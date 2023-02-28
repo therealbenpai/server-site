@@ -3,8 +3,10 @@ const Sentry = require('@sentry/node')
 const Tracing = require('@sentry/tracing')
 const { ProfilingIntegration } = require('@sentry/profiling-node')
 const Intigrations = require('@sentry/integrations')
+const https = require('https')
+const fs = require('fs')
 const app = express();
-const port = 80;
+const port = 443;
 
 const website = require('./routes/index')
 const api = require('./routes/api')
@@ -41,6 +43,18 @@ app.use('/api', api);
 app.use('/', website);
 app.use(Sentry.Handlers.errorHandler({shouldHandleError: () => { return true }}));
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
-});
+function getKeyAndCert() {
+    const data = {}
+    if (fs.existsSync('/etc/letsencrypt/live/sparty18.com/')) {
+        data.key = fs.readFileSync('/etc/letsencrypt/live/sparty18.com/privkey.pem')
+        data.cert = fs.readFileSync('/etc/letsencrypt/live/sparty18.com/fullchain.pem')
+    } else {
+        data.key = fs.readFileSync(`${process.cwd()}/certs/server.key`)
+        data.cert = fs.readFileSync(`${process.cwd()}/certs/server.cert`)
+    }
+    return data
+}
+
+https.createServer(getKeyAndCert(), app).listen(port, () => {
+    console.log(`Listening on port ${port}`)
+})
