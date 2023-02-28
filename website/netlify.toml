@@ -1,0 +1,175 @@
+[[redirects]]
+    from="/"
+    to="/html/"
+    status=200
+
+[[redirects]]
+    from="/css/d"
+    to="/stylesheets/general/combined.css"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/css"
+
+[[redirects]]
+    from="/css/c/*"
+    to="/stylesheets/general/:splat"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/css"
+    
+[[redirects]]
+    from="/css/f/*"
+    to="/stylesheets/file-specific/:splat"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/css"
+
+[[redirects]]
+    from="/js/fs/*"
+    to="/scripts/File-Specific/:splat"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/javascript"
+
+[[redirects]]
+    from="/js/cg/*"
+    to="/scripts/CoG/:splat"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/javascript"
+
+[[redirects]]
+    from="/js/o/*"
+    to="/scripts/Other/:splat"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/javascript"
+
+[[redirects]]
+    from="/f/fa/*"
+    to="/fonts/Font_Awesome/:splat"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/javascript"
+
+[[redirects]]
+    from="/f/*"
+    to="/fonts/:splat"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/javascript"
+
+[[redirects]]
+    from="/api/names"
+    to="/quick_data/names.json"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "application/json"
+
+[[redirects]]
+    from="/api/staff"
+    to="/API/staff.json"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "application/json"
+
+[[redirects]]
+    from="/api/commands"
+    to="/API/commands.json"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "application/json"
+
+[[redirects]]
+    from="/api/qd/*"
+    to="/quick_data/:splat"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/plain"
+    
+[[redirects]]
+    from="/icon"
+    to="/media/images/icon.ico"
+    status=200
+    [redirects.headers]
+        Content-Type = "image/x-icon"
+
+[[redirects]]
+    from="/bg"
+    to="/media/images/background.svg"
+    status=200
+    [redirects.headers]
+        Content-Type = "image/svg+xml"
+
+[[redirects]]
+    from="/robots.txt"
+    to="/metadata/robots.txt"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "text/plain"
+
+[[redirects]]
+    from="/sitemap"
+    to="/metadata/sitemap.xml"
+    status=200
+    force=true
+    [redirects.headers]
+        Content-Type = "application/xml"
+
+# External Redirects Below
+
+[[redirects]]
+    from="/repo"
+    to="https://github.com/sparty182020/Code-Area"
+    status=301
+
+[[redirects]]
+    from="/socials"
+    to="https://sparty182020.carrd.co/"
+    status=301
+
+[[redirects]]
+    from="/thumbnail"
+    to="https://i.ibb.co/Gs8BsdF/Screenshot-2022-02-28-5-45-23-PM.png"
+    status=200
+    [redirects.headers]
+        Content-Type = "image/png"
+
+[[redirects]]
+    from="/chessthumbnail"
+    to="https://cdn.discordapp.com/attachments/999266213697945652/1072217450306883654/image.png"
+    status=200
+    [redirects.headers]
+        Content-Type = "image/png"
+
+[[redirects]]
+    from="/chess"
+    to="/html/forms"
+    status=200
+    [redirects.headers]
+        Content-Type = "text/html"
+
+# Global Redirects Below
+
+[[redirects]]
+    from="/*"
+    to="/html/:splat"
+    status=200
+
+[[headers]]
+    for="*"
+    [headers.values]
+        X-Repo="https://github.com/sparty182020/Code-Area"

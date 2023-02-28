@@ -1,0 +1,17 @@
+{
+    "sqltools.connections": [
+        {
+            "mysqlOptions": {
+                "authProtocol": "default"
+            },
+            "previewLimit": 50,
+            "server": "34.28.253.132",
+            "port": 3306,
+            "driver": "MySQL",
+            "name": "BSH Database 2",
+            "database": "Database1",
+            "username": "root",
+            "password": ">IIl?,QC?mF(c*M\\"
+        }
+    ]
+}

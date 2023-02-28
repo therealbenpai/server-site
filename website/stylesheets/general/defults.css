@@ -1,0 +1,64 @@
+/* Navigation Management */
+
+.navigation nav {
+    padding-bottom: 10px;
+}
+
+.navigation nav ul {
+    text-align: center;
+    list-style-type: none;
+    background-color: #B577B5;
+    border: 2px solid Black;
+    border-radius: 10px;
+    font-weight: bold;
+    padding: 16px;
+    width: fit-content;
+    margin: auto;
+}
+
+.navigation nav ul li {
+    display: inline;
+    border-right: 2px solid var(--dark800);
+    padding-right: 8px;
+    padding-left: 8px;
+}
+
+.navigation nav ul li:last-child {
+    border-right: none;
+}
+
+.navigation nav ul li a {
+    text-decoration: none;
+    color: var(--dark800)
+}
+
+.navigation nav li.selected {
+    color: var(--dark300)
+}
+
+.navigation nav ul li a:hover {
+    text-decoration: underline;
+}
+
+/* SVG Background */
+
+html {
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-image: url("/bg");
+}
+
+/* Extras */
+
+.title {
+    color: black;
+    font-size: 48px;
+    font-size: bolder;
+    text-decoration: underline red 4px;
+}
+
+strong, i, strike, b, del, ins, dfn, em, s {
+    font-style: normal;
+    text-decoration: none;
+}

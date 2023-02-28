@@ -1,0 +1,71 @@
+:root {
+    margin-block: 0 0;
+    --buttonSize: 64px;
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    margin: 0 0;
+}
+
+#main-body {
+    display: flex;
+    justify-items: center;
+}
+
+#main-body > *:not(#number) {
+    width: 50%;
+    height: 100vh;
+    display: grid;
+    justify-items: center;
+}
+
+#number {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid black;
+    border-radius: 64px;
+    width: 64px;
+    height: 64px;
+    display: grid;
+    justify-items: center;
+    align-items: center;
+    padding: 0;
+    background: rgba(255, 255, 255, 1);
+}
+
+#number > * {
+    margin: 0;
+    padding: 0;
+}
+
+button {
+    height: 100%;
+    width: 100%;
+    border: none;
+    background: none;
+    font-size: var(--buttonSize);
+}
+
+#add-button {
+    background: rgba(0, 255, 0, 1);
+}
+
+#delete-button {
+    background: rgba(255, 0, 0, 1);
+}
+
+@media screen and (max-width: 600px) {
+    #main-body > *:not(#number) {
+        width: 100vw;
+        height: 100vh;
+    }
+    :root {
+        --buttonSize: 32px;
+    }
+}

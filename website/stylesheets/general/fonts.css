@@ -1,0 +1,218 @@
+@import "./font_awesome_keyreg.css";
+
+/* Fonts */
+@font-face {
+    font-family: 'Assistant';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/f/Assisstant1.ttf') format('truetype')
+        url('/f/Assisstant1.woff2') format('woff2')
+        url('/f/Assisstant2.ttf') format('truetype')
+        url('/f/Assisstant2.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/f/materialIcons.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: "IcoFont";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/f/icofont.woff2") format("woff2"),
+        url("/f/icofont.woff") format("woff");
+}
+
+@font-face {
+    font-family: 'Material Symbols Outlined';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/f/materialSymbolsOutlined.woff2") format('woff2');
+}
+
+@font-face {
+    font-family: 'Material Symbols Sharp';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/f/materialSymbolsSharp.woff2") format('woff2');
+}
+
+@font-face {
+    font-family: 'Material Symbols Rounded';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("/f/materialSymbolsRounded.woff2") format('woff2');
+}
+
+@font-face {
+    font-family: 'Font Awesome Brands';
+    src: url("/f/fa/Brands/fa-brands.woff2") format("woff2"),
+        url("/f/fa/Brands/fa-brands.woff") format("woff"),
+        url("/f/fa/Brands/fa-brands.ttf") format("truetype");
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Font Awesome Duotone';
+    src: url("/f/fa/Duotone/fa-duotone.woff2") format("woff2"),
+        url("/f/fa/Duotone/fa-duotone.woff") format("woff"),
+        url("/f/fa/Duotone/fa-duotone.ttf") format("truetype");
+    font-style: normal;
+    font-display: swap;
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: 'Font Awesome Light';
+    src: url("/f/fa/Light/fa-light.woff2") format("woff2"),
+        url("/f/fa/Light/fa-light.woff") format("woff"),
+        url("/f/fa/Light/fa-light.ttf") format("truetype");
+    font-style: normal;
+    font-display: swap;
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Font Awesome Regular';
+    src: url("/f/fa/Regular/fa-regular.woff2") format("woff2"),
+        url("/f/fa/Regular/fa-regular.woff") format("woff"),
+        url("/f/fa/Regular/fa-regular.ttf") format("truetype");
+    font-style: normal;
+    font-display: swap;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Font Awesome Solid';
+    src: url("/f/fa/Solid/fa-solid.woff2") format("woff2"),
+        url("/f/fa/Solid/fa-solid.woff") format("woff"),
+        url("/f/fa/Solid/fa-solid.ttf") format("truetype");
+    font-style: normal;
+    font-display: swap;
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: 'Font Awesome Thin';
+    src: url("/f/fa/Thin/fa-thin.woff2") format("woff2"),
+        url("/f/fa/Thin/fa-thin.woff") format("woff"),
+        url("/f/fa/Thin/fa-thin.ttf") format("truetype");
+    font-style: normal;
+    font-display: swap;
+    font-weight: 100;
+}
+
+icon[type="3"] {
+    font-weight: normal;
+    font-style: normal;
+    font-size: var(--ifs);
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: "liga";
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+    font-variation-settings: 'FILL' 1, 'wght' 700, 'GRAD' 200, 'opsz' 40;
+}
+
+icon[type="3"][outline] {
+    font-family: 'Material Symbols Outlined';
+}
+
+icon[type="3"][rounded] {
+    font-family: 'Material Symbols Rounded';
+}
+
+icon[type="3"][sharp] {
+    font-family: 'Material Symbols Sharp';
+}
+
+icon[type="2"] {
+    font-family: 'IcoFont';
+    font-style: normal;
+    font-weight: normal;
+    font-size: var(--ifs);
+    line-height: 1;
+    font-variant: normal;
+    text-transform: none;
+    display: default;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: "liga";
+    font-feature-settings: "liga";
+    -webkit-font-smoothing: antialiased;
+    transform: translateY(25%);
+}
+
+icon[type="1"] {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: var(--ifs);
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    word-wrap: normal;
+    direction: ltr;
+    -webkit-font-feature-settings: 'liga';
+    font-feature-settings: 'liga';
+    -webkit-font-smoothing: antialiased;
+    transform: translateY(23%);
+}
+
+[dark] {
+    color: var(--dark700);
+}
+
+[dark][inactive] {
+    color: var(--dark300);
+}
+
+.fa-regular,
+.far {
+    font-family: 'Font Awesome Regular';
+}
+
+.fa-solid,
+.fas,
+.fa {
+    font-family: 'Font Awesome Solid';
+}
+
+.fa-light,
+.fal {
+    font-family: 'Font Awesome Light';
+}
+
+.fa-duotone,
+.fad {
+    font-family: 'Font Awesome Duotone';
+}
+
+.fa-thin,
+.fat {
+    font-family: 'Font Awesome Thin';
+}
+
+.fa-brands,
+.fab {
+    font-family: 'Font Awesome Brands';
+}

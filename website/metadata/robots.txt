@@ -1,0 +1,12 @@
+User-agent: *
+Disallow: /jstesting
+Disallow: /killer-page
+Disallow: /success
+Disallow: /toolbox
+Disallow: /website-generator
+Disallow: /scripts/
+Disallow: /stylesheets/
+Disallow: /media/
+Disallow: /fonts/
+
+Sitemap: https://sparty18.me/sitemap

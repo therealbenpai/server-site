@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="nositelinkssearchbox">
+    <meta name="title" content="Sparty182020 Website">
+    <meta name="description" content="Sparty182020's Custom Coded Website">
+    <meta name="keywords" content="Sparty182020">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="author" content="Sparty182020">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sparty18.me/">
+    <meta property="og:title" content="Text Converter Page">
+    <meta property="og:description" content="Sparty182020's Custom Coded Website">
+    <meta property="og:image" content="/thumbnail">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://sparty18.me/">
+    <meta property="twitter:title" content="Text Converter Page">
+    <meta property="twitter:description" content="Sparty182020's Custom Coded Website">
+    <meta property="twitter:image" content="/thumbnail">
+    <title>Text Converter</title>
+    <link rel="icon" href="/icon" type="image/x-icon">
+    <!-- CSS -->
+    <link href="/css/d" rel="stylesheet" type="text/css">
+    <link href="/css/f/text-coverter.css" rel="stylesheet" type="text/css">
+    <!-- Script -->
+    <script src="/js/cg/converter.js"></script>
+    <script src="/js/cg/morsecode.js"></script>
+    <script src="/js/o/class.js"></script>
+    <script type='application/ld+json'>
+        {
+          "@context": "http://www.schema.org",
+          "@type": "person",
+          "name": "Sparty182020",
+          "jobTitle": "CEO, Manager, Developer",
+          "height": "68 inches",
+          "gender": "male",
+          "url": "https://sparty18.me",
+          "email": "admin@sparty18.me",
+          "birthDate": "2007-12-18",
+          "nationality": "American"
+        }
+        </script>
+</head>
+
+<body>
+    <div class="navigation">
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="about-me">About Me</a></li>
+                <li><a href="userpage">Userpage</a></li>
+                <li class="selected">Text Converter</li>
+                <li><a href="game">Game</a></li>
+                <li><a href="socials">Socials</a></li>
+                <li><a href="tiktok">TikTok Followers</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="text">
+        <div class="textarea">
+            <cssr class="textinput">
+                <input type="text" id="sitextinput" name="" maxlength="1" onkeyup="this.value = ''"
+                    placeholder="Enter Letter Here: ">
+            </cssr>
+            <br>
+            <div class="textinfo">
+                <p><strong>Letter: </strong>
+                    <ttag id="siletter"></ttag>
+                </p>
+                <br>
+                <p><strong>charCode: </strong>
+                    <ttag id="sicharCode"></ttag>
+                </p>
+                <br>
+                <p><strong>Binary: </strong>
+                    <ttag id="sibinary"></ttag>
+                </p>
+                <br>
+                <p><strong>Hex: </strong>
+                    <ttag id="sihex"></ttag>
+                </p>
+                <br>
+                <p><strong>Base32: </strong>
+                    <ttag id="sib32"></ttag>
+                </p>
+                <br>
+                <p><strong>Morse Code: </strong>
+                    <ttag id="simorsecode"></ttag>
+                </p>
+                <br>
+            </div>
+        </div>
+        <div class="textarea">
+            <cssr class="textinput">
+                <input type="text" id="mitextinput" placeholder="Enter Your text term here: ">
+            </cssr>
+            <br>
+            <div class="textinfo">
+                <p><strong>Binary: </strong>
+                    <ttag id="mibinary"></ttag>
+                </p>
+                <br>
+                <p><strong>Hex: </strong>
+                    <ttag id="mihex"></ttag>
+                </p>
+                <br>
+                <p><strong>Base32: </strong>
+                    <ttag id="mib32"></ttag>
+                </p>
+                <br>
+                <p><strong>Morse Code: </strong>
+                    <ttag id="mimorsecode"></ttag>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- Script for the singular inputs-->
+    <script>
+        function sconvert(e) {
+            const textel = document.getElementById("sitextinput")
+            document.getElementById("siletter").innerHTML = `<mark>${e.key}</mark>`
+            document.getElementById("sicharCode").innerHTML = `<mark>${String(e.keyCode)}</mark>`
+            document.getElementById("sibinary").innerHTML = `<mark>${stbi(String(e.key))}</mark>`
+            document.getElementById("sihex").innerHTML = `<mark>${sth(String(e.key))}</mark>`
+            document.getElementById("sib32").innerHTML = `<mark>${stb32(String(e.key))}</mark>`
+            document.getElementById("simorsecode").innerHTML = `<mark>${stmc(String(e.key))}</mark>`;
+        }
+        document.getElementById("sitextinput").addEventListener('keydown', sconvert)
+    </script>
+    <!-- Script for the Mutiple inputs-->
+    <script>
+        function mconvert(e) {
+            const textel = document.getElementById("mitextinput")
+            document.getElementById("mibinary").innerHTML = `<mark>${stbi(textel.value)}</mark>`
+            document.getElementById("mihex").innerHTML = `<mark>${sth(textel.value)}</mark>`
+            document.getElementById("mib32").innerHTML = `<mark>${stb32(textel.value)}</mark>`
+            document.getElementById("mimorsecode").innerHTML = `<mark>${stmc(textel.value)}</mark>`;
+        }
+        document.getElementById("mitextinput").addEventListener('keydown', mconvert)
+        document.getElementById("mitextinput").addEventListener('keyup', mconvert)
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,41 @@
+.text {
+    margin-left: 1%;
+    margin-right: 1%;
+    overflow: scroll;
+    display: flex;
+}
+
+.textarea {
+	width: 48%;
+    margin: 1%;
+    border: 3px solid black;
+    border-radius: 6px;
+    padding: 1%;
+}
+
+cssr {
+    color: black;
+}
+
+.textinput input {
+    border: 3px solid black;
+    border-radius: 8px;
+}
+
+input {
+	width:auto;
+}
+
+.textinput label {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+.textinfo p {
+    border-bottom: 4px solid black;
+    font-family: Brush Script MT, cursive;
+}
+
+mark {
+    background-color: rgba(255, 255, 255, 0.125);
+}

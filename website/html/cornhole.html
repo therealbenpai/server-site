@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="title" content="Sparty182020 Website">
+    <meta name="description" content="Sparty182020's Custom Coded Website">
+    <meta name="google" content="nositelinkssearchbox">
+    <meta name="keywords" content="Sparty182020">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="author" content="Sparty182020">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sparty18.me/">
+    <meta property="og:title" content="Cornhole Page">
+    <meta property="og:description" content="Sparty182020's Custom Coded Website">
+    <meta property="og:image" content="/thumbnail">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://sparty18.me/">
+    <meta property="twitter:title" content="Cornhole Page">
+    <meta property="twitter:description" content="Sparty182020's Custom Coded Website">
+    <meta property="twitter:image" content="/thumbnail">
+    <link href="/css/d" rel="stylesheet" type="text/css">
+    <link href="/css/f/cornhole.css" rel="stylesheet" type="text/css">
+    <script src="/js/fs/cornhole.js"></script>
+    <link rel="icon" href="/icon" type="image/x-icon">
+    <title>Cornhole Score Keeper</title>
+    <script type='application/ld+json'>
+        {
+          "@context": "http://www.schema.org",
+          "@type": "person",
+          "name": "Sparty182020",
+          "jobTitle": "CEO, Manager, Developer",
+          "height": "68 inches",
+          "gender": "male",
+          "url": "https://sparty18.me",
+          "email": "admin@sparty18.me",
+          "birthDate": "2007-12-18",
+          "nationality": "American"
+        }
+        </script>
+</head>
+
+<body onload="setup()">
+    <!-- <div class="navigation">
+        <nav>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="about-me">About Me</a></li>
+                <li><a href="userpage">Userpage</a></li>
+                <li><a href="text-converter">Text Converter</a></li>
+                <li><a href="game">Game</a></li>
+                <li><a href="socials">Socials</a></li>
+                <li><a href="tiktok">TikTok Followers</a></li>
+                <li class="selected">Cornhole Score Keeper</li>
+            </ul>
+        </nav>
+    </div> -->
+    <div main>
+        <div id="player1">
+            <div class="display">
+                <h1 class="name">Player 1</h1>
+            </div>
+            <div class="score">
+                <h2 rs>Round: <p id="rs1">0</p>
+                </h2>
+                <h2 gs>Game: <p id="gs1">0</p>
+                </h2>
+            </div>
+            <div class="point">
+                <button class="score onboard" onclick="gameEvent(1,1)">Land on board<br>(+1)</button>
+                <button class="score inhole" onclick="gameEvent(1,2)">Land in hole<br>(+3)</button>
+                <button class="score slidehole" onclick="gameEvent(1,3)" nac>Slide into hole<br>(1 => 3)</button>
+                <button class="score slideoff" onclick="gameEvent(1,4)" nac>Slide off<br>(1 => 0)</button>
+                <button class="score miss" onclick="gameEvent(1,5)">Miss<br>(+0)</button>
+            </div>
+        </div>
+        <split vert></split>
+        <div id="player2">
+            <div class="display">
+                <h1 class="name">Player 2</h1>
+            </div>
+            <div class="score">
+                <h2 rs>Round: <p id="rs2">0</p>
+                </h2>
+                <h2 gs>Game: <p id="gs2">0</p>
+                </h2>
+            </div>
+            <div class="point">
+                <button class="score onboard" onclick="gameEvent(2,1)">Land on board<br>(+1)</button>
+                <button class="score inhole" onclick="gameEvent(2,2)">Land in hole<br>(+3)</button>
+                <button class="score slidehole" onclick="gameEvent(2,3)" nac>Slide into hole<br>(1 => 3)</button>
+                <button class="score slideoff" onclick="gameEvent(2,4)" nac>Slide off<br>(1 => 0)</button>
+                <button class="score miss" onclick="gameEvent(2,5)">Miss<br>(+0)</button>
+            </div>
+        </div>
+    </div>
+    <button class="submit" onclick="submit()">Submit Scores</button>
+</body>
+
+</html>

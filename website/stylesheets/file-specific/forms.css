@@ -1,0 +1,62 @@
+:root {
+    background: rgb(127, 127, 127, 1);
+    overflow-x: hidden;
+    overflow-y: scroll;
+    text-align: center;
+}
+
+html {
+    background: linear-gradient(135deg, rgba(0,0,255,0.2), rgba(255,0,0,0.2)) !important;
+    animation: hue_rotate var(--rot-time) linear infinite;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    text-align: center;
+}
+
+h1 {
+    text-decoration: underline;
+    text-decoration-color: red;
+    padding-bottom: 16px;
+}
+
+form {
+    display: grid;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    justify-items: center;
+    border: 1px solid black;
+    border-radius: 80px;
+    width: max-content;
+    padding: 34px;
+    left: 50%;
+    position: absolute;
+    transform: translateX(-50%);
+    background: rgba(100, 100, 100, 0.5);
+}
+
+form * {
+    animation: hue_rotate var(--rot-time) linear infinite;
+    width: min-content;
+    text-align: center;
+    padding: 10px;
+    color: red;
+}
+
+button {
+    background-color: #fff;
+    border: 1px solid black;
+    border-radius: 50px;
+    width: 200px;
+}
+
+input {
+    border-radius: 20px;
+    background-color: rgba(127,127,127,0.5);
+    text-align: left;
+}
+
+::-webkit-input-placeholder {
+    color: black;
+    text-align: left;
+}

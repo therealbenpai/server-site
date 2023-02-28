@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="google" content="nositelinkssearchbox">
+    <meta name="title" content="Brian Smith's House Chess Club Tournament Signup Form">
+    <meta name="description" content="Brian Smith's House Chess Club Tournament Signup Form">
+    <meta name="keywords" content="Chess, Brian Smith, BSH, Signup">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    <meta name="author" content="Benpai">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sparty18.me/forms">
+    <meta property="og:title" content="Brian Smith's House Chess Club Tournament Signup Form">
+    <meta property="og:description" content="Brian Smith's House Chess Club Tournament Signup Form">
+    <meta property="og:image" content="/chessthumbnail">
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://sparty18.me/forms">
+    <meta property="twitter:title" content="Brian Smith's House Chess Club Tournament Signup Form">
+    <meta property="twitter:description" content="Brian Smith's House Chess Club Tournament Signup Form">
+    <meta property="twitter:image" content="/chessthumbnail">
+    <link rel="icon" href="/icon" type="image/x-icon">
+    <link href="/css/f/forms.css" rel="stylesheet" type="text/css">
+    <link href="/css/d" rel="stylesheet" type="text/css">
+    <title>Brian Smith's House Chess Club Tournament Signup Form</title>
+    <script type='application/ld+json'>
+        {
+          "@context": "http://www.schema.org",
+          "@type": "person",
+          "name": "Sparty182020",
+          "jobTitle": "CEO, Manager, Developer",
+          "height": "68 inches",
+          "gender": "male",
+          "url": "https://sparty18.me",
+          "email": "admin@sparty18.me",
+          "birthDate": "2007-12-18",
+          "nationality": "American"
+        }
+        </script>
+</head>
+
+<body>
+    <h1>Sign up for the Chess Event</h1>
+    <form action="/success" method="post" data-netlify="true" name="Chess Signup" netlify-honeypot="bot-field">
+        <label for="display">Display Name
+            <input type="text" name="DisplayName" id="display" placeholder="Your Name..." required>
+        </label>
+        <label for="discord">Discord Username
+            <input type="text" name="DiscordName" id="discord" placeholder="username#0000" required>
+        </label>
+        <label for="chess">Chess Username
+            <input type="text" name="ChessName" id="chess" placeholder="Username on chess.com" required>
+        </label>
+        <p hidden>
+            <label>
+                Don’t fill this out if you’re human: <input name="bot-field" hidden />
+            </label>
+        </p>
+        <button type="submit" hover="bump_in" id="submit">Send</button>
+    </form>
+    <script>
+        function lock() {
+            const submit = document.querySelector('#submit');
+            const textFields = document.querySelectorAll('input');
+            submit.disabled = true;
+            submit.style.cursor = 'not-allowed';
+            submit.style.backgroundColor = 'rgba(100,100,100,0.5)';
+            textFields.forEach((field) => {
+                field.disabled = true;
+                field.style.cursor = 'not-allowed';
+                field.style.backgroundColor = 'rgba(100,100,100,0.5)';
+            });
+            const dialog = document.createElement('div');
+            const message = document.createElement('p');
+            message.innerText = 'This form is closed. Please try again later.';
+            dialog.insertAdjacentElement('afterbegin', message);
+            dialog.style.position = 'fixed';
+            dialog.style.display = 'flex';
+            dialog.style.top = '50%';
+            dialog.style.left = '50%';
+            dialog.style.transform = 'translate(-50%, -50%)';
+            dialog.style.backgroundColor = 'rgba(100,100,100,1)';
+            dialog.style.border = '1px solid black';
+            dialog.style.padding = '1rem';
+            dialog.style.borderRadius = '1rem';
+            dialog.style.color = 'black';
+            dialog.style.fontWeight = 'bold';
+            dialog.style.fontSize = '32px';
+            dialog.style.width = '300px';
+            dialog.style.height = '100px';
+            dialog.style.textAlign = 'center';
+            dialog.style.alignItems = 'center';
+            dialog.style.zIndex = '1000';
+            document.body.insertAdjacentElement('afterbegin', dialog);
+        }
+        // if (new Date().getTime() > 1675886400000) {
+            lock();
+        // }
+    </script>
+</body>
+
+</html>

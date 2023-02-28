@@ -1,0 +1,51 @@
+name: Feature Recommendation
+description: Create a feature recommendation
+title: "[Feature]: "
+labels: "enhancement"
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this feature recommendation!
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Feature Submition Checklist
+      options:
+        - label: I have read the [Code of Conduct](https://github.com/sparty182020/Code-Area/blob/master/CODE_OF_CONDUCT.md)
+          required: true
+        - label: I have checked other issues for similar feature requests
+          required: true
+        - label: I have checked that it can be implemented
+          required: true
+        - label: I have a working demo of the feature available to the public displaying the feature
+          required: true
+  - type: input
+    id: demo
+    attributes:
+      label: Demo Link
+      description: If you have a working demo, please link to it here. (Required to be implemented)
+      placeholder: https://github.com/<user>/<repo> showing the feature in a forked demo
+    validations:
+      required: false
+  - type: input
+    id: contact
+    attributes:
+      label: Contact Details
+      description: How can we get in touch with you if we need more info?
+      placeholder: ex. email@example.com
+    validations:
+      required: false
+  - type: input
+    id: feature-title
+    attributes:
+      label: What is the feature called?
+    validations:
+      required: true
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: What does the feature do?
+      placeholder: Tell us what you want to see it do!
+    validations:
+      required: true
