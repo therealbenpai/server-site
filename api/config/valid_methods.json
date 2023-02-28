@@ -1,7 +1,0 @@
-{
-    "/": ["GET"],
-    "/enc": ["GET"],
-    "/dec": ["GET"],
-    "/genkey": ["GET", "POST", "PUT"],
-    "/signup": ["GET", "POST", "PUT"]
-}
