@@ -3,8 +3,10 @@ const Sentry = require('@sentry/node')
 const Tracing = require('@sentry/tracing')
 const { ProfilingIntegration } = require('@sentry/profiling-node')
 const Intigrations = require('@sentry/integrations')
+const https = require('https')
+const fs = require('fs')
 const app = express();
-const port = 80;
+const port = 443;
 
 const website = require('./routes/index')
 const api = require('./routes/api')
@@ -41,6 +43,9 @@ app.use('/api', api);
 app.use('/', website);
 app.use(Sentry.Handlers.errorHandler({shouldHandleError: () => { return true }}));
 
-app.listen(port, () => {
-    console.log(`Example app listening at http://localhost:${port}`)
+https.createServer({
+    key: fs.readFileSync('certs/server.key'),
+    cert: fs.readFileSync('certs/server.cert')
+}, app).listen(port, () => {
+    console.log(`Server listening on port ${port}`)
 });
