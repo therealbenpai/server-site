@@ -38,30 +38,23 @@ Sentry.init({
 });
 
 app.use((req, res, next) => {
-    const logString = `${req.path} ${req.ip} ${new Intl.DateTimeFormat('en-US', {year: "numeric",month: "long",day: "numeric",hour: "2-digit",minute: "2-digit",second: "2-digit",weekday: "long",timeZone: "America/Detroit",timeZoneName: "shortGeneric"}).format()}`
+    const logString = `${new Intl.DateTimeFormat('en-US', { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", weekday: "long", timeZone: "America/Detroit", timeZoneName: "shortGeneric" }).format()}\n    Path= ${req.path}\n   IP Address= ${req.ip}\n`
     fs.appendFile(`${process.cwd()}/server/reqLogs.log`, `${logString}\n`, (err) => {
         if (err) console.error(err)
     })
     next()
 })
-app.use(Sentry.Handlers.requestHandler({transaction: true}));
+app.use(Sentry.Handlers.requestHandler({ transaction: true }));
 app.use(Sentry.Handlers.tracingHandler());
 app.use('/api', api);
 app.use('/', website);
-app.use(Sentry.Handlers.errorHandler({shouldHandleError: () => { return true }}));
+app.use(Sentry.Handlers.errorHandler({ shouldHandleError: () => { return true } }));
 
-function getKeyAndCert() {
-    const data = {}
-    if (fs.existsSync('/etc/letsencrypt/live/sparty18.com/')) {
-        data.key = fs.readFileSync('/etc/letsencrypt/live/sparty18.com/privkey.pem')
-        data.cert = fs.readFileSync('/etc/letsencrypt/live/sparty18.com/fullchain.pem')
-    } else {
-        data.key = fs.readFileSync(`${process.cwd()}/certs/server.key`)
-        data.cert = fs.readFileSync(`${process.cwd()}/certs/server.cert`)
-    }
-    return data
-}
-
-https.createServer(getKeyAndCert(), app).listen(port, () => {
-    console.log(`Listening on port ${port}`)
-})
+https.createServer(
+    {
+        key: fs.readFileSync(`${process.cwd()}/certs/server.key`),
+        cert: fs.readFileSync(`${process.cwd()}/certs/server.cert`),
+        handshakeTimeout: 10000,
+    }, app).listen(port, () => {
+        console.log(`Listening on port ${port}`)
+    })
