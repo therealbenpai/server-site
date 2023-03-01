@@ -37,13 +37,6 @@ Sentry.init({
     sendDefaultPii: true
 });
 
-app.use((req, res, next) => {
-    const logString = `${new Intl.DateTimeFormat('en-US', { year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit", weekday: "long", timeZone: "America/Detroit", timeZoneName: "shortGeneric" }).format()}\n    Path= ${req.path}\n   IP Address= ${req.ip}\n`
-    fs.appendFile(`${process.cwd()}/server/reqLogs.log`, `${logString}\n`, (err) => {
-        if (err) console.error(err)
-    })
-    next()
-})
 app.use(Sentry.Handlers.requestHandler({ transaction: true }));
 app.use(Sentry.Handlers.tracingHandler());
 // use pug
