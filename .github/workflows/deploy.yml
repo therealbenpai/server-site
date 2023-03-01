@@ -17,7 +17,7 @@ jobs:
           password: sparty18Root
           port: 22
           script: |
-            cd server-site
+            cd website
             git pull
             npm up
-            pm2 restart 2
+            pm2 restart 0
