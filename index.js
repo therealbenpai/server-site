@@ -37,6 +37,13 @@ Sentry.init({
     sendDefaultPii: true
 });
 
+app.use((req, res, next) => {
+    const logString = `${req.path} ${req.ip} ${new Intl.DateTimeFormat('en-US', {year: "numeric",month: "long",day: "numeric",hour: "2-digit",minute: "2-digit",second: "2-digit",weekday: "long",timeZone: "America/Detroit",timeZoneName: "shortGeneric"}).format()}`
+    fs.appendFile(`${process.cwd()}/server/reqLogs.log`, `${logString}\n`, (err) => {
+        if (err) console.error(err)
+    })
+    next()
+})
 app.use(Sentry.Handlers.requestHandler({transaction: true}));
 app.use(Sentry.Handlers.tracingHandler());
 app.use('/api', api);
