@@ -10,7 +10,7 @@ router.get(`/css/c/:file`, (req, res) => {
 
 router.get(`/css/f/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/website/stylesheets/File-Specific/${file}`);
+    res.sendFile(`${process.cwd()}/website/stylesheets/file-specific/${file}`);
 });
 
 router.get(`/js/fs/:file`, (req, res) => {
