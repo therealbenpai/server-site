@@ -1,46 +1,46 @@
 const express = require(`express`);
 const router = express.Router();
 
-router.get(`/css/d`, (req, res) => { res.sendFile(`${process.cwd()}/website/stylesheets/general/combined.css`) });
+router.get(`/css/d`, (req, res) => { res.sendFile(`${process.cwd()}/assets/stylesheets/general/combined.css`) });
 
 router.get(`/css/c/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/website/stylesheets/general/${file}`);
+    res.sendFile(`${process.cwd()}/assets/stylesheets/general/${file}`);
 });
 
 router.get(`/css/f/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/website/stylesheets/file-specific/${file}`);
+    res.sendFile(`${process.cwd()}/assets/stylesheets/file-specific/${file}`);
 });
 
 router.get(`/js/fs/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/website/scripts/File-Specific/${file}`);
+    res.sendFile(`${process.cwd()}/assets/scripts/File-Specific/${file}`);
 });
 
 router.get(`/js/cg/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/website/scripts/CoG/${file}`);
+    res.sendFile(`${process.cwd()}/assets/scripts/CoG/${file}`);
 });
 
 router.get(`/js/o/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/website/scripts/Other/${file}`);
+    res.sendFile(`${process.cwd()}/assets/scripts/Other/${file}`);
 });
 
 router.get(`/f/fa/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/website/fonts/Font_Awesome/${file}`);
+    res.sendFile(`${process.cwd()}/assets/fonts/Font_Awesome/${file}`);
 });
 
 router.get(`/f/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/website/fonts/${file}`);
+    res.sendFile(`${process.cwd()}/assets/fonts/${file}`);
 });
 
-router.get(`/icon`, (req, res) => { res.setHeader(`Content-Type`, `image/x-icon`).sendFile(`${process.cwd()}/website/media/images/icon.ico`) });
+router.get(`/icon`, (req, res) => { res.setHeader(`Content-Type`, `image/x-icon`).sendFile(`${process.cwd()}/assets/media/images/icon.ico`) });
 
-router.get(`/bg`, (req, res) => { res.setHeader(`Content-Type`, `image/svg+xml`).sendFile(`${process.cwd()}/website/media/images/background.svg`) });
+router.get(`/bg`, (req, res) => { res.setHeader(`Content-Type`, `image/svg+xml`).sendFile(`${process.cwd()}/assets/media/images/background.svg`) });
 
 router.get(`/robots.txt`, (req, res) => { res.sendFile(`${process.cwd()}/website/metadata/robots.txt`) });
 
@@ -54,17 +54,87 @@ router.get(`/chessthumbnail`, (req, res) => { res.redirect("https://cdn.discorda
 
 router.get(`/chess`, (req, res) => { res.redirect('https://sparty18.me/chess') });
 
-router.get('favicon.ico', (req, res) => { res.sendFile(`${process.cwd()}/website/media/images/icon.ico`) });
+router.get('favicon.ico', (req, res) => { res.sendFile(`${process.cwd()}/assets/media/images/icon.ico`) });
 
-router.get(`/:file`, (req, res) => {
-    const file = `${req.params.file}${req.params.file.split(`.`).length > 1 ? `` : `.html`}`;
-    res.sendFile(`${process.cwd()}/website/html/${file}`, error => {
-        if (error) {
-            res.status(404).send(`404 Not Found`);
+router.get('/about-me', (req, res) => {
+    res.render(
+        `${process.cwd()}/views/main/about-me.pug`,
+        {
+            title: "About Me"
         }
-    });
-});
+    );
+})
 
-router.get(`/`, (req, res) => { res.sendFile(`${process.cwd()}/website/html/index.html`) });
+router.get('/cornhole', (req, res) => {
+    res.render(
+        `${process.cwd()}/views/main/cornhole.pug`,
+        {
+            title: "Cornhole Score Keeper"
+        }
+    );
+})
+
+router.get('/game', (req, res) => {
+    res.render(
+        `${process.cwd()}/views/main/game.pug`,
+        {
+            title: "Keyboard and Mouse Game"
+        }
+    );
+})
+
+router.get('/socials', (req, res) => {
+    res.render(
+        `${process.cwd()}/views/main/socials.pug`,
+        {
+            title: 'Socials'
+        }
+    );
+})
+
+router.get('/text-conv', (req, res) => {
+    res.render(
+        `${process.cwd()}/views/main/text-converter.pug`,
+        {
+            title: 'Text Conversion'
+        }
+    );
+})
+
+router.get('/toolbox', (req, res) => {
+    res.render(
+        `${process.cwd()}/views/main/toolbox.pug`,
+        {
+            title: 'Developmental Toolbox'
+        }
+    );
+})
+
+router.get('/web-gen', (req, res) => {
+    res.render(
+        `${process.cwd()}/views/main/website-generator.pug`,
+        {
+            title: 'Website Generator'
+        }
+    );
+})
+
+router.get('/index', (req, res) => {
+    res.render(
+        `${process.cwd()}/views/main/index.pug`,
+        {
+            title: 'Homepage'
+        }
+    );
+})
+
+router.get(`/`, (req, res) => {
+    res.render(
+        `${process.cwd()}/views/main/index.pug`,
+        {
+            title: 'Homepage'
+        }
+    );
+});
 
 module.exports = router;

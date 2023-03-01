@@ -46,15 +46,25 @@ app.use((req, res, next) => {
 })
 app.use(Sentry.Handlers.requestHandler({ transaction: true }));
 app.use(Sentry.Handlers.tracingHandler());
+// use pug
+app.set('view engine', 'pug');
 app.use('/api', api);
 app.use('/', website);
 app.use(Sentry.Handlers.errorHandler({ shouldHandleError: () => { return true } }));
+// render 404 page
+app.use((req, res, next) => {
+    res.status(404).render(
+        `${process.cwd()}/vies/misc/404.pug`,
+        {
+            title: '404 - Page Not Found'
+        }
+    );
+});
 
-https.createServer(
-    {
-        key: fs.readFileSync(`${process.cwd()}/certs/server.key`),
-        cert: fs.readFileSync(`${process.cwd()}/certs/server.cert`),
-        handshakeTimeout: 10000,
-    }, app).listen(port, () => {
-        console.log(`Listening on port ${port}`)
-    })
+https.createServer({
+    key: fs.readFileSync(`${process.cwd()}/certs/server.key`),
+    cert: fs.readFileSync(`${process.cwd()}/certs/server.cert`),
+    handshakeTimeout: 10000,
+}, app).listen(port, () => {
+    console.log(`Listening on port ${port}`)
+})

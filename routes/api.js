@@ -7,11 +7,16 @@ const ccf = require('../src/crypto')
 router.use(express.json())
 
 router.get('/favicon.ico', (_, res) => {
-    res.redirect('https://raw.githubusercontent.com/sparty182020/imagehost/main/favicon.ico')
+    res.redirect('https://sparty18.com/icon')
 })
 
 router.get('/', (_, res) => {
-    res.sendFile('index.html', { root: `${process.cwd()}/api/`, headers: { 'x-timestamp': Date.now(), 'x-sent': true } })
+    res.render(
+        `${process.cwd()}/views/api/index.pug`,
+        {
+            title: 'API Homepage'
+        }
+    );
 })
 
 router.get('/enc', (req, res) => {

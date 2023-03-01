@@ -1,0 +1,32 @@
+doctype html
+head
+  include ../defaults/header.pug
+  link(href='/css/f/index.css' rel='stylesheet' type='text/css')
+  script(defer='' src='/js/fs/index.js')
+  // Google tag (gtag.js)
+  script(async='' src='https://www.googletagmanager.com/gtag/js?id=G-V6YPYMWR4K')
+  script.
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-V6YPYMWR4K');
+  script(src='https://browser.sentry-cdn.com/7.20.1/bundle.min.js' integrity='sha384-ksXx74Cski/cokZPVeTXHKKlYYiMlbqL3Wl6IM4q/+7FFg1WyPyqabLu65X844KT' crossorigin='anonymous')
+  script(src='https://browser.sentry-cdn.com/7.20.1/bundle.tracing.min.js' integrity='sha384-xk+EzkcCWCQ0oHZ799jOtJGSGPbJjRff3hDggI3cQ8cLP3q+u3DjoddDdlf7xBQ6' crossorigin='anonymous')
+  script.
+    Sentry.init({
+    dsn: "https://2e639e2f659146c6b04d387deb6f4636@o1236511.ingest.sentry.io/4504200250982400",
+    integrations: [new Sentry.BrowserTracing()],
+    // Set tracesSampleRate to 1.0 to capture 100%
+    // of transactions for performance monitoring.
+    // We recommend adjusting this value in production
+    tracesSampleRate: 1.0,
+    });
+    try {
+    undefinedFunction();
+    } catch (error) {
+    Sentry.captureException(error);
+    }
+body
+  include ../defaults/nav.pug
+  h1.title Home Page
+  h2 Welcome to my website!

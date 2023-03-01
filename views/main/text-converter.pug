@@ -1,0 +1,83 @@
+doctype html
+head
+  include ../defaults/header.pug
+  // CSS
+  link(href='/css/f/text-coverter.css' rel='stylesheet' type='text/css')
+  // Script
+  script(src='/js/cg/converter.js')
+  script(src='/js/cg/morsecode.js')
+  script(src='/js/o/class.js')
+include ../defaults/nav.pug
+.text
+  .textarea
+    cssr.textinput
+      input#sitextinput(type='text' name='' maxlength='1' onkeyup="this.value = ''" placeholder='Enter Letter Here: ')
+    br
+    .textinfo
+      p
+        strong Letter: 
+        ttag#siletter
+      br
+      p
+        strong charCode: 
+        ttag#sicharCode
+      br
+      p
+        strong Binary: 
+        ttag#sibinary
+      br
+      p
+        strong Hex: 
+        ttag#sihex
+      br
+      p
+        strong Base32: 
+        ttag#sib32
+      br
+      p
+        strong Morse Code: 
+        ttag#simorsecode
+      br
+  .textarea
+    cssr.textinput
+      input#mitextinput(type='text' placeholder='Enter Your text term here: ')
+    br
+    .textinfo
+      p
+        strong Binary: 
+        ttag#mibinary
+      br
+      p
+        strong Hex: 
+        ttag#mihex
+      br
+      p
+        strong Base32: 
+        ttag#mib32
+      br
+      p
+        strong Morse Code: 
+        ttag#mimorsecode
+// Script for the singular inputs
+script.
+  function sconvert(e) {
+  const textel = document.getElementById("sitextinput")
+  document.getElementById("siletter").innerHTML = `<mark>${e.key}</mark>`
+  document.getElementById("sicharCode").innerHTML = `<mark>${String(e.keyCode)}</mark>`
+  document.getElementById("sibinary").innerHTML = `<mark>${stbi(String(e.key))}</mark>`
+  document.getElementById("sihex").innerHTML = `<mark>${sth(String(e.key))}</mark>`
+  document.getElementById("sib32").innerHTML = `<mark>${stb32(String(e.key))}</mark>`
+  document.getElementById("simorsecode").innerHTML = `<mark>${stmc(String(e.key))}</mark>`;
+  }
+  document.getElementById("sitextinput").addEventListener('keydown', sconvert)
+// Script for the Mutiple inputs
+script.
+  function mconvert(e) {
+  const textel = document.getElementById("mitextinput")
+  document.getElementById("mibinary").innerHTML = `<mark>${stbi(textel.value)}</mark>`
+  document.getElementById("mihex").innerHTML = `<mark>${sth(textel.value)}</mark>`
+  document.getElementById("mib32").innerHTML = `<mark>${stb32(textel.value)}</mark>`
+  document.getElementById("mimorsecode").innerHTML = `<mark>${stmc(textel.value)}</mark>`;
+  }
+  document.getElementById("mitextinput").addEventListener('keydown', mconvert)
+  document.getElementById("mitextinput").addEventListener('keyup', mconvert)
