@@ -57,8 +57,12 @@ router.get(`/chess`, (req, res) => { res.redirect('https://sparty18.me/chess') }
 router.get('favicon.ico', (req, res) => { res.sendFile(`${process.cwd()}/website/media/images/icon.ico`) });
 
 router.get(`/:file`, (req, res) => {
-    const file = req.params.file;
-    res.sendFile(`${process.cwd()}/website/html/${file}.html`);
+    const file = `${req.params.file}${req.params.file.split(`.`).length > 1 ? `` : `.html`}`;
+    res.sendFile(`${process.cwd()}/website/html/${file}`, error => {
+        if (error) {
+            res.status(404).send(`404 Not Found`);
+        }
+    });
 });
 
 router.get(`/`, (req, res) => { res.sendFile(`${process.cwd()}/website/html/index.html`) });
