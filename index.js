@@ -47,7 +47,7 @@ app.use(Sentry.Handlers.errorHandler({ shouldHandleError: () => { return true } 
 // render 404 page
 app.use((req, res, next) => {
     res.status(404).render(
-        `${process.cwd()}/vies/misc/404.pug`,
+        `${process.cwd()}/views/misc/404.pug`,
         {
             title: '404 - Page Not Found'
         }
