@@ -22,6 +22,8 @@ meta(property='twitter:description' content="Sparty182020's Custom Coded Website
 meta(property='twitter:image' content='/thumbnail')
 link(rel='icon' href='/icon' type='image/x-icon')
 link(href='/css/d' rel='stylesheet' type='text/css')
+if file
+  link(href='/css/f/#{file}' rel='stylesheet' type='text/css')
 script(type='application/ld+json').
   {
     "@context": "http://www.schema.org",
@@ -36,3 +38,12 @@ script(type='application/ld+json').
     "nationality": "American"
   }
 title= title
+if locked
+  script(defer='' src='/js/o/testing.js')
+  script(defer='' src='https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js' integrity='sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==' crossorigin='anonymous' referrerpolicy='no-referrer')
+script(async='' src='https://www.googletagmanager.com/gtag/js?id=G-V6YPYMWR4K')
+script.
+  window.dataLayer = window.dataLayer || [];
+  function gtag() { dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-V6YPYMWR4K');

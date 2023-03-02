@@ -1,8 +1,8 @@
-@import "./c/animation_manager.css";
-@import "./c/attr_manager.css";
-@import "./c/custom_elements.css";
-@import "./c/defults.css";
-@import "./c/fonts.css";
-@import "./c/loaders.css";
-@import "./c/lock.css";
-@import "./c/var_tracker.css";
+@import "./c/animation_manager";
+@import "./c/attr_manager";
+@import "./c/custom_elements";
+@import "./c/defaults";
+@import "./c/fonts";
+@import "./c/loaders";
+@import "./c/lock";
+@import "./c/var_tracker";

@@ -1,27 +1,17 @@
 doctype html
 head
   include ../defaults/header.pug
-  // CSS
-  link(href='/css/f/toolbox.css' rel='stylesheet' type='text/css')
   // Script
   script(defer='' src='/js/fs/toolbox.js')
-  script(defer='' src='/js/o/testing.js')
-  script(defer='' src='https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js' integrity='sha512-E8QSvWZ0eCLGk4km3hxSsNmGWbLtSCSUcewDQPQWZF6pEU8GlT8a5fF32wOl1i8ftdMhssTrF/OhyGWwonTcXA==' crossorigin='anonymous' referrerpolicy='no-referrer')
-include ../defaults/nav.pug
-#toolbox-container
-  h1(rbt='') Benjamin&apos;s Coding Toolbox
-  .innerdiv
-    button(onclick='Util.writeClipboard(1)') Copy Code Part #1
-    button(onclick='Util.writeClipboard(2)') Copy Code Part #2
-    button(onclick='Util.writeClipboard(3)') Copy Code Part #3
-    button(onclick='Util.writeClipboard(4)') Copy Code Part #4
-    button(onclick='Util.writeClipboard(5)') Copy Code Part #5
-lb
-#blocker
-#login
-  label(for='psw') Admin Password: 
-  input#psw(type='password' minlength='4')
-  p#pswCheck(style='color:red;' ch='' ns='')
-    icon(type='3' rounded='') error
-    |  Password Incorrect 
-    icon(type='3' rounded='') error
+body(onload='setup()')
+  include ../defaults/nav.pug
+  #toolbox-container
+    h1(rbt='') Benjamin&apos;s Coding Toolbox
+    .innerdiv
+      button(onclick='Util.writeClipboard(1)') Copy Code Part #1
+      button(onclick='Util.writeClipboard(2)') Copy Code Part #2
+      button(onclick='Util.writeClipboard(3)') Copy Code Part #3
+      button(onclick='Util.writeClipboard(4)') Copy Code Part #4
+      button(onclick='Util.writeClipboard(5)') Copy Code Part #5
+  lb
+  include ../defaults/locked.pug

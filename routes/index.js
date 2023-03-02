@@ -5,12 +5,12 @@ router.get(`/css/d`, (req, res) => { res.sendFile(`${process.cwd()}/assets/style
 
 router.get(`/css/c/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/assets/stylesheets/general/${file}`);
+    res.sendFile(`${process.cwd()}/assets/stylesheets/general/${file}.css`);
 });
 
 router.get(`/css/f/:file`, (req, res) => {
     const file = req.params.file;
-    res.sendFile(`${process.cwd()}/assets/stylesheets/file-specific/${file}`);
+    res.sendFile(`${process.cwd()}/assets/stylesheets/file-specific/${file}.css`);
 });
 
 router.get(`/js/fs/:file`, (req, res) => {
@@ -60,7 +60,9 @@ router.get('/about-me', (req, res) => {
     res.render(
         `${process.cwd()}/views/main/about-me.pug`,
         {
-            title: "About Me"
+            title: "About Me",
+            page: 2,
+            file: "about-me"
         }
     );
 })
@@ -69,7 +71,8 @@ router.get('/cornhole', (req, res) => {
     res.render(
         `${process.cwd()}/views/main/cornhole.pug`,
         {
-            title: "Cornhole Score Keeper"
+            title: "Cornhole Score Keeper",
+            file: "cornhole"
         }
     );
 })
@@ -78,7 +81,9 @@ router.get('/game', (req, res) => {
     res.render(
         `${process.cwd()}/views/main/game.pug`,
         {
-            title: "Keyboard and Mouse Game"
+            title: "Keyboard and Mouse Game",
+            page: 4,
+            file: "game"
         }
     );
 })
@@ -87,7 +92,8 @@ router.get('/socials', (req, res) => {
     res.render(
         `${process.cwd()}/views/main/socials.pug`,
         {
-            title: 'Socials'
+            title: 'Socials',
+            page: 5
         }
     );
 })
@@ -96,7 +102,9 @@ router.get('/text-conv', (req, res) => {
     res.render(
         `${process.cwd()}/views/main/text-converter.pug`,
         {
-            title: 'Text Conversion'
+            title: 'Text Conversion',
+            page: 3,
+            file: 'text-converter'
         }
     );
 })
@@ -105,7 +113,8 @@ router.get('/toolbox', (req, res) => {
     res.render(
         `${process.cwd()}/views/main/toolbox.pug`,
         {
-            title: 'Developmental Toolbox'
+            title: 'Developmental Toolbox',
+            file: 'toolbox'
         }
     );
 })
@@ -114,7 +123,8 @@ router.get('/web-gen', (req, res) => {
     res.render(
         `${process.cwd()}/views/main/website-generator.pug`,
         {
-            title: 'Website Generator'
+            title: 'Website Generator',
+            file: 'website-generator'
         }
     );
 })
@@ -123,7 +133,9 @@ router.get('/index', (req, res) => {
     res.render(
         `${process.cwd()}/views/main/index.pug`,
         {
-            title: 'Homepage'
+            title: 'Homepage',
+            page: 1,
+            file: 'index'
         }
     );
 })
@@ -132,7 +144,9 @@ router.get(`/`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/index.pug`,
         {
-            title: 'Homepage'
+            title: 'Homepage',
+            page: 1,
+            file: 'index'
         }
     );
 });
