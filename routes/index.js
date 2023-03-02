@@ -28,11 +28,6 @@ router.get(`/js/o/:file`, (req, res) => {
     res.sendFile(`${process.cwd()}/assets/scripts/Other/${file}`);
 });
 
-router.get(`/f/fa/:file`, (req, res) => {
-    const file = req.params.file;
-    res.sendFile(`${process.cwd()}/assets/fonts/Font_Awesome/${file}`);
-});
-
 router.get(`/f/:file`, (req, res) => {
     const file = req.params.file;
     res.sendFile(`${process.cwd()}/assets/fonts/${file}`);

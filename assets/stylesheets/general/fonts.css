@@ -53,66 +53,6 @@
     src: url("/f/materialSymbolsRounded.woff2") format('woff2');
 }
 
-@font-face {
-    font-family: 'Font Awesome Brands';
-    src: url("/f/fa/Brands/fa-brands.woff2") format("woff2"),
-        url("/f/fa/Brands/fa-brands.woff") format("woff"),
-        url("/f/fa/Brands/fa-brands.ttf") format("truetype");
-    font-style: normal;
-    font-display: swap;
-    font-weight: 400;
-}
-
-@font-face {
-    font-family: 'Font Awesome Duotone';
-    src: url("/f/fa/Duotone/fa-duotone.woff2") format("woff2"),
-        url("/f/fa/Duotone/fa-duotone.woff") format("woff"),
-        url("/f/fa/Duotone/fa-duotone.ttf") format("truetype");
-    font-style: normal;
-    font-display: swap;
-    font-weight: 900;
-}
-
-@font-face {
-    font-family: 'Font Awesome Light';
-    src: url("/f/fa/Light/fa-light.woff2") format("woff2"),
-        url("/f/fa/Light/fa-light.woff") format("woff"),
-        url("/f/fa/Light/fa-light.ttf") format("truetype");
-    font-style: normal;
-    font-display: swap;
-    font-weight: 300;
-}
-
-@font-face {
-    font-family: 'Font Awesome Regular';
-    src: url("/f/fa/Regular/fa-regular.woff2") format("woff2"),
-        url("/f/fa/Regular/fa-regular.woff") format("woff"),
-        url("/f/fa/Regular/fa-regular.ttf") format("truetype");
-    font-style: normal;
-    font-display: swap;
-    font-weight: 400;
-}
-
-@font-face {
-    font-family: 'Font Awesome Solid';
-    src: url("/f/fa/Solid/fa-solid.woff2") format("woff2"),
-        url("/f/fa/Solid/fa-solid.woff") format("woff"),
-        url("/f/fa/Solid/fa-solid.ttf") format("truetype");
-    font-style: normal;
-    font-display: swap;
-    font-weight: 900;
-}
-
-@font-face {
-    font-family: 'Font Awesome Thin';
-    src: url("/f/fa/Thin/fa-thin.woff2") format("woff2"),
-        url("/f/fa/Thin/fa-thin.woff") format("woff"),
-        url("/f/fa/Thin/fa-thin.ttf") format("truetype");
-    font-style: normal;
-    font-display: swap;
-    font-weight: 100;
-}
-
 icon[type="3"] {
     font-weight: normal;
     font-style: normal;
@@ -184,35 +124,4 @@ icon[type="1"] {
 
 [dark][inactive] {
     color: var(--dark300);
-}
-
-.fa-regular,
-.far {
-    font-family: 'Font Awesome Regular';
-}
-
-.fa-solid,
-.fas,
-.fa {
-    font-family: 'Font Awesome Solid';
-}
-
-.fa-light,
-.fal {
-    font-family: 'Font Awesome Light';
-}
-
-.fa-duotone,
-.fad {
-    font-family: 'Font Awesome Duotone';
-}
-
-.fa-thin,
-.fat {
-    font-family: 'Font Awesome Thin';
-}
-
-.fa-brands,
-.fab {
-    font-family: 'Font Awesome Brands';
 }
