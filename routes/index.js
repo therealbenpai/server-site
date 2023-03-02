@@ -49,7 +49,7 @@ router.get(`/chessthumbnail`, (req, res) => { res.redirect("https://cdn.discorda
 
 router.get(`/chess`, (req, res) => { res.redirect('https://sparty18.me/chess') });
 
-router.get('favicon.ico', (req, res) => { res.sendFile(`${process.cwd()}/assets/media/images/icon.ico`) });
+router.get('/favicon.ico', (req, res) => { res.sendFile(`${process.cwd()}/assets/media/images/icon.ico`) });
 
 router.get('/about-me', (req, res) => {
     res.render(

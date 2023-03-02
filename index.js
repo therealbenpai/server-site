@@ -49,7 +49,8 @@ app.use((req, res, next) => {
     res.status(404).render(
         `${process.cwd()}/views/misc/404.pug`,
         {
-            title: '404 - Page Not Found'
+            title: '404 - Page Not Found',
+            path: req.path
         }
     );
 });
