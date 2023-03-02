@@ -55,8 +55,8 @@ app.use((req, res, next) => {
 });
 
 https.createServer({
-    key: fs.readFileSync(`${process.cwd()}/certs/server.key`),
-    cert: fs.readFileSync(`${process.cwd()}/certs/server.cert`),
+    key: fs.readFileSync(`${process.cwd()}/assets/certs/server.key`),
+    cert: fs.readFileSync(`${process.cwd()}/assets/certs/server.cert`),
     handshakeTimeout: 10000,
 }, app).listen(port, () => {
     console.log(`Listening on port ${port}`)
