@@ -23,7 +23,8 @@ meta(property='twitter:image' content='/thumbnail')
 link(rel='icon' href='/icon' type='image/x-icon')
 link(href='/css/d' rel='stylesheet' type='text/css')
 if file
-  link(href='/css/f/#{file}' rel='stylesheet' type='text/css')
+  - var filename = '/css/f/' + file
+  link(href=filename rel='stylesheet' type='text/css')
 script(type='application/ld+json').
   {
     "@context": "http://www.schema.org",
