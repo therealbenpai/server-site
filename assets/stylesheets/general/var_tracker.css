@@ -2,7 +2,7 @@
     --bg: rgba(24,25,31,1);
     --bk: rgba(0,0,0,0.5);
     --lb: rgba(0,114,255,1);
-    --gscale: 2;
+    --gscale: 1;
     --gts: 125ms;
     --rot-multi: 60;
     --rot-time: calc(var(--gts) * var(--rot-multi));

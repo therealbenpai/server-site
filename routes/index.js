@@ -77,7 +77,7 @@ router.get('/game', (req, res) => {
         `${process.cwd()}/views/main/game.pug`,
         {
             title: "Keyboard and Mouse Game",
-            page: 4,
+            page: 3,
             file: "game"
         }
     );
@@ -88,18 +88,7 @@ router.get('/socials', (req, res) => {
         `${process.cwd()}/views/main/socials.pug`,
         {
             title: 'Socials',
-            page: 5
-        }
-    );
-})
-
-router.get('/text-conv', (req, res) => {
-    res.render(
-        `${process.cwd()}/views/main/text-converter.pug`,
-        {
-            title: 'Text Conversion',
-            page: 3,
-            file: 'text-converter'
+            page: 4
         }
     );
 })

@@ -17,7 +17,7 @@
 }
 
 [glow] {
-    font-size: calc(4em * var(--gscale));
+    font-size: calc(4rem * var(--gscale));
     background-color: var(--trans);
     color: white;
     box-shadow: calc(2px * var(--gscale)) calc(2px * var(--gscale)) calc(2px * var(--gscale)) var(--bk),

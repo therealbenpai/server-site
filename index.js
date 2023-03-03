@@ -55,13 +55,13 @@ app.use(limiter);
 app.use('/', website);
 app.use('/api', api);
 app.use((err, req, res, next) => {
-        switch (err.statusCode) {
+        switch (err.status) {
             case 401:
             case 403:
                 res.status(err.status).render(
                     `${process.cwd()}/views/misc/401.pug`,
                     {
-                        title: `${err.statusCode} - Unauthorized`,
+                        title: `401 - Unauthorized`,
                         path: req.path,
                         code: err.status
                     }
@@ -96,7 +96,7 @@ app.use((err, req, res, next) => {
                     .render(
                         `${process.cwd()}/views/misc/501.pug`,
                         {
-                            title: `${err.statusCode} - Internal Server Error`,
+                            title: `501 - Internal Server Error`,
                             errorId
                         }
                     )

@@ -7,8 +7,9 @@
 .navigation nav ul {
     text-align: center;
     list-style-type: none;
-    background-color: #B577B5;
-    border: 2px solid Black;
+    background-color: var(--dark100);
+    color: var(--dark800);
+    border: 2px solid var(--dark800);
     border-radius: 10px;
     font-weight: bold;
     padding: 16px;
@@ -18,22 +19,17 @@
 
 .navigation nav ul li {
     display: inline;
-    border-right: 2px solid var(--dark800);
-    padding-right: 8px;
-    padding-left: 8px;
-}
-
-.navigation nav ul li:last-child {
-    border-right: none;
+    padding: 0 9px;
 }
 
 .navigation nav ul li a {
     text-decoration: none;
-    color: var(--dark800)
+    color: var(--dark800);
 }
 
 .navigation nav li.selected {
-    color: var(--dark300)
+    color: var(--dark900);
+    text-decoration: underline;
 }
 
 .navigation nav ul li a:hover {
@@ -61,4 +57,19 @@ html {
 strong, i, strike, b, del, ins, dfn, em, s {
     font-style: normal;
     text-decoration: none;
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+    padding: 10px;
+    background-color: var(--dark100);
+    color: var(--dark900);
+    border: 2px solid var(--dark800);
+    border-radius: 10px;
+    font-weight: bold;
+    font-size: 0.8em;
 }
