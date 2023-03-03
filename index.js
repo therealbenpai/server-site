@@ -1,4 +1,5 @@
-const app = require('express')();
+const express = require('express')
+const app = express();
 const Sentry = require('@sentry/node')
 const Tracing = require('@sentry/tracing')
 const { ProfilingIntegration } = require('@sentry/profiling-node')
@@ -15,7 +16,7 @@ Sentry.init({
     serverName: "Main PC",
     integrations: [
         new ProfilingIntegration(),
-        new Intigrations.ExtraErrorData({ depth: 10 }),
+        new Intigrations.ExtraErrorData({ depth: 25 }),
         new Intigrations.SessionTiming(),
         new Intigrations.Transaction(),
         new Intigrations.ReportingObserver(),
@@ -26,7 +27,7 @@ Sentry.init({
             tracing: true,
             breadcrumbs: true
         }),
-        new Tracing.Integrations.Express({ app })
+        new Tracing.Integrations.Express({ app: app })
     ],
     // @ts-ignore
     profilesSampleRate: 1.0,
@@ -38,8 +39,9 @@ Sentry.init({
 app.use(Sentry.Handlers.requestHandler({ transaction: true }));
 app.use(Sentry.Handlers.tracingHandler());
 app.set('view engine', 'pug');
-app.use('/api', api);
 app.use('/', website);
+app.use('/api', api);
+app.use(Sentry.Handlers.errorHandler({ shouldHandleError: (_) => true}));
 app.use(
     (err, req, res, options) => {
         switch (err.status) {
@@ -54,6 +56,7 @@ app.use(
                     }
                 );
                 break;
+            case 400:
             case 404:
                 res.status(404).render(
                     `${process.cwd()}/views/misc/404.pug`,
@@ -63,34 +66,30 @@ app.use(
                     }
                 );
                 break;
-            // case 405:
-            //     const { path } = req;
-            //     const allowedMethods = app._router.stack
-            //         .filter(r => r.route && r.route.path === path)
-            //         .map(r => r.route.stack[0].method.toUpperCase())
-            //         .join(', ');
-            //     const methodUsed = req.method.toUpperCase();
-            //     res.status(405).render(
-            //         `${process.cwd()}/views/misc/405.pug`,
-            //         {
-            //             title: '405 - Method Not Allowed',
-            //             path,
-            //             allowedMethods,
-            //             methodUsed
-            //         }
-            //     );
-            //     break;
+            case 405:
+                const { path } = req;
+                const allowedMethods = app._router.stack
+                    .filter(r => r.route && r.route.path === path)
+                    .map(r => r.route.stack[0].method.toUpperCase())
+                    .join(', ');
+                const methodUsed = req.method.toUpperCase();
+                res.status(405).render(
+                    `${process.cwd()}/views/misc/405.pug`,
+                    {
+                        title: '405 - Method Not Allowed',
+                        path,
+                        allowedMethods,
+                        methodUsed
+                    }
+                );
+                break;
             default:
-                const errorId = Sentry.captureException(err);
                 res
                     .status(501)
-                    .setHeader('X-Error-ID', errorId)
-                    .setHeader()
                     .render(
                         `${process.cwd()}/views/misc/501.pug`,
                         {
                             title: `${err.status} - Internal Server Error`,
-                            errorId
                         }
                     )
                 break;
