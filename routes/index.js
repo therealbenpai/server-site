@@ -1,7 +1,8 @@
-const express = require(`express`);
-const router = express.Router();
+const router = require(`express`).Router();
 
-router.get(`/css/d`, (req, res) => { res.sendFile(`${process.cwd()}/assets/stylesheets/general/combined.css`) });
+router.get(`/css/d`, (req, res) => {
+    res.sendFile(`${process.cwd()}/assets/stylesheets/general/combined.css`)
+});
 
 router.get(`/css/c/:file`, (req, res) => {
     const file = req.params.file;
@@ -33,25 +34,55 @@ router.get(`/f/:file`, (req, res) => {
     res.sendFile(`${process.cwd()}/assets/fonts/${file}`);
 });
 
-router.get(`/icon`, (req, res) => { res.setHeader(`Content-Type`, `image/x-icon`).sendFile(`${process.cwd()}/assets/media/images/icon.ico`) });
+router.get(`/icon`, (req, res) => {
+    res
+        .setHeader(`Content-Type`, `image/x-icon`)
+        .sendFile(`${process.cwd()}/assets/media/images/icon.ico`)
+});
 
-router.get(`/bg`, (req, res) => { res.setHeader(`Content-Type`, `image/svg+xml`).sendFile(`${process.cwd()}/assets/media/images/background.svg`) });
+router.get(`/bg`, (req, res) => {
+    res
+        .setHeader(`Content-Type`, `image/svg+xml`)
+        .sendFile(`${process.cwd()}/assets/media/images/background.svg`)
+});
 
-router.get(`/robots.txt`, (req, res) => { res.sendFile(`${process.cwd()}/metadata/robots.txt`) });
+router.get(`/robots.txt`, (req, res) => {
+    res
+        .sendFile(`${process.cwd()}/metadata/robots.txt`)
+});
 
-router.get(`/sitemap`, (req, res) => { res.setHeader(`Content-Type`, `application/xml`).sendFile(`${process.cwd()}/metadata/sitemap.xml`) });
+router.get(`/sitemap`, (req, res) => {
+    res
+        .setHeader(`Content-Type`, `application/xml`)
+        .sendFile(`${process.cwd()}/metadata/sitemap.xml`)
+});
 
-router.get(`/socials`, (req, res) => { res.redirect(`https://sparty182020.carrd.co/`) });
+router.get(`/socials`, (req, res) => {
+    res
+        .redirect(301, `https://sparty182020.carrd.co/`)
+});
 
-router.get(`/thumbnail`, (req, res) => { res.redirect("https://i.ibb.co/Gs8BsdF/Screenshot-2022-02-28-5-45-23-PM.png") });
+router.get(`/thumbnail`, (req, res) => {
+    res
+        .redirect(301, "https://i.ibb.co/Gs8BsdF/Screenshot-2022-02-28-5-45-23-PM.png")
+});
 
-router.get(`/chessthumbnail`, (req, res) => { res.redirect("https://cdn.discordapp.com/attachments/999266213697945652/1072217450306883654/image.png") });
+router.get(`/chessthumbnail`, (req, res) => {
+    res
+        .redirect(301, "https://cdn.discordapp.com/attachments/999266213697945652/1072217450306883654/image.png")
+});
 
-router.get(`/chess`, (req, res) => { res.redirect('https://sparty18.me/chess') });
+router.get(`/chess`, (req, res) => {
+    res
+        .redirect(301, `https://sparty18.me/chess`, 200)
+});
 
-router.get('/favicon.ico', (req, res) => { res.sendFile(`${process.cwd()}/assets/media/images/icon.ico`) });
+router.get(`/favicon.ico`, (req, res) => {
+    res
+        .sendFile(`${process.cwd()}/assets/media/images/icon.ico`)
+});
 
-router.get('/about-me', (req, res) => {
+router.get(`/about-me`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/about-me.pug`,
         {
@@ -62,7 +93,7 @@ router.get('/about-me', (req, res) => {
     );
 })
 
-router.get('/cornhole', (req, res) => {
+router.get(`/cornhole`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/cornhole.pug`,
         {
@@ -72,7 +103,7 @@ router.get('/cornhole', (req, res) => {
     );
 })
 
-router.get('/game', (req, res) => {
+router.get(`/game`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/game.pug`,
         {
@@ -83,54 +114,54 @@ router.get('/game', (req, res) => {
     );
 })
 
-router.get('/socials', (req, res) => {
+router.get(`/socials`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/socials.pug`,
         {
-            title: 'Socials',
+            title: `Socials`,
             page: 5
         }
     );
 })
 
-router.get('/text-conv', (req, res) => {
+router.get(`/text-conv`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/text-converter.pug`,
         {
-            title: 'Text Conversion',
+            title: `Text Conversion`,
             page: 3,
-            file: 'text-converter'
+            file: `text-converter`
         }
     );
 })
 
-router.get('/toolbox', (req, res) => {
+router.get(`/toolbox`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/toolbox.pug`,
         {
-            title: 'Developmental Toolbox',
-            file: 'toolbox'
+            title: `Developmental Toolbox`,
+            file: `toolbox`
         }
     );
 })
 
-router.get('/web-gen', (req, res) => {
+router.get(`/web-gen`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/website-generator.pug`,
         {
-            title: 'Website Generator',
-            file: 'website-generator'
+            title: `Website Generator`,
+            file: `website-generator`
         }
     );
 })
 
-router.get('/index', (req, res) => {
+router.get(`/index`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/index.pug`,
         {
-            title: 'Homepage',
+            title: `Homepage`,
             page: 1,
-            file: 'index'
+            file: `index`
         }
     );
 })
@@ -139,9 +170,9 @@ router.get(`/`, (req, res) => {
     res.render(
         `${process.cwd()}/views/main/index.pug`,
         {
-            title: 'Homepage',
+            title: `Homepage`,
             page: 1,
-            file: 'index'
+            file: `index`
         }
     );
 });
