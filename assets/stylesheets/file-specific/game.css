@@ -37,3 +37,9 @@ body {
 .counter span {
     color: rgba(84, 84, 84, 0.95);
 }
+
+@media screen and (max-width: 768px) {
+    #typing {
+        display: none;
+    }
+}
