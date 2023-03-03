@@ -7,9 +7,9 @@
 .navigation nav ul {
     text-align: center;
     list-style-type: none;
-    background-color: var(--dark100);
-    color: var(--dark800);
-    border: 2px solid var(--dark800);
+    background-color: rgba(84, 84, 84, 0.625);
+    color: rgba(4, 4, 4, 1);
+    border: 2px solid rgba(18, 18, 18, 0.625);
     border-radius: 10px;
     font-weight: bold;
     padding: 16px;
@@ -24,11 +24,11 @@
 
 .navigation nav ul li a {
     text-decoration: none;
-    color: var(--dark800);
+    color: rgba(18, 18, 18, 1);
 }
 
 .navigation nav li.selected {
-    color: var(--dark900);
+    color: rgba(4, 4, 4, 1);
     text-decoration: underline;
 }
 
@@ -39,10 +39,8 @@
 /* SVG Background */
 
 html {
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    background-image: url("/bg");
+    background: linear-gradient(135deg, rgba(0, 0, 255, 0.2), rgba(255, 0, 0, 0.2)) !important;
+    animation: hue_rotate var(--rot-time) linear infinite;
 }
 
 /* Extras */
@@ -54,7 +52,15 @@ html {
     text-decoration: underline red 4px;
 }
 
-strong, i, strike, b, del, ins, dfn, em, s {
+strong,
+i,
+strike,
+b,
+del,
+ins,
+dfn,
+em,
+s {
     font-style: normal;
     text-decoration: none;
 }
@@ -66,9 +72,9 @@ footer {
     right: 0;
     text-align: center;
     padding: 10px;
-    background-color: var(--dark100);
-    color: var(--dark900);
-    border: 2px solid var(--dark800);
+    background-color: rgba(84, 84, 84, 0.625);
+    color: rgba(4, 4, 4, 1);
+    border: 2px solid rgba(18, 18, 18, 0.625);
     border-radius: 10px;
     font-weight: bold;
     font-size: 0.8em;

@@ -18,9 +18,9 @@ body {
     align-content: space-around;
 }
 
-div#typing,
-div#clicking {
-    width: -webkit-fill-available;
+#typing,
+#clicking {
+    width: 100%;
     margin: 4px;
     align-items: center;
     align-content: center;
@@ -29,11 +29,11 @@ div#clicking {
 }
 
 .counter {
-    color: rgba(200, 150, 180, 0.95);
+    color: rgb(24, 25, 31);
     text-decoration: underline;
     font-weight: bold;
 }
 
 .counter span {
-    color: red;
+    color: rgba(84, 84, 84, 0.95);
 }
