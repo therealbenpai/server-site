@@ -37,17 +37,12 @@ router.get('/dec', (req, res) => {
     res.status(200).send({ dec: dec })
 })
 
-router.get('/staff', (req, res) => res.sendFile(`${process.cwd()}/API/staff.json`))
+router.get('/staff', (req, res) => { res.sendFile(`${process.cwd()}/API/staff.json`) })
 
 router.get('/qd/:name', (req, res) => {
-    const { name } = req.params
-    if (!name) {
-        res.status(400).send(util.failedStatus('Missing name'))
-        return
-    }
-    return res.sendFile(`${process.cwd()}/API/quick_data/${name}`)
+    res.sendFile(`${process.cwd()}/API/quick_data/${req.params.name}`)
 })
 
-router.get('/qd/names', (_, res) => res.sendFile(`${process.cwd()}/API/quick_data/names.json`))
+router.get('/qd/names', (_, res) => { res.sendFile(`${process.cwd()}/API/quick_data/names.json`) })
 
 module.exports = router

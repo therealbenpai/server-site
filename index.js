@@ -1,6 +1,6 @@
 const express = require('express');
-const Sentry = require('@sentry/node')
-const Tracing = require('@sentry/tracing')
+const Sentry = require('@sentry/node');
+const Tracing = require('@sentry/tracing');
 const { ProfilingIntegration } = require('@sentry/profiling-node')
 const Intigrations = require('@sentry/integrations')
 const https = require('https')
@@ -38,24 +38,13 @@ Sentry.init({
     sendDefaultPii: true
 });
 
-const limiter = rateLimiter({
+const limiter = rateLimiter.rateLimit({
     windowMs: 1000,
     max: 10,
-    message: "Too many requests, please try again later.",
     legacyHeaders: false,
     standardHeaders: true,
-    handler: (_, res, ...args) => res.render(`${process.cwd()}/views/misc/429.pug`, { title: '429 - Too Many Requests' }),
-    skip: (req, res) => {
-        const rateLimitImuneEndpoints = [
-            '/css',
-            '/js',
-            '/f',
-            '/icon',
-            '/bg',
-            '/thumbnail'
-        ]
-        return rateLimitImuneEndpoints.some(endpoint => req.path.startsWith(endpoint))
-    }
+    handler: (req, res, next, options) => res.status(429).render(`${process.cwd()}/views/misc/429.pug`, { title: '429 - Too Many Requests' }),
+    skip: (req, res) => ['/css','/js','/f','/icon','/bg','/thumbnail'].some(endpoint => req.path.startsWith(endpoint))
 });
 
 app.use(Sentry.Handlers.requestHandler({ transaction: true }));
@@ -63,36 +52,23 @@ app.use(Sentry.Handlers.tracingHandler());
 // use pug
 app.set('view engine', 'pug');
 app.use(limiter);
-app.use('/api', api);
 app.use('/', website);
-app.use(
-    /**
-     * @param {Error} err 
-     * @param {import('express').Request} req 
-     * @param {import('express').Response} res 
-     * @param {import('express').NextFunction} _ 
-     */
-    (err, req, res, _) => {
-        switch (err.status) {
+app.use('/api', api);
+app.use((err, req, res, next) => {
+        switch (err.statusCode) {
             case 401:
             case 403:
                 res.status(err.status).render(
                     `${process.cwd()}/views/misc/401.pug`,
                     {
-                        title: `${err.status} - Unauthorized`,
+                        title: `${err.statusCode} - Unauthorized`,
                         path: req.path,
                         code: err.status
                     }
                 );
                 break;
             case 404:
-                res.status(404).render(
-                    `${process.cwd()}/views/misc/404.pug`,
-                    {
-                        title: '404 - Page Not Found',
-                        path: req.path
-                    }
-                );
+                next();
                 break;
             case 405:
                 // find the allowed methods for the path
@@ -117,11 +93,10 @@ app.use(
                 res
                     .status(501)
                     .setHeader('X-Error-ID', errorId)
-                    .setHeader()
                     .render(
                         `${process.cwd()}/views/misc/501.pug`,
                         {
-                            title: `${err.status} - Internal Server Error`,
+                            title: `${err.statusCode} - Internal Server Error`,
                             errorId
                         }
                     )
@@ -129,6 +104,15 @@ app.use(
         }
     }
 );
+app.use((req, res, next) => {
+    res.status(404).render(
+        `${process.cwd()}/views/misc/404.pug`,
+        {
+            title: '404 - Page Not Found',
+            path: req.path
+        }
+    );
+})
 
 https.createServer({
     key: fs.readFileSync(`${process.cwd()}/assets/certs/server.key`),
