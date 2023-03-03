@@ -9,10 +9,11 @@ const app = express();
 const port = 443;
 
 const website = require('./routes/index')
-const api = require('./routes/api')
+const api = require('./routes/api');
+const { IncomingMessage, OutgoingMessage } = require('http');
 
 Sentry.init({
-    dsn: "https://82f73b485cdc419699fe0e52e2daadd0@o1236511.ingest.sentry.io/4504203537350656",
+    dsn: "https://90738d20a91d4f169081dfbea05bc8d4@o4504516705058816.ingest.sentry.io/4504771825303552",
     sampleRate: 1.0,
     serverName: "Main PC",
     integrations: [
@@ -43,17 +44,70 @@ app.use(Sentry.Handlers.tracingHandler());
 app.set('view engine', 'pug');
 app.use('/api', api);
 app.use('/', website);
-app.use(Sentry.Handlers.errorHandler({ shouldHandleError: () => { return true } }));
-// render 404 page
-app.use((req, res, next) => {
-    res.status(404).render(
-        `${process.cwd()}/views/misc/404.pug`,
-        {
-            title: '404 - Page Not Found',
-            path: req.path
+app.use(
+    /**
+     * @param {Error} err 
+     * @param {import('express').Request} req 
+     * @param {import('express').Response} res 
+     * @param {import('express').NextFunction} _ 
+     */
+    (err, req, res, _) => {
+        switch (err.status) {
+            case 401:
+            case 403:
+                res.status(err.status).render(
+                    `${process.cwd()}/views/misc/401.pug`,
+                    {
+                        title: `${err.status} - Unauthorized`,
+                        path: req.path,
+                        code: err.status
+                    }
+                );
+                break;
+            case 404:
+                res.status(404).render(
+                    `${process.cwd()}/views/misc/404.pug`,
+                    {
+                        title: '404 - Page Not Found',
+                        path: req.path
+                    }
+                );
+                break;
+            case 405:
+                // find the allowed methods for the path
+                const { path } = req;
+                const allowedMethods = app._router.stack
+                    .filter(r => r.route && r.route.path === path)
+                    .map(r => r.route.stack[0].method.toUpperCase())
+                    .join(', ');
+                const methodUsed = req.method.toUpperCase();
+                res.status(405).render(
+                    `${process.cwd()}/views/misc/405.pug`,
+                    {
+                        title: '405 - Method Not Allowed',
+                        path,
+                        allowedMethods,
+                        methodUsed
+                    }
+                );
+                break;
+            default:
+                const errorId = Sentry.captureException(err);
+                res
+                    .status(501)
+                    .setHeader('X-Error-ID', errorId)
+                    .setHeader()
+                    .render(
+                        `${process.cwd()}/views/misc/501.pug`,
+                        {
+                            title: `${err.status} - Internal Server Error`,
+                            errorId
+                        }
+                    )
+                break;
         }
-    );
-});
+    }
+);
 
 https.createServer({
     key: fs.readFileSync(`${process.cwd()}/assets/certs/server.key`),
