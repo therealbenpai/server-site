@@ -43,7 +43,7 @@ router.get(`/sitemap`, (req, res) => { res.setHeader(`Content-Type`, `applicatio
 
 router.get(`/socials`, (req, res) => { res.redirect(`https://sparty182020.carrd.co/`) });
 
-router.get(`/thumbnail`, (req, res) => { res.redirect("https://i.ibb.co/Gs8BsdF/Screenshot-2022-02-28-5-45-23-PM.png") });
+router.get(`/thumbnail`, (req, res) => { res.redirect("https://cdn.discordapp.com/attachments/999266213697945652/1081273691867992124/image.png") });
 
 router.get(`/chessthumbnail`, (req, res) => { res.redirect("https://cdn.discordapp.com/attachments/999266213697945652/1072217450306883654/image.png") });
 
