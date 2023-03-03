@@ -39,8 +39,8 @@ Sentry.init({
 });
 
 const limiter = rateLimiter({
-    windowMs: 10000,
-    max: 1,
+    windowMs: 1000,
+    max: 10,
     message: "Too many requests, please try again later.",
     legacyHeaders: false,
     standardHeaders: true,
