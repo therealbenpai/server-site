@@ -37,9 +37,9 @@ router.get(`/icon`, (req, res) => { res.setHeader(`Content-Type`, `image/x-icon`
 
 router.get(`/bg`, (req, res) => { res.setHeader(`Content-Type`, `image/svg+xml`).sendFile(`${process.cwd()}/assets/media/images/background.svg`) });
 
-router.get(`/robots.txt`, (req, res) => { res.sendFile(`${process.cwd()}/website/metadata/robots.txt`) });
+router.get(`/robots.txt`, (req, res) => { res.sendFile(`${process.cwd()}/metadata/robots.txt`) });
 
-router.get(`/sitemap`, (req, res) => { res.setHeader(`Content-Type`, `application/xml`).sendFile(`${process.cwd()}/website/metadata/sitemap.xml`) });
+router.get(`/sitemap`, (req, res) => { res.setHeader(`Content-Type`, `application/xml`).sendFile(`${process.cwd()}/metadata/sitemap.xml`) });
 
 router.get(`/socials`, (req, res) => { res.redirect(`https://sparty182020.carrd.co/`) });
 

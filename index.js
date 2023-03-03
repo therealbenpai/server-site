@@ -7,10 +7,10 @@ const https = require('https')
 const fs = require('fs')
 const app = express();
 const port = 443;
+const rateLimiter = require('express-rate-limit');
 
 const website = require('./routes/index')
 const api = require('./routes/api');
-const { IncomingMessage, OutgoingMessage } = require('http');
 
 Sentry.init({
     dsn: "https://90738d20a91d4f169081dfbea05bc8d4@o4504516705058816.ingest.sentry.io/4504771825303552",
@@ -38,10 +38,31 @@ Sentry.init({
     sendDefaultPii: true
 });
 
+const limiter = rateLimiter({
+    windowMs: 10000,
+    max: 1,
+    message: "Too many requests, please try again later.",
+    legacyHeaders: false,
+    standardHeaders: true,
+    handler: (_, res, ...args) => res.render(`${process.cwd()}/views/misc/429.pug`, { title: '429 - Too Many Requests' }),
+    skip: (req, res) => {
+        const rateLimitImuneEndpoints = [
+            '/css',
+            '/js',
+            '/f',
+            '/icon',
+            '/bg',
+            '/thumbnail'
+        ]
+        return rateLimitImuneEndpoints.some(endpoint => req.path.startsWith(endpoint))
+    }
+});
+
 app.use(Sentry.Handlers.requestHandler({ transaction: true }));
 app.use(Sentry.Handlers.tracingHandler());
 // use pug
 app.set('view engine', 'pug');
+app.use(limiter);
 app.use('/api', api);
 app.use('/', website);
 app.use(
