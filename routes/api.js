@@ -37,7 +37,7 @@ router.get('/dec', (req, res) => {
     res.status(200).send({ dec: dec })
 })
 
-router.get('/staff', (req, res) => { res.sendFile(`${process.cwd()}/API/staff.json`) })
+router.get('/staff', (req, res) => res.sendFile(`${process.cwd()}/API/staff.json`))
 
 router.get('/qd/:name', (req, res) => {
     const { name } = req.params
@@ -48,6 +48,6 @@ router.get('/qd/:name', (req, res) => {
     return res.sendFile(`${process.cwd()}/API/quick_data/${name}`)
 })
 
-router.get('/qd/names', (req, res) => { res.sendFile(`${process.cwd()}/API/quick_data/names.json`) })
+router.get('/qd/names', (_, res) => res.sendFile(`${process.cwd()}/API/quick_data/names.json`))
 
 module.exports = router

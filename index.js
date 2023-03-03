@@ -1,10 +1,12 @@
-const app = require('express')();
+const express = require('express');
 const Sentry = require('@sentry/node')
 const Tracing = require('@sentry/tracing')
 const { ProfilingIntegration } = require('@sentry/profiling-node')
 const Intigrations = require('@sentry/integrations')
 const https = require('https')
 const fs = require('fs')
+const app = express();
+const port = 443;
 
 const website = require('./routes/index')
 const api = require('./routes/api');
@@ -20,7 +22,7 @@ Sentry.init({
         new Intigrations.Transaction(),
         new Intigrations.ReportingObserver(),
         new Intigrations.CaptureConsole({
-            levels: ['error', 'warn']
+            levels: ['error', 'critical', 'fatal', 'warn']
         }),
         new Sentry.Integrations.Http({
             tracing: true,
@@ -37,11 +39,18 @@ Sentry.init({
 
 app.use(Sentry.Handlers.requestHandler({ transaction: true }));
 app.use(Sentry.Handlers.tracingHandler());
+// use pug
 app.set('view engine', 'pug');
 app.use('/api', api);
 app.use('/', website);
 app.use(
-    (err, req, res, options) => {
+    /**
+     * @param {Error} err 
+     * @param {import('express').Request} req 
+     * @param {import('express').Response} res 
+     * @param {import('express').NextFunction} _ 
+     */
+    (err, req, res, _) => {
         switch (err.status) {
             case 401:
             case 403:
@@ -63,23 +72,24 @@ app.use(
                     }
                 );
                 break;
-            // case 405:
-            //     const { path } = req;
-            //     const allowedMethods = app._router.stack
-            //         .filter(r => r.route && r.route.path === path)
-            //         .map(r => r.route.stack[0].method.toUpperCase())
-            //         .join(', ');
-            //     const methodUsed = req.method.toUpperCase();
-            //     res.status(405).render(
-            //         `${process.cwd()}/views/misc/405.pug`,
-            //         {
-            //             title: '405 - Method Not Allowed',
-            //             path,
-            //             allowedMethods,
-            //             methodUsed
-            //         }
-            //     );
-            //     break;
+            case 405:
+                // find the allowed methods for the path
+                const { path } = req;
+                const allowedMethods = app._router.stack
+                    .filter(r => r.route && r.route.path === path)
+                    .map(r => r.route.stack[0].method.toUpperCase())
+                    .join(', ');
+                const methodUsed = req.method.toUpperCase();
+                res.status(405).render(
+                    `${process.cwd()}/views/misc/405.pug`,
+                    {
+                        title: '405 - Method Not Allowed',
+                        path,
+                        allowedMethods,
+                        methodUsed
+                    }
+                );
+                break;
             default:
                 const errorId = Sentry.captureException(err);
                 res
@@ -102,6 +112,6 @@ https.createServer({
     key: fs.readFileSync(`${process.cwd()}/assets/certs/server.key`),
     cert: fs.readFileSync(`${process.cwd()}/assets/certs/server.cert`),
     handshakeTimeout: 10000,
-}, app).listen(443, () => {
-    console.log(`Listening on port 443`)
+}, app).listen(port, () => {
+    console.log(`Listening on port ${port}`)
 })
