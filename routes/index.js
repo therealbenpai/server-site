@@ -35,12 +35,14 @@ router.get(`/f/:file`, (req, res) => {
 
 router.get(`/icon`, (req, res) => {
     res
+        .setHeader('Cache-Control', 'no-cache')
         .setHeader(`Content-Type`, `image/x-icon`)
         .sendFile(`${process.cwd()}/assets/media/images/icon.ico`)
 });
 
 router.get(`/bg`, (req, res) => {
     res
+        .setHeader('Cache-Control', 'no-cache')
         .setHeader(`Content-Type`, `image/svg+xml`)
         .sendFile(`${process.cwd()}/assets/media/images/background.svg`)
 });
@@ -63,11 +65,13 @@ router.get(`/socials`, (req, res) => {
 
 router.get(`/thumbnail`, (req, res) => {
     res
+        .setHeader('Cache-Control', 'no-cache')
         .redirect("https://cdn.discordapp.com/attachments/999266213697945652/1081273691867992124/image.png")
 });
 
 router.get(`/chessthumbnail`, (req, res) => {
     res
+        .setHeader('Cache-Control', 'no-cache')
         .redirect("https://cdn.discordapp.com/attachments/999266213697945652/1072217450306883654/image.png")
 });
 
@@ -78,6 +82,7 @@ router.get(`/chess`, (req, res) => {
 
 router.get('/favicon.ico', (req, res) => {
     res
+        .setHeader('Cache-Control', 'no-cache')
         .sendFile(`${process.cwd()}/assets/media/images/icon.ico`)
 });
 
