@@ -1,4 +1,4 @@
-const express = require(`express`);
+const express = require('express');
 const router = express.Router();
 
 router.get(`/css/d`, (req, res) => { res.sendFile(`${process.cwd()}/assets/stylesheets/general/combined.css`) });
@@ -33,25 +33,55 @@ router.get(`/f/:file`, (req, res) => {
     res.sendFile(`${process.cwd()}/assets/fonts/${file}`);
 });
 
-router.get(`/icon`, (req, res) => { res.setHeader(`Content-Type`, `image/x-icon`).sendFile(`${process.cwd()}/assets/media/images/icon.ico`) });
+router.get(`/icon`, (req, res) => {
+    res
+        .setHeader(`Content-Type`, `image/x-icon`)
+        .sendFile(`${process.cwd()}/assets/media/images/icon.ico`)
+});
 
-router.get(`/bg`, (req, res) => { res.setHeader(`Content-Type`, `image/svg+xml`).sendFile(`${process.cwd()}/assets/media/images/background.svg`) });
+router.get(`/bg`, (req, res) => {
+    res
+        .setHeader(`Content-Type`, `image/svg+xml`)
+        .sendFile(`${process.cwd()}/assets/media/images/background.svg`)
+});
 
-router.get(`/robots.txt`, (req, res) => { res.sendFile(`${process.cwd()}/metadata/robots.txt`) });
+router.get(`/robots.txt`, (req, res) => {
+    res
+        .sendFile(`${process.cwd()}/metadata/robots.txt`)
+});
 
-router.get(`/sitemap`, (req, res) => { res.setHeader(`Content-Type`, `application/xml`).sendFile(`${process.cwd()}/metadata/sitemap.xml`) });
+router.get(`/sitemap`, (req, res) => {
+    res
+        .setHeader(`Content-Type`, `application/xml`)
+        .sendFile(`${process.cwd()}/metadata/sitemap.xml`)
+});
 
-router.get(`/socials`, (req, res) => { res.redirect(`https://sparty182020.carrd.co/`) });
+router.get(`/socials`, (req, res) => {
+    res
+        .redirect(`https://sparty182020.carrd.co/`)
+});
 
-router.get(`/thumbnail`, (req, res) => { res.redirect("https://cdn.discordapp.com/attachments/999266213697945652/1081273691867992124/image.png") });
+router.get(`/thumbnail`, (req, res) => {
+    res
+        .redirect("https://cdn.discordapp.com/attachments/999266213697945652/1081273691867992124/image.png")
+});
 
-router.get(`/chessthumbnail`, (req, res) => { res.redirect("https://cdn.discordapp.com/attachments/999266213697945652/1072217450306883654/image.png") });
+router.get(`/chessthumbnail`, (req, res) => {
+    res
+        .redirect("https://cdn.discordapp.com/attachments/999266213697945652/1072217450306883654/image.png")
+});
 
-router.get(`/chess`, (req, res) => { res.redirect('https://sparty18.me/chess') });
+router.get(`/chess`, (req, res) => {
+    res
+        .redirect('https://sparty18.me/chess')
+});
 
-router.get('/favicon.ico', (req, res) => { res.sendFile(`${process.cwd()}/assets/media/images/icon.ico`) });
+router.get('/favicon.ico', (req, res) => {
+    res
+        .sendFile(`${process.cwd()}/assets/media/images/icon.ico`)
+});
 
-router.get('/blank', (req, res) => { 
+router.get('/blank', (req, res) => {
     res.render(
         `${process.cwd()}/views/main/blank.pug`,
         {

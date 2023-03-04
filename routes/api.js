@@ -1,5 +1,6 @@
 const express = require('express')
 const router = express.Router();
+const fs = require('fs')
 
 const util = require('../src/util-fuctions')
 const ccf = require('../src/crypto')
@@ -37,12 +38,18 @@ router.get('/dec', (req, res) => {
     res.status(200).send({ dec: dec })
 })
 
-router.get('/staff', (req, res) => { res.sendFile(`${process.cwd()}/API/staff.json`) })
-
-router.get('/qd/:name', (req, res) => {
-    res.sendFile(`${process.cwd()}/API/quick_data/${req.params.name}`)
+router.get('/staff', (req, res) => {
+    res.send(
+        require(`${process.cwd()}/API/staff.json`)
+    )
 })
 
-router.get('/qd/names', (_, res) => { res.sendFile(`${process.cwd()}/API/quick_data/names.json`) })
+router.get('/qd/:name', (req, res) => {
+    res.send(fs.readFileSync(`${process.cwd()}/API/quick_data/${req.params.name}`))
+})
+
+router.get('/qd/names', (_, res) => {
+    res.sendFile(`${process.cwd()}/API/quick_data/names.json`)
+})
 
 module.exports = router
