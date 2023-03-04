@@ -39,7 +39,7 @@ router.get('/dec', (req, res) => {
 })
 
 router.get('/staff', (req, res) => {
-    res.send(
+    res.json(
         require(`${process.cwd()}/API/staff.json`)
     )
 })
@@ -47,7 +47,9 @@ router.get('/staff', (req, res) => {
 router.get('/qd/:name', (req, res) => {
     if (req.params.name === 'names') return res.sendFile(`${process.cwd()}/API/quick_data/names.json`)
     const data = fs.readFileSync(`${process.cwd()}/API/quick_data/${req.params.name}`).toString()
-    res.send(data)
+    res
+        .contentType('text/plain')
+        .send(data)
 })
 
 module.exports = router
