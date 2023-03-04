@@ -55,4 +55,21 @@ router.get('/qd/:name', (req, res) => {
         .send(data)
 })
 
+router.get('/qd/full/:name', (req, res) => {
+    const { name } = req.params
+    const namesDic = require(`${process.cwd()}/API/quick_data/names.json`)
+    if (!namesDic[name]) {
+        res.status(400).send(util.failedStatus('Invalid name')).end()
+        return
+    }
+    const data = {
+        title: namesDic[name],
+        description: fs.readFileSync(`${process.cwd()}/API/quick_data/${name}`).toString()
+    }
+    res
+        .setHeader('Cache-Control', 'no-cache')
+        .contentType('application/json')
+        .send(data)
+})
+
 module.exports = router
