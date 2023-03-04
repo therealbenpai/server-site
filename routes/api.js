@@ -45,11 +45,8 @@ router.get('/staff', (req, res) => {
 })
 
 router.get('/qd/:name', (req, res) => {
+    if (req.params.name === 'names') return res.sendFile(`${process.cwd()}/API/quick_data/names.json`)
     res.send(fs.readFileSync(`${process.cwd()}/API/quick_data/${req.params.name}`))
-})
-
-router.get('/qd/names', (_, res) => {
-    res.sendFile(`${process.cwd()}/API/quick_data/names.json`)
 })
 
 module.exports = router
