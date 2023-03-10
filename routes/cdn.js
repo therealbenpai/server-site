@@ -13,9 +13,9 @@ const connection = mysql.createConnection({
 router.get('/transcript/:id', async (req, res) => {
     const { id } = req.params;
     const sql = `SELECT transcript FROM tickets WHERE id = ${id}`;
-    connection.query(sql, (rows) => {
-        if (rows.length === 0) return
-        res.send(fs.readFileSync(`/CDN/BenpaiBot/transcripts/${rows[0].transcript}`, 'utf8'))
+    connection.query(sql, (err, rows) => {
+        if (rows[0].length === 0) return
+        res.send(fs.readFileSync(`/CDN/BenpaiBot/transcripts/${rows[0][0].transcript}`, 'utf8'))
     })
 })
 
