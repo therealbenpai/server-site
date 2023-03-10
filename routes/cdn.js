@@ -7,7 +7,7 @@ const connection = mysql.createConnection({
     host: 'sparty18.com',
     user: 'benpai',
     password: 'benpaiIsCool',
-    database: 'benpai'
+    database: 'benpaibot'
 });
 
 router.get('/transcript/:id', async (req, res) => {
