@@ -1,5 +1,5 @@
-const crypto = require('node:crypto')
-const { Buffer } = require('node:buffer')
+const crypto = require('crypto')
+const { Buffer } = require('buffer')
 const { semiKey, semiIV } = require('../config/config.json')
 
 function semiEnc(data, key=semiKey, iv=semiIV) {
