@@ -25,5 +25,8 @@
   },
   "author": "benpai",
   "license": "AGPL-3.0-or-later",
-  "description": ""
+  "description": "",
+  "engines": {
+    "node": ">=18.0.0"
+  }
 }

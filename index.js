@@ -6,7 +6,6 @@ const Intigrations = require('@sentry/integrations')
 const http = require('http')
 const fs = require('fs')
 const app = express();
-const port = 80;
 const rateLimiter = require('express-rate-limit');
 
 const website = require('./routes/index')
@@ -116,6 +115,6 @@ app.use((req, res, next) => {
     );
 })
 
-http.createServer(app).listen(port, () => {
-    console.log(`Listening on port ${port}`)
+app.listen(443, () => {
+    console.log(`Example app listening at http://localhost:443`)
 })
