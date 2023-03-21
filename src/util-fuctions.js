@@ -1,21 +1,9 @@
 /**
- * 
  * @param {String} message 
- * @param {{}=} previous_data 
- * @returns {{status: String, reason: String, received: Boolean}}
+ * @param previous_data 
+ * @returns {{status: String, reason: String, received: Boolean} & previous_data}
  */
-function failedStatus(message,previous_data) {
-    const startingData = {
-        status: 'failed',
-        reason: `${message}`,
-        received: true,
-    }
-    const addedData = previous_data || {};
-    const string = `${JSON.stringify(startingData)}${JSON.stringify(addedData)}`
-    const fixed = string.replace(/\{\}/gmi,'').replace(/(\}\{)/gmi,',')
-    const fixedArray = JSON.parse(fixed)
-    return fixedArray
-}
+const failedStatus = (message, previous_data = {}) => ({ status: 'failed', reason: `${message}`, received: true, ...previous_data })
 
 module.exports = {
     failedStatus

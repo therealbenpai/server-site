@@ -3,10 +3,10 @@ const Sentry = require('@sentry/node');
 const Tracing = require('@sentry/tracing');
 const { ProfilingIntegration } = require('@sentry/profiling-node')
 const Intigrations = require('@sentry/integrations')
-const https = require('https')
+const http = require('http')
 const fs = require('fs')
 const app = express();
-const port = 443;
+const port = 80;
 const rateLimiter = require('express-rate-limit');
 
 const website = require('./routes/index')
@@ -116,10 +116,6 @@ app.use((req, res, next) => {
     );
 })
 
-https.createServer({
-    key: fs.readFileSync(`${process.cwd()}/assets/certs/server.key`),
-    cert: fs.readFileSync(`${process.cwd()}/assets/certs/server.cert`),
-    handshakeTimeout: 10000,
-}, app).listen(port, () => {
+http.createServer(app).listen(port, () => {
     console.log(`Listening on port ${port}`)
 })
