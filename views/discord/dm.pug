@@ -1,0 +1,18 @@
+doctype html
+html(lang="en")
+  head
+    title= title
+    include css.pug
+  body
+    h1 Send a DM
+    form(action='/discord/api/message/dm' method='post')
+      label(for="token") Discord Bot Token:
+        br
+        input#token(type="password", name="token" required='')
+      label(for="userID") User ID:
+        br
+        input#userID(type='text' name='userID' required='' pattern='[0-9]{18,}')
+      label(for="message") Message:
+        br
+        input#message(type='text' name='message' required='')
+      input#submit(type='submit' value='Send Message')

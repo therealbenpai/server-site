@@ -3,7 +3,7 @@ const Sentry = require('@sentry/node');
 const Tracing = require('@sentry/tracing');
 const { ProfilingIntegration } = require('@sentry/profiling-node')
 const Intigrations = require('@sentry/integrations')
-const http = require('http')
+const https = require('https')
 const fs = require('fs')
 const app = express();
 const rateLimiter = require('express-rate-limit');
@@ -11,6 +11,7 @@ const rateLimiter = require('express-rate-limit');
 const website = require('./routes/index')
 const api = require('./routes/api');
 const cdn = require('./routes/cdn');
+const discord = require('./routes/discord/main');
 
 Sentry.init({
     dsn: "https://90738d20a91d4f169081dfbea05bc8d4@o4504516705058816.ingest.sentry.io/4504771825303552",
@@ -54,7 +55,8 @@ app.set('view engine', 'pug');
 app.use(limiter);
 app.use('/', website);
 app.use('/api', api);
-app.use('/cdn', cdn)
+app.use('/cdn', cdn);
+app.use('/discord', discord);
 app.use((err, req, res, next) => {
         switch (err.status) {
             case 401:
@@ -115,6 +117,17 @@ app.use((req, res, next) => {
     );
 })
 
-app.listen(3001, () => {
-    console.log(`Example app listening at http://localhost:3001`)
-})
+
+
+if (process.platform === 'win32') {
+    https.createServer({
+        key: fs.readFileSync(`${process.cwd()}\\assets\\certs\\server.key`),
+        cert: fs.readFileSync(`${process.cwd()}\\assets\\certs\\server.cert`)
+    }, app).listen(443, () => {
+        console.log(`Example app listening at https://localhost:443`)
+    })
+} else {
+    app.listen(3001, () => {
+        console.log(`Example app listening at http://localhost:3001`)
+    })
+}
