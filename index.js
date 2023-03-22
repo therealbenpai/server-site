@@ -11,7 +11,6 @@ const rateLimiter = require('express-rate-limit');
 const website = require('./routes/index')
 const api = require('./routes/api');
 const cdn = require('./routes/cdn');
-const discord = require('./routes/discord/main');
 
 Sentry.init({
     dsn: "https://90738d20a91d4f169081dfbea05bc8d4@o4504516705058816.ingest.sentry.io/4504771825303552",
@@ -56,7 +55,6 @@ app.use(limiter);
 app.use('/', website);
 app.use('/api', api);
 app.use('/cdn', cdn);
-app.use('/discord', discord);
 app.use((err, req, res, next) => {
         switch (err.status) {
             case 401:
