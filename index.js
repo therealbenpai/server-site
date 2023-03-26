@@ -7,10 +7,7 @@ const https = require('https')
 const fs = require('fs')
 const app = express();
 const rateLimiter = require('express-rate-limit');
-
-const website = require('./routes/index')
-const api = require('./routes/api');
-const cdn = require('./routes/cdn');
+const router = require('./routes/router');
 
 Sentry.init({
     dsn: "https://90738d20a91d4f169081dfbea05bc8d4@o4504516705058816.ingest.sentry.io/4504771825303552",
@@ -52,9 +49,7 @@ app.use(Sentry.Handlers.tracingHandler());
 // use pug
 app.set('view engine', 'pug');
 app.use(limiter);
-app.use('/', website);
-app.use('/api', api);
-app.use('/cdn', cdn);
+app.use('/', router);
 app.use((err, req, res, next) => {
         switch (err.status) {
             case 401:
