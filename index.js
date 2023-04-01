@@ -6,7 +6,6 @@ const Intigrations = require('@sentry/integrations')
 const https = require('https')
 const fs = require('fs')
 const app = express();
-const rateLimiter = require('express-rate-limit');
 const router = require('./routes/router');
 
 Sentry.init({
@@ -35,27 +34,16 @@ Sentry.init({
     sendDefaultPii: true
 });
 
-const limiter = rateLimiter.rateLimit({
-    windowMs: 1000,
-    max: 10,
-    legacyHeaders: false,
-    standardHeaders: true,
-    handler: (req, res, next, options) => res.status(429).render(`${process.cwd()}/views/misc/429.pug`, { title: '429 - Too Many Requests' }),
-    skip: (req, res) => ['/css','/js','/f','/icon','/bg','/thumbnail'].some(endpoint => req.path.startsWith(endpoint))
-});
-
 app.use(Sentry.Handlers.requestHandler({ transaction: true }));
 app.use(Sentry.Handlers.tracingHandler());
-// use pug
 app.set('view engine', 'pug');
-app.use(limiter);
 app.use('/', router);
 app.use((err, req, res, next) => {
         switch (err.status) {
             case 401:
             case 403:
                 res.status(err.status).render(
-                    `${process.cwd()}/views/misc/401.pug`,
+                    `misc/401.pug`,
                     {
                         title: `401 - Unauthorized`,
                         path: req.path,
@@ -64,7 +52,13 @@ app.use((err, req, res, next) => {
                 );
                 break;
             case 404:
-                next();
+                res.status(404).render(
+                    `misc/404.pug`,
+                    {
+                        title: '404 - Page Not Found',
+                        path: req.path
+                    }
+                );
                 break;
             case 405:
                 // find the allowed methods for the path
@@ -75,7 +69,7 @@ app.use((err, req, res, next) => {
                     .join(', ');
                 const methodUsed = req.method.toUpperCase();
                 res.status(405).render(
-                    `${process.cwd()}/views/misc/405.pug`,
+                    `misc/405.pug`,
                     {
                         title: '405 - Method Not Allowed',
                         path,
@@ -90,7 +84,7 @@ app.use((err, req, res, next) => {
                     .status(501)
                     .setHeader('X-Error-ID', errorId)
                     .render(
-                        `${process.cwd()}/views/misc/501.pug`,
+                        `misc/501.pug`,
                         {
                             title: `501 - Internal Server Error`,
                             errorId
@@ -100,27 +94,20 @@ app.use((err, req, res, next) => {
         }
     }
 );
-app.use((req, res, next) => {
-    res.status(404).render(
-        `${process.cwd()}/views/misc/404.pug`,
-        {
-            title: '404 - Page Not Found',
-            path: req.path
-        }
-    );
-})
 
-
-
-if (process.platform === 'win32') {
-    https.createServer({
-        key: fs.readFileSync(`${process.cwd()}\\assets\\certs\\server.key`),
-        cert: fs.readFileSync(`${process.cwd()}\\assets\\certs\\server.cert`)
-    }, app).listen(443, () => {
-        console.log(`Example app listening at https://localhost:443`)
-    })
-} else {
-    app.listen(3001, () => {
-        console.log(`Example app listening at http://localhost:3001`)
-    })
+switch (process.platform) {
+    case 'win32':
+    case 'darwin':
+        https.createServer({
+            key: fs.readFileSync(`${process.cwd()}\\assets\\certs\\server.key`),
+            cert: fs.readFileSync(`${process.cwd()}\\assets\\certs\\server.cert`)
+        }, app).listen(443, () => {
+            console.log(`Example app listening at https://localhost:443`)
+        })
+        break;
+    default:
+        app.listen(3001, () => {
+            console.log(`Example app listening at http://localhost:3001`)
+        })
+        break;
 }

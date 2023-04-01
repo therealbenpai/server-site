@@ -4,7 +4,7 @@ const fs = require('fs');
 
 router.get('/', (req, res) => {
     res.render(
-        `${process.cwd()}/views/projects/index.pug`,
+        `projects/index.pug`,
     )
 });
 

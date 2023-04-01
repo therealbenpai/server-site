@@ -13,7 +13,7 @@ router.get('/favicon.ico', (_, res) => {
 
 router.get('/', (_, res) => {
     res.render(
-        `${process.cwd()}/views/api/index.pug`,
+        `api/index.pug`,
         {
             title: 'API Homepage'
         }

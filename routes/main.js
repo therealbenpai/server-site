@@ -88,7 +88,7 @@ router.get('/favicon.ico', (req, res) => {
 
 router.get('/blank', (req, res) => {
     res.render(
-        `${process.cwd()}/views/main/blank.pug`,
+        `main/blank.pug`,
         {
             title: "Blank",
         }
@@ -97,7 +97,7 @@ router.get('/blank', (req, res) => {
 
 router.get('/about-me', (req, res) => {
     res.render(
-        `${process.cwd()}/views/main/about-me.pug`,
+        `main/about-me.pug`,
         {
             title: "About Me",
             page: 2,
@@ -108,7 +108,7 @@ router.get('/about-me', (req, res) => {
 
 router.get('/cornhole', (req, res) => {
     res.render(
-        `${process.cwd()}/views/main/cornhole.pug`,
+        `main/cornhole.pug`,
         {
             title: "Cornhole Score Keeper",
             file: "cornhole"
@@ -118,7 +118,7 @@ router.get('/cornhole', (req, res) => {
 
 router.get('/game', (req, res) => {
     res.render(
-        `${process.cwd()}/views/main/game.pug`,
+        `main/game.pug`,
         {
             title: "Keyboard and Mouse Game",
             page: 3,
@@ -129,7 +129,7 @@ router.get('/game', (req, res) => {
 
 router.get('/socials', (req, res) => {
     res.render(
-        `${process.cwd()}/views/main/socials.pug`,
+        `main/socials.pug`,
         {
             title: 'Socials',
             page: 4
@@ -139,7 +139,7 @@ router.get('/socials', (req, res) => {
 
 router.get('/toolbox', (req, res) => {
     res.render(
-        `${process.cwd()}/views/main/toolbox.pug`,
+        `main/toolbox.pug`,
         {
             title: 'Developmental Toolbox',
             file: 'toolbox'
@@ -149,7 +149,7 @@ router.get('/toolbox', (req, res) => {
 
 router.get('/web-gen', (req, res) => {
     res.render(
-        `${process.cwd()}/views/main/website-generator.pug`,
+        `main/website-generator.pug`,
         {
             title: 'Website Generator',
             file: 'website-generator'
@@ -159,7 +159,7 @@ router.get('/web-gen', (req, res) => {
 
 router.get('/index', (req, res) => {
     res.render(
-        `${process.cwd()}/views/main/index.pug`,
+        `main/index.pug`,
         {
             title: 'Homepage',
             page: 1,
@@ -170,7 +170,7 @@ router.get('/index', (req, res) => {
 
 router.get(`/`, (req, res) => {
     res.render(
-        `${process.cwd()}/views/main/index.pug`,
+        `main/index.pug`,
         {
             title: 'Homepage',
             page: 1,
