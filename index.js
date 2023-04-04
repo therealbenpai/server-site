@@ -5,6 +5,8 @@ const Intigrations = require('@sentry/integrations')
 const http = require('http')
 const app = express();
 const router = require('./routes/router');
+require('dotenv').config();
+const { PORT } = process.env;
 
 Sentry.init({
     dsn: "https://90738d20a91d4f169081dfbea05bc8d4@o4504516705058816.ingest.sentry.io/4504771825303552",
@@ -94,6 +96,6 @@ app.use((err, req, res, next) => {
 
 http
 .createServer(app)
-.listen(443, () => {
-    console.log(`Example app listening at https://localhost:443`)
+.listen(PORT, () => {
+    console.log(`Example app listening at https://localhost:${PORT}`)
 })
