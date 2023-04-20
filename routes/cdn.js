@@ -1,24 +1,26 @@
-const fs = require('fs');
 const express = require('express');
 const router = express.Router();
+/*
+const fs = require('fs');
 const mysql = require('mysql2');
 
-// const connection = mysql.createConnection({
-//     host: 'sparty18.com',
-//     user: 'benpai',
-//     password: 'benpaiIsCool',
-//     database: 'benpaibot'
-// });
+const connection = mysql.createConnection({
+    host: 'sparty18.com',
+    user: 'benpai',
+    password: 'benpaiIsCool',
+    database: 'benpaibot'
+});
 
-// router.get('/transcript/:id', async (req, res) => {
-//     const { id } = req.params;
-//     const sql = `SELECT transcript FROM tickets WHERE id = ${id}`;
-//     connection.query(sql, (err, rows) => {
-//         if (rows.length === 0) return
-//         res.send(fs.readFileSync(`/CDN/BenpaiBot/transcripts/${rows[0].transcript}`, 'utf8'))
-//     })
-// })
+router.get('/transcript/:id', async (req, res) => {
+    const { id } = req.params;
+    const sql = `SELECT transcript FROM tickets WHERE id = ${id}`;
+    connection.query(sql, (err, rows) => {
+        if (rows.length === 0) return
+        res.send(fs.readFileSync(`/CDN/BenpaiBot/transcripts/${rows[0].transcript}`, 'utf8'))
+    })
+})
+*/
 
-router.get('/discord', (req, res) => res.redirect(200, 'https://discord.gg/TQ722XTzxu'))
+router.get('/discord', (req, res) => res.redirect('https://discord.gg/TQ722XTzxu'))
 
 module.exports = router;
