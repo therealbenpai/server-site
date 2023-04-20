@@ -19,4 +19,6 @@ const mysql = require('mysql2');
 //     })
 // })
 
+router.get('/discord', (req, res) => res.redirect(200, 'https://discord.gg/TQ722XTzxu'))
+
 module.exports = router;
