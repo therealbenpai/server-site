@@ -1,5 +1,5 @@
 const fs = require('fs');
-const latestHead = fs.readFileSync(`${process.cwd()}\\.git\\refs\\heads\\master`, 'utf8').trim();
+const latestHead = fs.readFileSync(`${process.cwd()}/.git/refs/heads/master`, 'utf8').trim();
 
 /**
  * @param {import('express').Request} req
