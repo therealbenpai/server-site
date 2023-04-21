@@ -60,7 +60,7 @@ router.get(`/sitemap`, (req, res) => {
 
 router.get(`/socials`, (req, res) => {
     res
-        .redirect(`https://sparty182020.carrd.co/`)
+        .redirect(`https://benpai.carrd.co/`)
 });
 
 router.get(`/thumbnail`, (req, res) => {
