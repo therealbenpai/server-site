@@ -72,4 +72,6 @@ router.get('/qd/full/:name', (req, res) => {
         .send(data)
 })
 
+router.get('/util', (_, res) => res.setHeader('Content-Type', 'text/javascript').send(fs.readFileSync(`${process.cwd()}/API/util.js`).toString()))
+
 module.exports = router
