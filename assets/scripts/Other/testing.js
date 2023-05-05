@@ -36,112 +36,17 @@ class Timer {
         }
     }
     static timestamp = v => new Intl.DateTimeFormat(this.#timesettings.locale, this.#timesettings.options).format(v)
-    static elapsedTime = (timestamp) => {
-        if (isNaN(timestamp)) throw TypeError("Timestamp must be a number")
-        const time = {
-            year: Math.floor(Math.floor(timestamp) / 1000 / 60 / 60 / 24 / 30 / 12),
-            month: Math.floor(Math.floor(timestamp) / 1000 / 60 / 60 / 24 / 30) % 12,
-            day: Math.floor(Math.floor(timestamp) / 1000 / 60 / 60 / 24) % 30,
-            hour: Math.floor(Math.floor(timestamp) / 1000 / 60 / 60) % 24,
-            minute: Math.floor(Math.floor(timestamp) / 1000 / 60) % 60,
-            second: Math.floor(Math.floor(timestamp) / 1000) % 60,
-            millisecond: Math.floor(timestamp) % 1000
-        }
-        const timeStr = []
-        for (const [key, value] of Object.entries(time)) {
-            switch (value) {
-                case 0: break;
-                case 1: timeStr.push(`${value} ${key}`); break;
-                default: timeStr.push(`${value} ${key}s`); break;
-            }
-        }
-        return timeStr.join(', ')
-    }
-    static stringToMilliseconds = (timeString) => {
-        if (typeof timeString !== 'string') throw TypeError("Time String must be a string")
-        const time = timeString.split(' ');
-        let milliseconds = 0;
-        time.forEach(value => {
-            const unit = value.slice(-1);
-            const amount = value.slice(0, -1);
-            switch (unit) {
-                case 'w':
-                    milliseconds += amount * 604800000;
-                    break;
-                case 'd':
-                    milliseconds += amount * 86400000;
-                    break;
-                case 'h':
-                    milliseconds += amount * 3600000;
-                    break;
-                case 'm':
-                    milliseconds += amount * 60000;
-                    break;
-                case 's':
-                    milliseconds += amount * 1000;
-                    break;
-            }
-        })
-        return milliseconds;
-    }
+    static elapsedTime = (timestamp) => isNaN(timestamp) ? TypeError("Timestamp must be a number") : Object.entries({ year: Math.floor(Math.floor(timestamp) / 60 / 60 / 24 / 30 / 12), month: Math.floor(Math.floor(timestamp) / 60 / 60 / 24 / 30) % 12, day: Math.floor(Math.floor(timestamp) / 60 / 60 / 24) % 30, hour: Math.floor(Math.floor(timestamp) / 60 / 60) % 24, minute: Math.floor(Math.floor(timestamp) / 60) % 60, second: Math.floor(timestamp) % 60 }).map(([key, value]) => value !== 0 ? `${value} ${key}${value == 1 ? '' : 's'}` : null).filter(value => value !== null).join(', ')
+    static stringToMilliseconds = (timeString) => typeof timeString !== 'string' ? TypeError("Time String must be a string") : timeString.split(' ').map(value => { switch (value.slice(-1)) { case 'w': return value.slice(0, -1) * 604800000; case 'd': return value.slice(0, -1) * 86400000; case 'h': return value.slice(0, -1) * 3600000; case 'm': return value.slice(0, -1) * 60000; case 's': return value.slice(0, -1) * 1000; } }).reduce((a, b) => a + b, 0);
     static stringToSeconds = (timeString) => this.stringToMilliseconds(timeString) / 1000;
     static unixTime = (date) => (!(date instanceof Date) || !(typeof date == 'number')) ? TypeError("Date must be a Date object") : Math.round(date.getTime() / 1000)
-}
-
-class Logger {
-    constructor() {
-        this.cmethods = []
-    }
-    static #defaults = { color: ["0", "0", "0", "1"], borderColor: ["0", "0", "0", "1"], background: ["0", "0", "0", "0.2"], text: "Filler Text", logType: "log" }
-    static error = (msg = "") => console.error(`%cERROR%c ${msg}`, 'color:red;border:1px solid red;border-radius:12px;font-size:11px;font-family:arial;background-color:rgba(220,0,0,0.2);padding: 0px 3px 0px 3px', '')
-    static warn = (msg = "") => console.warn(`%cWARNING%c ${msg}`, 'color:darkorange;border:1px solid darkorange;border-radius:12px;font-size:11px;font-family:arial;background-color:rgba(240,130,0,0.2);padding: 0px 3px 0px 3px', '')
-    static success = (msg = "") => console.log(`%cLOG%c ${msg}`, 'color:green;border:1px solid green;border-radius:12px;font-size:11px;font-family:arial;background-color:rgba(0,220,0,0.2);padding: 0px 3px 0px 3px', '')
-    static customTag = (tagData) => {
-        if (typeof tagData !== "object" && tagData !== undefined) throw new SyntaxError("Invalid Data")
-        for (const [key, val] of Object.entries(tagData)) tagData[key] = val || this.#defaults[key]
-        if (
-            typeof tagData.color !== "object" ||
-            tagData.color.length !== 4 ||
-            typeof tagData.borderColor !== "object" ||
-            tagData.borderColor.length !== 4 ||
-            typeof tagData.background !== "object" ||
-            tagData.background.length !== 4
-        ) throw new TypeError("Please enter a valid rgba array")
-        const tagCSS = `color:rgba(${tagData.color.join(', ')});border:1px solid rgba(${tagData.borderColor.join(', ')});border-radius:12px;font-size:11px;font-family:arial;background-color:rgba(${tagData.background.join(', ')});padding: 0px 3px 0px 3px;`
-        console.log(`Your method:\n%cconsole.${tagData.logType}('%c${tagData.text.toUpperCase()}%c ','${tagCSS}','')`, 'font-weight:bolder;font-family:arial;')
-        console.log('%cPreview: ', 'font-weight:bolder;font-family:arial;text-decoration:underline')
-        new Function(`console.${tagData.logType}('%c${tagData.text.toUpperCase()}%c ','${tagCSS}','')`).call()
-    }
-    error = (msg = "") => cLogs.error(msg)
-    warn = (msg = "") => cLogs.warn(msg)
-    success = (msg = "") => cLogs.success(msg)
-    makeTag = (tagData) => {
-        if (typeof tagData !== "object" && tagData !== undefined) throw new SyntaxError("Invalid Data")
-        for (const [key, val] of Object.entries(tagData)) tagData[key] = val || this.#defaults[key]
-        if (
-            typeof tagData.color !== "object" ||
-            tagData.color.length !== 4 ||
-            typeof tagData.borderColor !== "object" ||
-            tagData.borderColor.length !== 4 ||
-            typeof tagData.background !== "object" ||
-            tagData.background.length !== 4
-        ) throw new TypeError("Please enter a valid rgba array")
-        const tagCSS = `color:rgba(${tagData.color.join(', ')});border:1px solid rgba(${tagData.borderColor.join(', ')});border-radius:12px;font-size:11px;font-family:arial;background-color:rgba(${tagData.background.join(', ')});padding: 0px 3px 0px 3px;`
-        const method = new Function(`console.${fvalues.logType}('%c${fvalues.text.toUpperCase()}%c ','${tagCSS}',''); return`)
-        this.cmethods.push(method)
-        console.log(`Your method:\n%cconsole.${fvalues.logType}('%c${fvalues.text.toUpperCase()}%c ','${tagCSS}','')`, 'font-weight:bolder;font-family:arial;')
-        cLogs.success("Saved")
-    }
-    run = (index) => {
-        try { this.cmethods.at(index).call() } catch (err) { return (err instanceof TypeError) ? console.error("Invalid Index") : console.error(err) }
-    }
 }
 
 class Converter {
     static stringToBinary = (string) => string.split('').map(char => String(char).charCodeAt(0).toString(2)).join(' ')
     static binaryToString = (binary) => binary.split(' ').map(char => String.fromCharCode(parseInt(char, 2).toString(10))).join('')
     static stringToHex = (string) => string.split('').map(char => String(char).charCodeAt(0).toString(16)).join(' ')
-    static hexToSring = (hex) => hex.split(' ').map(char => String.fromCharCode(parseInt(char, 16).toString(10))).join('')
+    static hexToString = (hex) => hex.split(' ').map(char => String.fromCharCode(parseInt(char, 16).toString(10))).join('')
     static stringToBase32 = (string) => string.split('').map(char => String(char).charCodeAt(0).toString(32)).join(' ')
     static base32ToString = (base32) => base32.split(' ').map(char => String.fromCharCode(parseInt(char, 32).toString(10))).join('')
 }
@@ -547,13 +452,8 @@ class Cryptography {
 }
 
 class Utils {
-    __log__
-    constructor() {
-        this.__log__ = new Logger()
-    }
     static CustomMath = CustomMath
     static Time = Timer
-    static Logs = Logger
     static Converter = Converter
     static Random = RandomGenerators
     static Formatter = Formatter
@@ -563,8 +463,6 @@ class Utils {
     set CustomMath(_) { throw new ReferenceError('CustomMath is Read-Only') }
     get Time() { return Timer }
     set Time(_) { throw new ReferenceError('Time is Read-Only') }
-    get Logs() { return this.__log__ }
-    set Logs(_) { throw new ReferenceError('Logs is Read-Only') }
     get Converter() { return Converter }
     set Converter(_) { throw new ReferenceError('Converter is Read-Only') }
     get Random() { return RandomGenerators }
