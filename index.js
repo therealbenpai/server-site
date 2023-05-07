@@ -16,7 +16,7 @@ app.use('/', router);
 
 https
     .createServer({
-        cert: fs.readdirSync(`${__dirname}/keys/server.cert`),
+        cert: fs.readFileSync(`${__dirname}/keys/server.cert`),
         key: fs.readFileSync(`${__dirname}/keys/server.key`)
     }, app)
     .listen(PORT, () => {
