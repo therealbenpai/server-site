@@ -16,8 +16,8 @@ app.use('/', router);
 
 https
     .createServer({
-        cert: fs.readFileSync('/etc/letsencrypt/live/sparty18.com/fullchain.pem'),
-        key: fs.readFileSync('/etc/letsencrypt/live/sparty18.com/privkey.pem')
+        cert: fs.readFile('/etc/letsencrypt/live/sparty18.com/fullchain.pem', (...x) => null),
+        key: fs.readFile('/etc/letsencrypt/live/sparty18.com/privkey.pem', (...x) => null)
     }, app)
     .listen(PORT, () => {
         console.log(`Example app listening at https://localhost:${PORT}`)
