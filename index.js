@@ -1,5 +1,6 @@
 const express = require('express');
-const http = require('http')
+const https = require('https')
+const fs = require('fs')
 const app = express();
 const fs = require('fs');
 const router = require('./routes/router');
@@ -14,8 +15,11 @@ app.set('view engine', 'pug');
 
 app.use('/', router);
 
-http
-    .createServer(app)
+https
+    .createServer({
+        cert: fs.readSync('/etc/letsencrypt/live/sparty18.com/fullchain.pem'),
+        key: fs.readSync('/etc/letsencrypt/live/sparty18.com/privkey.pem')
+    }, app)
     .listen(PORT, () => {
         console.log(`Example app listening at https://localhost:${PORT}`)
     })
