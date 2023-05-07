@@ -16,8 +16,8 @@ app.use('/', router);
 
 https
     .createServer({
-        cert: fs.readdirSync(`${__dirname}\\keys\\cert`),
-        key: fs.readFileSync(`${__dirname}\\keys\\key`)
+        cert: fs.readdirSync(`${__dirname}/keys/cert`),
+        key: fs.readFileSync(`${__dirname}/keys/key`)
     }, app)
     .listen(PORT, () => {
         console.log(`Example app listening at https://localhost:${PORT}`)
