@@ -3,12 +3,7 @@ const router = express.Router();
 const fs = require('fs');
 const mariadb = require('mariadb');
 
-const connection = maria.createConnection({
-    host: "68.66.23.216",
-    user: "benpai",
-    password: "BenpaiIsCool",
-    database: "sanrio",
-});
+const connection = mariadb.createConnection("jdbc:mariadb://localhost:3306/sanrio?user=benpai&password=BenpaiIsCool");
 
 router.get('/transcript/:id', async (req, res) => {
     const { id } = req.params;
