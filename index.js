@@ -26,4 +26,4 @@ app.use('/', router);
     */
 http
     .createServer(app)
-    .listen(3000, () => console.log('http server is up'));
+    .listen(3001, () => console.log('http server is up'));
