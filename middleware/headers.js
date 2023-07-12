@@ -1,5 +1,5 @@
 const fs = require('fs');
-const latestHead = fs.readFileSync(`${process.cwd()}/.git/refs/heads/master`, 'utf8').trim();
+// const latestHead = fs.readFileSync(`${process.cwd()}/.git/refs/heads/master`, 'utf8').trim();
 
 /**
  * @param {import('express').Request} req
@@ -12,6 +12,6 @@ module.exports = (req, res, next) => {
         .setHeader('X-Repo','https://github.com/sparty182020/server-site')
         .setHeader('X-Live-Deploy', 'https://spaty18.com')
         .setHeader('X-OS-License', 'Affero General Public License v3.0 or newer (AGPL-3.0-or-later)')
-        .setHeader('X-Head', latestHead);
+        // .setHeader('X-Head', latestHead);
     next();
 }
