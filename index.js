@@ -1,19 +1,17 @@
 const express = require('express');
-const https = require('https')
 const app = express();
 const fs = require('fs');
 const http = require('http');
 const router = require('./routes/router');
 require('dotenv').config();
-const { PORT } = process.env;
 
 fs.readdirSync(`${__dirname}/middleware`).forEach(file => {
     app.use(require(`./middleware/${file}`))
 })
 
-app.set('view engine', 'pug');
-
-app.use('/', router);
+app
+    .set('view engine', 'pug')
+    .use('/', router);
 
 /* https
     .createServer({

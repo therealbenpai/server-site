@@ -10,1094 +10,6 @@
         content="Free Offline Minesweeper in JavaScript. Play the classic game in Beginner, Intermediate, and Expert modes.">
     <!-- Page Stylesheets -->
     <style>
-        /* Vars */
-        :root {
-            --hex0: #000;
-            --hex1: #111;
-            --hex2: #222;
-            --hex3: #333;
-            --hex4: #444;
-            --hex5: #555;
-            --hex6: #666;
-            --hex7: #777;
-            --hex8: #888;
-            --hex9: #999;
-            --hexa: #aaa;
-            --hexb: #bbb;
-            --hexc: #ccc;
-            --hexd: #ddd;
-            --hexe: #eee;
-            --hexf: #fff;
-            --ani1: top .3s, left .3s, width .3s, height .3s, opacity .3s;
-        }
-
-        html {
-            height: 95%
-        }
-
-        body {
-            margin-left: 0;
-            margin-top: 15px;
-            font-family: arial;
-            font-size: 12px;
-            height: 100%
-        }
-
-        .night-mode {
-            background-color: black;
-            color: var(--hex8);
-        }
-
-        label {
-            display: inline-block;
-            margin-bottom: 3px
-        }
-
-        .outer-container {
-            vertical-align: top;
-            text-align: left;
-            text-align: center
-        }
-
-        .inner-container {
-            display: inline-block;
-            text-align: left
-        }
-
-        .left-column,
-        #center-column,
-        .right-column {
-            float: left;
-        }
-
-        .left-column {
-            margin-right: 10px
-        }
-
-        .left-column,
-        .right-column {
-            width: 160px
-        }
-
-        #game-container {
-            position: relative;
-            margin-right: 20px
-        }
-
-        #options-link,
-        #display-link,
-        #controls-link,
-        #import-link,
-        #export-link {
-            color: blue;
-            text-decoration: underline;
-            cursor: pointer
-        }
-
-        .night-mode #options-link,
-        .night-mode #display-link,
-        .night-mode #controls-link,
-        .night-mode #import-link,
-        .night-mode #export-link,
-        .night-mode a {
-            color: #069
-        }
-
-        #game {
-            background-color: silver
-        }
-
-        .night-mode #game {
-            background-color: #7e7e7e
-        }
-
-        .dialog {
-            background-color: var(--hexe);
-            border: 1px solid var(--hex4);
-            position: absolute;
-            display: none;
-            z-index: 1;
-        }
-
-        .night-mode .dialog {
-            background-color: var(--hexb);
-            color: var(--hex4);
-        }
-
-        .dialog-title {
-            color: white;
-            font-weight: bold;
-            background-color: #06f;
-        }
-
-        .night-mode .dialog-title {
-            color: var(--hexa);
-            background-color: #184292;
-        }
-
-        .dialog-bar {
-            background-color: var(--hexd)
-        }
-
-        .night-mode .dialog-bar {
-            background-color: var(--hexa)
-        }
-
-        #controls ul {
-            padding: 0 0 0 12px;
-            margin: 0
-        }
-
-        #controls li {
-            margin-bottom: 2px
-        }
-
-        .dialog-close {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 20px;
-            line-height: 15px;
-            cursor: pointer
-        }
-
-        .night-mode .dialog-close {
-            color: var(--hexa)
-        }
-
-        .dialog-text-input {
-            width: 30px;
-            font-size: 12px
-        }
-
-        .dialog td {
-            padding: 3px;
-            white-space: nowrap
-        }
-
-        .dialog input[type="checkbox"],
-        .dialog input[type="radio"] {
-            margin: 0 3px 0 0;
-            vertical-align: top;
-            padding: 0
-        }
-
-        #game div {
-            float: left;
-            line-height: 0;
-            font-size: 0
-        }
-
-        .flag-animation {
-            position: absolute;
-            pointer-events: none;
-            transition: var(--ani1);
-            -webkit-transition: var(--ani1);
-            -moz-transition: var(--ani1);
-            -ms-transition: var(--ani1)
-        }
-
-        .z100 #game div {
-            background-image: url('data:image/png;base64,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')
-        }
-
-        .night-mode .z100 #game div {
-            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJAAAABbCAMAAACrt/z9AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAgVBMVEUAAACqqqqqAABSAABSUlJ+fn4AAKoAUgAAAFIAUlJVVVWAgICqqgBVVQBSUgCqf01Nf6qqqpVoMACqlWgwAAAwaJUAMGh/aDCVaDAATWgATX8wADBolX9NAABoMDBolaqqqn9NADAwAE1/qn9/qqoAAE0AADBNf5V/TQB/qpWVlWjIqW4NAAAAAWJLR0QB/wIt3gAAAAd0SU1FB+YEHhEWIp2T6ScAAAUYSURBVGje7ZmLVtw4DECV1wAzoQwDdLvsdmm7dF///4Hr+CnJkuOkmQLnYEgYWZZyR5ZlpwV4Xa0xVxua7en8D3DNmmGVAvJmgNqgNJ+mPq+yAtEgocXDkoOOCcxGE9JDOwvklWBpvTIIRJOEtkXDooMOmMBtFCE+tHMR8mFr41PmBWKD406FeRviugsRQjqvmhNE5z5CSJi3Ia7fI/R2IwTheyDYskBsotABEypspAjR0lNZh0Qhr0NiucrrULJpQqhC2M5WgittihHSq25l7PQIdYUI6Tmk50NldlVqqleZvmIq11+lproO6TWlskJVat4j9PYjpJ2H9LONfmyq8CYdtch5qKJy5HVIK+jr6hA5MZ7zTL18WAOvrDXQv7IG/UDbS8tvB2i3S/KFb16OCRnHX15e2svJXWxef+Wb16eM8fowXSWgHQK6uEBEGKitA7qaAUoJpAPtGNAwhD9pfAKyLASI+PMofIow0DCEPzLQjgD59pJAdMoCzkWSSQ5dxsamLAGRKcM8q3IopPWwFIjn0NVWQAlHnjLb0pT5hoEmmQJ5nlVThnBeCmi3i2ldtewpUM2UBZ7KZV8JNMwABb2Q1BioKodeTH4HmgVqaBu4vPQ8M2ffKM3j9cDtM38tbXPfMLMv6kUg4r7ncgACBgQMCOIDmf1GQG5Ni0BOBX6UDARhY9gIKBQZDwT+FQ9chIzOnWamQbaYeRkC0ETj9vI+1R1YD9QyoPQPKW7K4jtomLJ03lKAYsdGETKjApGNSNu6V14PFPU4hzYFYjmUAYF/CS4A5Tn0Y0A+SScg8iJngAKaQ+gHog9AEO0pzxZAbUKKEfJAMUIpiTSgsJmuBELLVgTiU5YBRX+bACX/8ipzywwdP/gqk6Zs2BCI1aFs2Wd1aPspQyHPtw4LAn4p1m4d9UBsP87256VbB7dfOmWZfS8D1e72mf1SIPVgo5+Ehr3WDmu8cSCNuHAI2ys2h33Bm6qpAxqEaMdJUYAO+33B2wwpBhIfOgN0ENreAmneVM0bAorVdgGQtRGBuDdVowEBjFNLJRYDYR8IKNpkQLk3VaMAuWF2aAZEfSQgZMOABG+qRgZK49xIDMR8RCBiQ4Akb6pGBMLj7EgExH0EINN/DdejvwMCMhoYJzN7BwQkPUcFgnTDQJkPBATeBjKg0c/ymAHFw1MJCEYCNAIDIqweCEYSIUMUgGJswj0CBZ4xEpWASBwiUM6KgIgNAcq9OY1j8bf1QGze1wMZ1Qf/7T7YZbs9EAAsAJI0GlAYDIuArk3cr0UgnybrgOR1EYEoK1plvsvxVK6yTEO3f1yH4nfKlj3xQYBihLI6FL9DVofYc0SgQqXOfNBKHfp/tFJzoMJeplXqbfeyDKiw22t72aa7fQ5UOA9pu/2W5yEJCLe689CGJ0YEVHhDkZsBOijvQQVvqoYDFd53VCCNZ196/1JJKdAKD73Ks1/jjQFJ70qxkKdPwmtVzZjlTQAaUv4180DlMeV2c3QXA8oTX+rjPbLdonZ7OtrrZwLd3cNDc/PxF3j4hD/Y/tsTwK/mepzG/fb7Z/vhzEC3fzx9+Woe9XB3/3D37c/w4dn2P335fGymqzF3+P5889fT2YFMIACOhoD/2v4EZCL0ZK+zA317dvf818blpwPdnkziCBFy/WWgVJj7vub/EUU7ac4eTfL+fYLjpymD3YdH2980/5jbdBlw+P7vCT7+d39EQEP6NM/TS3ZL65DU/gcrX8q68tuFYAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wNC0zMFQxNzoyMjozNCswMDowMF4bVDYAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDQtMzBUMTc6MjI6MzQrMDA6MDAvRuyKAAAAAElFTkSuQmCC')
-        }
-
-        .z100 .time0 {
-            background-position: 0 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time1 {
-            background-position: -13px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time2 {
-            background-position: -26px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time3 {
-            background-position: -39px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time4 {
-            background-position: -52px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time5 {
-            background-position: -65px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time6 {
-            background-position: -78px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time7 {
-            background-position: -91px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time8 {
-            background-position: -104px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time9 {
-            background-position: -117px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .time- {
-            background-position: -130px 0;
-            width: 13px;
-            height: 23px
-        }
-
-        .z100 .open0 {
-            background-position: 0 -23px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .open1 {
-            background-position: -16px -23px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .open2 {
-            background-position: -32px -23px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .open3 {
-            background-position: -48px -23px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .open4 {
-            background-position: -64px -23px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .open5 {
-            background-position: -80px -23px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .open6 {
-            background-position: -96px -23px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .open7 {
-            background-position: -112px -23px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .open8 {
-            background-position: -128px -23px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .blank {
-            background-position: 0 -39px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .bombflagged {
-            background-position: -16px -39px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .bombdeath {
-            background-position: -32px -39px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .bombmisflagged {
-            background-position: -48px -39px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .bombrevealed {
-            background-position: -64px -39px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .question {
-            background-position: -80px -39px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .questionpressed {
-            background-position: -96px -39px;
-            width: 16px;
-            height: 16px
-        }
-
-        .z100 .facesmile {
-            background-position: 0 -55px;
-            width: 26px;
-            height: 26px
-        }
-
-        .z100 .facepressed {
-            background-position: -26px -55px;
-            width: 26px;
-            height: 26px
-        }
-
-        .z100 .faceooh {
-            background-position: -52px -55px;
-            width: 26px;
-            height: 26px
-        }
-
-        .z100 .facedead {
-            background-position: -78px -55px;
-            width: 26px;
-            height: 26px
-        }
-
-        .z100 .facewin {
-            background-position: -104px -55px;
-            width: 26px;
-            height: 26px
-        }
-
-        .z100 .bordertl {
-            background-position: 0 -81px;
-            width: 10px;
-            height: 10px
-        }
-
-        .z100 .bordertr {
-            background-position: -10px -81px;
-            width: 10px;
-            height: 10px
-        }
-
-        .z100 .borderbl {
-            background-position: -20px -81px;
-            width: 10px;
-            height: 10px
-        }
-
-        .z100 .borderbr {
-            background-position: -30px -81px;
-            width: 10px;
-            height: 10px
-        }
-
-        .z100 .bordertb {
-            background-position: -40px -81px;
-            width: 16px;
-            height: 10px
-        }
-
-        .z100 .borderjointl {
-            background-position: -56px -81px;
-            width: 10px;
-            height: 10px
-        }
-
-        .z100 .borderjointr {
-            background-position: -66px -81px;
-            width: 10px;
-            height: 10px
-        }
-
-        .z100 .borderlr {
-            background-position: -134px -39px;
-            width: 10px;
-            height: 16px
-        }
-
-        .z100 .borderlrlong {
-            background-position: -134px -39px;
-            width: 10px;
-            height: 32px
-        }
-
-        .z100 #mines_hundreds {
-            margin: 4px 0 5px 6px
-        }
-
-        .z100 #mines_tens {
-            margin: 4px 0 5px 0
-        }
-
-        .z100 #mines_ones {
-            margin: 4px 0 5px 0
-        }
-
-        .z100 #seconds_hundreds {
-            margin: 4px 0 5px 0
-        }
-
-        .z100 #seconds_tens {
-            margin: 4px 0 5px 0
-        }
-
-        .z100 #seconds_ones {
-            margin: 4px 6px 5px 0
-        }
-
-        .z100 #face {
-            margin-top: 3px;
-            margin-bottom: 3px
-        }
-
-        .z100 .dialog {
-            left: 16px;
-            top: 74px
-        }
-
-        .z150 #game div {
-            background-image: url('data:image/png;base64,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')
-        }
-
-        .night-mode .z150 #game div {
-            background-image: url('data:image/png;base64,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');
-        }
-
-        .z150 .time0 {
-            background-position: 0 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time1 {
-            background-position: -20px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time2 {
-            background-position: -39px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time3 {
-            background-position: -59px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time4 {
-            background-position: -78px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time5 {
-            background-position: -98px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time6 {
-            background-position: -117px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time7 {
-            background-position: -137px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time8 {
-            background-position: -156px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time9 {
-            background-position: -176px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .time- {
-            background-position: -195px 0;
-            width: 20px;
-            height: 35px
-        }
-
-        .z150 .open0 {
-            background-position: 0 -35px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .open1 {
-            background-position: -24px -35px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .open2 {
-            background-position: -48px -35px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .open3 {
-            background-position: -72px -35px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .open4 {
-            background-position: -96px -35px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .open5 {
-            background-position: -120px -35px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .open6 {
-            background-position: -144px -35px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .open7 {
-            background-position: -168px -35px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .open8 {
-            background-position: -192px -35px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .blank {
-            background-position: 0 -59px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .bombflagged {
-            background-position: -24px -59px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .bombdeath {
-            background-position: -48px -59px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .bombmisflagged {
-            background-position: -72px -59px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .bombrevealed {
-            background-position: -96px -59px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .question {
-            background-position: -120px -59px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .questionpressed {
-            background-position: -144px -59px;
-            width: 24px;
-            height: 24px
-        }
-
-        .z150 .facesmile {
-            background-position: 0 -83px;
-            width: 39px;
-            height: 39px
-        }
-
-        .z150 .facepressed {
-            background-position: -39px -83px;
-            width: 39px;
-            height: 39px
-        }
-
-        .z150 .faceooh {
-            background-position: -78px -83px;
-            width: 39px;
-            height: 39px
-        }
-
-        .z150 .facedead {
-            background-position: -117px -83px;
-            width: 39px;
-            height: 39px
-        }
-
-        .z150 .facewin {
-            background-position: -156px -83px;
-            width: 39px;
-            height: 39px
-        }
-
-        .z150 .bordertl {
-            background-position: 0 -122px;
-            width: 15px;
-            height: 15px
-        }
-
-        .z150 .bordertr {
-            background-position: -15px -122px;
-            width: 15px;
-            height: 15px
-        }
-
-        .z150 .borderbl {
-            background-position: -30px -122px;
-            width: 15px;
-            height: 15px
-        }
-
-        .z150 .borderbr {
-            background-position: -45px -122px;
-            width: 15px;
-            height: 15px
-        }
-
-        .z150 .bordertb {
-            background-position: -60px -122px;
-            width: 24px;
-            height: 15px
-        }
-
-        .z150 .borderjointl {
-            background-position: -84px -122px;
-            width: 15px;
-            height: 15px
-        }
-
-        .z150 .borderjointr {
-            background-position: -99px -122px;
-            width: 15px;
-            height: 15px
-        }
-
-        .z150 .borderlr {
-            background-position: -201px -59px;
-            width: 15px;
-            height: 24px
-        }
-
-        .z150 .borderlrlong {
-            background-position: -201px -59px;
-            width: 15px;
-            height: 48px
-        }
-
-        .z150 #mines_hundreds {
-            margin: 6px 0 7px 9px
-        }
-
-        .z150 #mines_tens {
-            margin: 6px 0 7px 0
-        }
-
-        .z150 #mines_ones {
-            margin: 6px 0 7px 0
-        }
-
-        .z150 #seconds_hundreds {
-            margin: 6px 0 7px 0
-        }
-
-        .z150 #seconds_tens {
-            margin: 6px 0 7px 0
-        }
-
-        .z150 #seconds_ones {
-            margin: 6px 9px 7px 0
-        }
-
-        .z150 #face {
-            margin-top: 4px;
-            margin-bottom: 5px
-        }
-
-        .z150 .dialog {
-            left: 24px;
-            top: 102px
-        }
-
-        .z200 #game div {
-            background-image: url('data:image/png;base64,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')
-        }
-
-        .night-mode .z200 #game div {
-            background-image: url('data:image/png;base64,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')
-        }
-
-        .z200 .time0 {
-            background-position: 0 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time1 {
-            background-position: -26px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time2 {
-            background-position: -52px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time3 {
-            background-position: -78px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time4 {
-            background-position: -104px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time5 {
-            background-position: -130px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time6 {
-            background-position: -156px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time7 {
-            background-position: -182px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time8 {
-            background-position: -208px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time9 {
-            background-position: -234px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .time- {
-            background-position: -260px 0;
-            width: 26px;
-            height: 46px
-        }
-
-        .z200 .open0 {
-            background-position: 0 -46px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .open1 {
-            background-position: -32px -46px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .open2 {
-            background-position: -64px -46px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .open3 {
-            background-position: -96px -46px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .open4 {
-            background-position: -128px -46px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .open5 {
-            background-position: -160px -46px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .open6 {
-            background-position: -192px -46px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .open7 {
-            background-position: -224px -46px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .open8 {
-            background-position: -256px -46px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .blank {
-            background-position: 0 -78px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .bombflagged {
-            background-position: -32px -78px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .bombdeath {
-            background-position: -64px -78px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .bombmisflagged {
-            background-position: -96px -78px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .bombrevealed {
-            background-position: -128px -78px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .question {
-            background-position: -160px -78px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .questionpressed {
-            background-position: -192px -78px;
-            width: 32px;
-            height: 32px
-        }
-
-        .z200 .facesmile {
-            background-position: 0 -110px;
-            width: 52px;
-            height: 52px
-        }
-
-        .z200 .facepressed {
-            background-position: -52px -110px;
-            width: 52px;
-            height: 52px
-        }
-
-        .z200 .faceooh {
-            background-position: -104px -110px;
-            width: 52px;
-            height: 52px
-        }
-
-        .z200 .facedead {
-            background-position: -156px -110px;
-            width: 52px;
-            height: 52px
-        }
-
-        .z200 .facewin {
-            background-position: -208px -110px;
-            width: 52px;
-            height: 52px
-        }
-
-        .z200 .bordertl {
-            background-position: 0 -162px;
-            width: 20px;
-            height: 20px
-        }
-
-        .z200 .bordertr {
-            background-position: -20px -162px;
-            width: 20px;
-            height: 20px
-        }
-
-        .z200 .borderbl {
-            background-position: -40px -162px;
-            width: 20px;
-            height: 20px
-        }
-
-        .z200 .borderbr {
-            background-position: -60px -162px;
-            width: 20px;
-            height: 20px
-        }
-
-        .z200 .bordertb {
-            background-position: -80px -162px;
-            width: 32px;
-            height: 20px
-        }
-
-        .z200 .borderjointl {
-            background-position: -112px -162px;
-            width: 20px;
-            height: 20px
-        }
-
-        .z200 .borderjointr {
-            background-position: -132px -162px;
-            width: 20px;
-            height: 20px
-        }
-
-        .z200 .borderlr {
-            background-position: -268px -78px;
-            width: 20px;
-            height: 32px
-        }
-
-        .z200 .borderlrlong {
-            background-position: -268px -78px;
-            width: 20px;
-            height: 64px
-        }
-
-        .z200 #mines_hundreds {
-            margin: 8px 0 10px 12px
-        }
-
-        .z200 #mines_tens {
-            margin: 8px 0 10px 0
-        }
-
-        .z200 #mines_ones {
-            margin: 8px 0 10px 0
-        }
-
-        .z200 #seconds_hundreds {
-            margin: 8px 0 10px 0
-        }
-
-        .z200 #seconds_tens {
-            margin: 8px 0 10px 0
-        }
-
-        .z200 #seconds_ones {
-            margin: 8px 12px 10px 0
-        }
-
-        .z200 #face {
-            margin-top: 6px;
-            margin-bottom: 6px
-        }
-
-        .z200 .dialog {
-            left: 30px;
-            top: 130px
-        }
-
-        notice {
-            display: none;
-        }
-
-        @media only screen and (max-width:820px) {
-            body>* {
-                display: none;
-            }
-
-            notice {
-                display: initial;
-                position: absolute;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                color: white;
-                text-decoration: underline;
-                font-weight: bolder;
-                font-family: 'Comic Sans MS';
-                font-size: 24px;
-            }
-        }
-
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
-        /* #f00 */
     </style>
     <!-- jQuery Code **DO NOT TOUCH** -->
     <script>
@@ -4669,6 +3581,231 @@
     </script>
     <!-- Main Minesweeper Code -->
     <script type="text/javascript">
+        function numSeg(Y) {
+            Y = Math.min(Y, 999);
+            return (Y < 0) ? ["-", Math.floor((-Y % 100) / 10), -Y % 10] : [Math.floor(Y / 100), Math.floor((Y % 100) / 10), Y % 10]
+        }
+
+        class squareData {
+            constructor(ad, Z, parent) {
+                this.rows = parent.rows;
+                this.cols = parent.cols;
+                this.mines = parent.mines;
+                this.zoomlvl = parent.zoomlvl;
+                this.I = parent.I;
+                this.parent = parent;
+                this.ad = ad;
+                this.Z = Z;
+                this.ab = 0;
+                this.aa = false;
+                this.Y = false;
+                this.ac = false;
+            }
+            addToValue(ae) {
+                this.ab += ae
+            };
+            isMine() {
+                return this.ab < 0
+            };
+            isFlagged() {
+                return this.aa
+            };
+            isMarked() {
+                return this.Y
+            };
+            isRevealed() {
+                return this.ac
+            };
+            isHidden() {
+                return this.ad < 1 || this.ad > this.rows || this.Z < 1 || this.Z > this.cols
+            };
+            getRow() {
+                return this.ad
+            };
+            getCol() {
+                return this.Z
+            };
+            getValue() {
+                return this.ab
+            };
+            setRevealed(ae) {
+                this.ac = this.ae
+            };
+            plantMine() {
+                this.ab -= 10;
+                this.I[this.ad - 1][this.Z - 1].addToValue(1);
+                this.I[this.ad - 1][this.Z].addToValue(1);
+                this.I[this.ad - 1][this.Z + 1].addToValue(1);
+                this.I[this.ad][this.Z - 1].addToValue(1);
+                this.I[this.ad][this.Z + 1].addToValue(1);
+                this.I[this.ad + 1][this.Z - 1].addToValue(1);
+                this.I[this.ad + 1][this.Z].addToValue(1);
+                this.I[this.ad + 1][this.Z + 1].addToValue(1)
+            };
+            unplantMine() {
+                this.ab += 10;
+                this.I[this.ad - 1][this.Z - 1].addToValue(-1);
+                this.I[this.ad - 1][this.Z].addToValue(-1);
+                this.I[this.ad - 1][this.Z + 1].addToValue(-1);
+                this.I[this.ad][this.Z - 1].addToValue(-1);
+                this.I[this.ad][this.Z + 1].addToValue(-1);
+                this.I[this.ad + 1][this.Z - 1].addToValue(-1);
+                this.I[this.ad + 1][this.Z].addToValue(-1);
+                this.I[this.ad + 1][this.Z + 1].addToValue(-1)
+            };
+            setClass(ae) {
+                document.getElementById(`${this.ad}_${this.Z}`).className = ae
+            };
+            reveal1() {
+                let ae, af;
+                let ag, ah;
+                let ai = [];
+                ai.push(this);
+                this.pushed = true;
+                while (ai.length > 0) {
+                    ag = ai.pop();
+                    if (!ag.isRevealed() && !ag.isFlagged()) {
+                        if (ag.isMine()) return false
+                        else {
+                            if (!ag.isFlagged()) {
+                                ag.setClass("square open" + ag.getValue());
+                                ag.setRevealed(true);
+                                if (!ag.isHidden() && --G == 0) {
+                                    this.parent.gameWin();
+                                    return true
+                                }
+                                if (ag.getValue() == 0 && !ag.isHidden()) {
+                                    for (ae = -1; ae <= 1; ae++) {
+                                        for (af = -1; af <= 1; af++) {
+                                            ah = this.I[ag.getRow() + ae][ag.getCol() + af];
+                                            if (!ah.pushed && !ah.isHidden() && !ah.isRevealed()) {
+                                                ai.push(ah);
+                                                ah.pushed = true
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                this.parent.setO();
+                return true
+            };
+            flag(ae) {
+                if (!this.ac) {
+                    if (this.aa) {
+                        if ($("#marks").attr("checked")) {
+                            this.setClass("square question");
+                            this.Y = true
+                        } else {
+                            this.setClass("square blank");
+                            if (ae) this._showFlagAnimation(true);
+                        }
+                        this.aa = false;
+                        this.K++;
+                        updateMines()
+                    } else {
+                        if (this.Y) {
+                            this.setClass("square blank");
+                            this.Y = false
+                        } else {
+                            this.setClass("square bombflagged");
+                            this.aa = true;
+                            this.K--;
+                            this.parent.updateMines();
+                            if (ae) this._showFlagAnimation()
+                        }
+                    }
+                    this.setO()
+                }
+            };
+            _showFlagAnimation(af) {
+                let al = $(`#${this.ad}_${this.Z}`);
+                let ag = al.offset();
+                let aj = ag.left + al.width() / 2;
+                let ai = ag.top + al.height() / 2;
+                let ao = 57 * this.zoomlvl * 1.75;
+                let ah = 79 * this.zoomlvl * 1.75;
+                let ae = {
+                    left: aj - ao / 2,
+                    top: ai - ah / 2,
+                    width: ao + "px",
+                    height: ah + "px",
+                    opacity: 0
+                };
+                let am = {
+                    left: aj,
+                    top: ai,
+                    width: 0,
+                    height: 0,
+                    opacity: 1
+                };
+                if (af) {
+                    let an = ae;
+                    ae = am;
+                    am = an
+                }
+                let ak = $('<img src="flag.png" class="flag-animation"></div>').css(ae);
+                $("body").append(ak);
+                setTimeout(() => ak.css(am), 0);
+                setTimeout(() => ak.remove(), 500);
+            };
+            serializeToObj = (ae) => (ae) ?
+                ((!this.ac && !this.aa && !this.Y) ?
+                    this.ab : [this.ab, this.ac ? 1 : 0, this.aa ? 1 : 0, Y ? 1 : 0])
+                : {
+                    value: this.ab,
+                    isRevealed: this.ac,
+                    isFlagged: this.aa,
+                    isMarked: this.Y
+                };
+            deserializeFromObj(ae) {
+                this.ab = ae.value;
+                this.aa = ae.isFlagged;
+                this.Y = ae.isMarked;
+                this.ac = ae.isRevealed
+            }
+        }
+
+        class TimeManager {
+            constructor() {
+                this.aa;
+                this.ab;
+                this.ac;
+            }
+            startClock() {
+                let ag = new Date().getTime();
+                let ad = this.ab * 1000;
+                let af = ag - this.aa;
+                let ae = 1000 - (af - ad);
+                this.ac = setTimeout(startClock, ae);
+                this.ab++;
+                this.setTimeCounter()
+            }
+
+            setTimeCounter() {
+                let ad = numSeg(this.ab);
+                document.getElementById("seconds_hundreds").className = "time" + ad[0];
+                document.getElementById("seconds_tens").className = "time" + ad[1];
+                document.getElementById("seconds_ones").className = "time" + ad[2]
+            }
+            start() {
+                this.aa = new Date().getTime() - this.ab * 1000;
+                this.startClock()
+            };
+            stop() {
+                clearTimeout(this.ac)
+            };
+            getTime() {
+                return this.ab
+            };
+            setTime(ad) {
+                this.ab = ad;
+                this.setTimeCounter()
+            }
+        }
+
         /**
          * @class
          * @param A 
@@ -4676,225 +3813,209 @@
          * @param {Function} s 
          */
 
-        function Minesweeper(A, Q, s) {
-            var E = this;
-            var gti;
-            var rows;
-            var cols;
-            var mines;
-            var zoomlvl;
-            var er
-            /**
-             * @inner
-             * Grid Obj
-             */
-            var o;
-            /**
-             * @inner
-             * if "ae" in newGame exists, is true. Otherwise, is false
-             */
-            var p;
-            /**
-             * @inner
-             * Number of mines for the newGame function
-             */
-            var K;
-            /**
-             * @inner
-             * Number of non-mines for the newGame function
-             */
-            var G;
-            /**
-             * @inner
-             * Grid Management Varible
-             */
-            var I;
-            /**
-             * @inner
-             * Array containing the square pressed/hovered
-             */
-            var c;
-            /**
-             * @inner
-             * Time Varible
-             */
-            var U = new TimeManager();
-            /**
-             * @inner
-             * Game Over Varible
-             */
-            var L;
-            /**
-             * @inner
-             * Playing Varible
-             */
-            var g;
-            /**
-             * @inner
-             * Backup Grid Managment
-             */
-            var M;
-            /**
-             * @inner
-             * Game ID
-             */
-            var r;
-            /**
-             * tests if the browser is compatable
-             */
-            var k;
-            /**
-             * @inner
-             * Mouse Press Tracker
-             */
-            var D;
-            /**
-             * @inner
-             * Mouse Press Tracker
-             */
-            var e;
-            /**
-             * @inner
-             * Mouse Press Tracker
-             */
-            var v;
-            /**
-             * @inner
-             * Unknown, set to Null in newGame, called by ae(), but not changed, and not needed
-             */
-            var d;
-            /**
-             * @inner
-             * Gusture Tracker
-             */
-            var C;
-            /**
-             * @inner
-             * Likely First-Press protection
-             */
-            var y;
-            Setup();
-            this.newGame = function (ae, Y) {
-                var af, ab;
-                var ad;
-                var aa, ac;
-                var Z;
-                er = undefined
+        class Minesweeper {
+            constructor(A, Q, s) {
+                this.A = A;
+                this.Q = Q;
+                this.s = s;
+                this.gti;
+                this.rows;
+                this.cols;
+                this.mines;
+                this.zoomlvl;
+                this.er
+                /**
+                 * @inner
+                 * Grid Obj
+                 */
+                this.o;
+                /**
+                 * @inner
+                 * if "ae" in newGame exists, is true. Otherwise, is false
+                 */
+                this.p;
+                /**
+                 * @inner
+                 * Number of mines for the newGame function
+                 */
+                this.K;
+                /**
+                 * @inner
+                 * Number of non-mines for the newGame function
+                 */
+                this.G;
+                /**
+                 * @inner
+                 * Grid Management Varible
+                 */
+                this.I;
+                /**
+                 * @inner
+                 * Array containing the square pressed/hovered
+                 */
+                this.c;
+                /**
+                 * @inner
+                 * Time Varible
+                 */
+                this.U = new TimeManager();
+                /**
+                 * @inner
+                 * Game Over Varible
+                 */
+                this.L;
+                /**
+                 * @inner
+                 * Playing Varible
+                 */
+                this, g;
+                /**
+                 * @inner
+                 * Backup Grid Managment
+                 */
+                this.M;
+                /**
+                 * @inner
+                 * Game ID
+                 */
+                this.r;
+                /**
+                 * tests if the browser is compatable
+                 */
+                this.k;
+                /**
+                 * @inner
+                 * Mouse Press Tracker
+                 */
+                this.D;
+                /**
+                 * @inner
+                 * Mouse Press Tracker
+                 */
+                this.e;
+                /**
+                 * @inner
+                 * Mouse Press Tracker
+                 */
+                this.v;
+                /**
+                 * @inner
+                 * Unknown, set to Null in newGame, called by ae(), but not changed, and not needed
+                 */
+                this.d;
+                /**
+                 * @inner
+                 * Gusture Tracker
+                 */
+                this.C;
+                /**
+                 * @inner
+                 * Likely First-Press protection
+                 */
+                this.y;
+                Setup();
+            }
+            newGame(ae, Y) {
+                let af, ab;
+                let ad;
+                let aa, ac;
+                let Z;
+                this.er = undefined
                 aa = gameSettingString();
                 Z = Q();
-                gti = Z.gameTypeId;
-                rows = Z.numRows;
-                cols = Z.numCols;
-                mines = Z.numMines;
-                zoomlvl = Z.zoom;
+                this.gti = Z.gameTypeId;
+                this.rows = Z.numRows;
+                this.cols = Z.numCols;
+                this.mines = Z.numMines;
+                this.zoomlvl = Z.zoom;
                 if (Y) {
-                    if (typeof Y.gameTypeId !== "undefined") {
-                        gti = Y.gameTypeId
-                    }
-                    if (typeof Y.numRows !== "undefined") {
-                        rows = Y.numRows
-                    }
-                    if (typeof Y.numCols !== "undefined") {
-                        cols = Y.numCols
-                    }
-                    if (typeof Y.numMines !== "undefined") {
-                        mines = Y.numMines
-                    }
+                    if (typeof Y.gameTypeId !== "undefined") this.gti = Y.gameTypeId
+                    if (typeof Y.numRows !== "undefined") this.rows = Y.numRows
+                    if (typeof Y.numCols !== "undefined") this.cols = Y.numCols
+                    if (typeof Y.numMines !== "undefined") this.mines = Y.numMines
                 }
-                ac = (gameSettingString() != aa);
-                setZoom(zoomlvl);
-                if (ac) {
-                    gridGen()
-                }
-                mineLayer(ae);
-                setO();
-                p = !!ae;
-                K = mines;
-                G = rows * cols - mines;
-                for (af = 1; af <= rows; af++) {
-                    for (ab = 1; ab <= cols; ab++) {
-                        ad = I[af][ab];
+                ac = (this.gameSettingString() != aa);
+                this.setZoom(this.zoomlvl);
+                if (ac) this.gridGen()
+                this.mineLayer(ae);
+                this.setO();
+                this.p = !!ae;
+                this.K = this.mines;
+                this.G = this.rows * this.cols - this.mines;
+                for (af = 1; af <= this.rows; af++) {
+                    for (ab = 1; ab <= this.cols; ab++) {
+                        ad = this.I[af][ab];
                         if (ad.isFlagged()) {
                             ad.setClass("square bombflagged");
                             K--
                         } else {
-                            if (ad.isMarked()) {
-                                ad.setClass("square question")
-                            } else {
+                            if (ad.isMarked()) ad.setClass("square question")
+                            else {
                                 if (ad.isRevealed()) {
                                     ad.setClass("square open" + ad.getValue());
-                                    if (!ad.isHidden()) {
-                                        G--
-                                    }
-                                } else {
-                                    ad.setClass("square blank")
-                                }
+                                    if (!ad.isHidden()) G--
+                                } else ad.setClass("square blank")
                             }
                         }
                     }
                 }
-                U.stop();
-                if (!p) {
-                    U.setTime(0)
-                } else {
-                    if (Y && typeof Y.time !== "undefined") {
-                        U.setTime(Y.time)
-                    } else { }
-                }
-                updateMines();
-                L = false;
-                g = false;
-                D = false;
-                e = false;
-                v = false;
-                isMouseDownForCtrlClick = false;
-                d = null;
-                C = false;
-                y = false;
+                this.U.stop();
+                if (!this.p) this.U.setTime(0)
+                else if (Y && typeof Y.time !== "undefined") this.U.setTime(Y.time)
+                this.updateMines();
+                this.L = false;
+                this.g = false;
+                this.D = false;
+                this.e = false;
+                this.v = false;
+                this.isMouseDownForCtrlClick = false;
+                this.d = null;
+                this.C = false;
+                this.y = false;
                 $("#face")[0].className = "facesmile";
-                hoveredSquareId = ""
+                this.hoveredSquareId = ""
             };
-            this.resize = function (Y) {
-                var Z = zoomMargin(Y);
-                setZoom(Y);
-                $("#game-container").removeClass("getGrid" + zoomlvl * 100).addClass("getGrid" + Y * 100);
+            resize(Y) {
+                let Z = this.zoomMargin(Y);
+                this.setZoom(Y);
+                $("#game-container").removeClass("getGrid" + this.zoomlvl * 100).addClass("getGrid" + Y * 100);
                 $("#face").css({
                     "margin-left": Math.floor(Z) + "px",
                     "margin-right": Math.ceil(Z) + "px"
                 });
-                zoomlvl = Y
-            };
-            this.hasStartedPlaying = function () {
-                return g
-            };
-            this.export_ = function () {
-                var aa = getGrid(true);
-                var Z = U.getTime();
-                var Y = {
+                this.zoomlvl = Y
+            }
+            hasStartedPlaying() {
+                return this.g
+            }
+            export_() {
+                let aa = this.getGrid(true);
+                let Z = this.U.getTime();
+                let Y = {
                     version: 1,
-                    gameTypeId: gti,
-                    numRows: rows,
-                    numCols: cols,
-                    numMines: mines,
+                    gameTypeId: this.gti,
+                    numRows: this.rows,
+                    numCols: this.cols,
+                    numMines: this.mines,
                     gridObj: aa,
                     time: Z
                 };
-                y = true;
+                this.y = true;
                 return btoa(JSON.stringify(Y))
-            };
-            this.isImportable = function (aa) {
+            }
+            isImportable(aa) {
                 try {
-                    var Y = JSON.parse(atob(aa));
+                    let Y = JSON.parse(atob(aa));
                     return Y.version === 1
                 } catch (Z) {
                     return false
                 }
-            };
-            this.import_ = function (ae) {
-                var aa = JSON.parse(atob(ae));
-                var ag, Z;
-                var af, ad;
-                var ac = [];
+            }
+            import_ = function (ae) {
+                let aa = JSON.parse(atob(ae));
+                let ag, Z;
+                let af, ad;
+                let ac = [];
                 for (ag = 0; ag <= aa.numRows + 1; ag++) {
                     ac[ag] = [];
                     for (Z = 0; Z <= aa.numCols + 1; Z++) {
@@ -4917,24 +4038,22 @@
                         ac[ag][Z] = ad
                     }
                 }
-                var Y = {
-                    gridObj: ac
-                };
-                var ab = {
+                let Y = { gridObj: ac };
+                let ab = {
                     gameTypeId: aa.gameTypeId,
                     numRows: aa.numRows,
                     numCols: aa.numCols,
                     numMines: aa.numMines,
                     time: aa.time
                 };
-                s({
+                this.s({
                     gameTypeId: aa.gameTypeId,
                     numRows: aa.numRows,
                     numCols: aa.numCols,
                     numMines: aa.numMines
                 });
-                E.newGame(Y, ab)
-            };
+                this.newGame(Y, ab)
+            }
 
             /**
              * 
@@ -4942,9 +4061,9 @@
              * @description
              * Sets the zoom values for the game
              */
-            function setZoom(Y) {
-                $("#game-container, #game").width(Y * (cols * 16 + 20));
-                $("#game").height(Y * (rows * 16 + 30 + 26 + 6))
+            setZoom(Y) {
+                $("#game-container, #game").width(Y * (this.cols * 16 + 20));
+                $("#game").height(Y * (this.rows * 16 + 30 + 26 + 6))
             }
 
             /**
@@ -4953,55 +4072,43 @@
              * @description
              * Returns a special margin value for use in the gridGen function as the margins of the smile
              */
-            function zoomMargin(Y) {
-                return (Y * cols * 16 - 6 * Math.ceil(Y * 13) - Y * 2 * 6 - Y * 26) / 2
+            zoomMargin(Y) {
+                return (Y * this.cols * 16 - 6 * Math.ceil(Y * 13) - Y * 2 * 6 - Y * 26) / 2
             }
 
             /**
              * Returns a string with a "ROW_COL_MINES" format
              */
-            function gameSettingString() {
-                return rows + "_" + cols + "_" + mines
+            gameSettingString() {
+                return [this.rows, this.cols, this.mines].join("_")
             }
             /**
              * Makes a new minesweeper grid for the site
              */
-            function gridGen() {
-                var ab, Y;
-                var Z = [];
-                var aa = zoomMargin(zoomlvl);
+            gridGen() {
+                let ab, Y;
+                let Z = [];
+                let aa = this.zoomMargin(zoomlvl);
                 Z.push('<div class="bordertl"></div>');
-                for (Y = 0; Y < cols; Y++) {
-                    Z.push('<div class="bordertb"></div>')
-                }
+                new Array(this.cols).forEach((_) => Z.push(`<div class="bordertb"></div>`));
                 Z.push('<div class="bordertr"></div>');
-                Z.push('<div class="borderlrlong"></div>', '<div class="time0" id="mines_hundreds"></div>', '<div class="time0" id="mines_tens"></div>', '<div class="time0" id="mines_ones"></div>', '<div class="facesmile" style="margin-left:', Math.floor(aa), "px; margin-right: ", Math.ceil(aa), 'px;" id="face"></div>', '<div class="time0" id="seconds_hundreds"></div>', '<div class="time0" id="seconds_tens"></div>', '<div class="time0" id="seconds_ones"></div>', '<div class="borderlrlong"></div>');
+                Z.push('<div class="borderlrlong"></div>', '<div class="time0" id="mines_hundreds"></div>', '<div class="time0" id="mines_tens"></div>', '<div class="time0" id="mines_ones"></div>', `<div class="facesmile" style="margin-left:${Math.floor(aa)}px; margin-right: ${Math.ceil(aa)}px;" id="face"></div>`, '<div class="time0" id="seconds_hundreds"></div>', '<div class="time0" id="seconds_tens"></div>', '<div class="time0" id="seconds_ones"></div>', '<div class="borderlrlong"></div>');
                 Z.push('<div class="borderjointl"></div>');
-                for (Y = 0; Y < cols; Y++) {
-                    Z.push('<div class="bordertb"></div>')
-                }
+                new Array(this.cols).forEach((_) => Z.push(`<div class="bordertb"></div>`));
                 Z.push('<div class="borderjointr"></div>');
-                for (ab = 1; ab <= rows; ab++) {
+                for (ab = 1; ab <= this.rows; ab++) {
                     Z.push('<div class="borderlr"></div>');
-                    for (Y = 1; Y <= cols; Y++) {
-                        Z.push('<div class="square blank" id="', ab, "_", Y, '"></div>')
-                    }
+                    new Array(this.cols).forEach((_, Y) => Z.push(`<div class="square blank" style="display: none;" id="${ab}_${Y + 1}"></div>`));
                     Z.push('<div class="borderlr"></div>')
                 }
                 Z.push('<div class="borderbl"></div>');
-                for (Y = 0; Y < cols; Y++) {
-                    Z.push('<div class="bordertb"></div>')
-                }
+                new Array(this.cols).forEach((_) => Z.push(`<div class="bordertb"></div>`));
                 Z.push('<div class="borderbr"></div>');
-                for (Y = 0; Y <= cols + 1; Y++) {
-                    Z.push('<div class="square blank" style="display: none;" id="', 0, "_", Y, '"></div>')
-                }
-                for (Y = 0; Y <= cols + 1; Y++) {
-                    Z.push('<div class="square blank" style="display: none;" id="', rows + 1, "_", Y, '"></div>')
-                }
-                for (ab = 1; ab <= rows; ab++) {
-                    Z.push('<div class="square blank" style="display: none;" id="', ab, "_", 0, '"></div>');
-                    Z.push('<div class="square blank" style="display: none;" id="', ab, "_", cols + 1, '"></div>')
+                new Array(this.cols + 1).forEach((_, Y) => Z.push(`<div class="square blank" style="display: none;" id="0_${Y}"></div>`));
+                new Array(this.cols + 1).forEach((_, Y) => Z.push(`<div class="square blank" style="display: none;" id="${this.rows + 1}_${Y}"></div>`));
+                for (ab = 1; ab <= this.rows; ab++) {
+                    Z.push(`<div class="square blank" style="display: none;" id="${ab}_0"></div>`);
+                    Z.push(`<div class="square blank" style="display: none;" id="${ab}_${this.cols + 1}"></div>`)
                 }
                 $("#game").html(Z.join(""))
             }
@@ -5029,237 +4136,43 @@
              * - serializeToObj
              * - deserializeFromObj
              */
-            function squareData(ad, Z) {
-                var ab = 0;
-                var aa = false;
-                var Y = false;
-                var ac = false;
-                this.addToValue = function (ae) {
-                    ab += ae
-                };
-                this.isMine = function () {
-                    return ab < 0
-                };
-                this.isFlagged = function () {
-                    return aa
-                };
-                this.isMarked = function () {
-                    return Y
-                };
-                this.isRevealed = function () {
-                    return ac
-                };
-                this.isHidden = function () {
-                    return ad < 1 || ad > rows || Z < 1 || Z > cols
-                };
-                this.getRow = function () {
-                    return ad
-                };
-                this.getCol = function () {
-                    return Z
-                };
-                this.getValue = function () {
-                    return ab
-                };
-                this.setRevealed = function (ae) {
-                    ac = ae
-                };
-                this.plantMine = function () {
-                    ab -= 10;
-                    I[ad - 1][Z - 1].addToValue(1);
-                    I[ad - 1][Z].addToValue(1);
-                    I[ad - 1][Z + 1].addToValue(1);
-                    I[ad][Z - 1].addToValue(1);
-                    I[ad][Z + 1].addToValue(1);
-                    I[ad + 1][Z - 1].addToValue(1);
-                    I[ad + 1][Z].addToValue(1);
-                    I[ad + 1][Z + 1].addToValue(1)
-                };
-                this.unplantMine = function () {
-                    ab += 10;
-                    I[ad - 1][Z - 1].addToValue(-1);
-                    I[ad - 1][Z].addToValue(-1);
-                    I[ad - 1][Z + 1].addToValue(-1);
-                    I[ad][Z - 1].addToValue(-1);
-                    I[ad][Z + 1].addToValue(-1);
-                    I[ad + 1][Z - 1].addToValue(-1);
-                    I[ad + 1][Z].addToValue(-1);
-                    I[ad + 1][Z + 1].addToValue(-1)
-                };
-                this.setClass = function (ae) {
-                    document.getElementById(ad + "_" + Z).className = ae
-                };
-                this.reveal1 = function () {
-                    var ae, af;
-                    var ag, ah;
-                    var ai = [];
-                    ai.push(this);
-                    this.pushed = true;
-                    while (ai.length > 0) {
-                        ag = ai.pop();
-                        if (!ag.isRevealed() && !ag.isFlagged()) {
-                            if (ag.isMine()) {
-                                return false
-                            } else {
-                                if (!ag.isFlagged()) {
-                                    ag.setClass("square open" + ag.getValue());
-                                    ag.setRevealed(true);
-                                    if (!ag.isHidden() && --G == 0) {
-                                        gameWin();
-                                        return true
-                                    }
-                                    if (ag.getValue() == 0 && !ag.isHidden()) {
-                                        for (ae = -1; ae <= 1; ae++) {
-                                            for (af = -1; af <= 1; af++) {
-                                                ah = I[ag.getRow() + ae][ag.getCol() + af];
-                                                if (!ah.pushed && !ah.isHidden() && !ah.isRevealed()) {
-                                                    ai.push(ah);
-                                                    ah.pushed = true
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    setO();
-                    return true
-                };
-                this.flag = function (ae) {
-                    if (!ac) {
-                        if (aa) {
-                            if ($("#marks").attr("checked")) {
-                                this.setClass("square question");
-                                Y = true
-                            } else {
-                                this.setClass("square blank");
-                                if (ae) {
-                                    this._showFlagAnimation(true)
-                                }
-                            }
-                            aa = false;
-                            K++;
-                            updateMines()
-                        } else {
-                            if (Y) {
-                                this.setClass("square blank");
-                                Y = false
-                            } else {
-                                this.setClass("square bombflagged");
-                                aa = true;
-                                K--;
-                                updateMines();
-                                if (ae) {
-                                    this._showFlagAnimation()
-                                }
-                            }
-                        }
-                        setO()
-                    }
-                };
-                this._showFlagAnimation = function (af) {
-                    var al = $("#" + ad + "_" + Z);
-                    var ag = al.offset();
-                    var aj = ag.left + al.width() / 2;
-                    var ai = ag.top + al.height() / 2;
-                    var ao = 57 * zoomlvl * 1.75;
-                    var ah = 79 * zoomlvl * 1.75;
-                    var ae = {
-                        left: aj - ao / 2,
-                        top: ai - ah / 2,
-                        width: ao + "px",
-                        height: ah + "px",
-                        opacity: 0
-                    };
-                    var am = {
-                        left: aj,
-                        top: ai,
-                        width: 0,
-                        height: 0,
-                        opacity: 1
-                    };
-                    if (af) {
-                        var an = ae;
-                        ae = am;
-                        am = an
-                    }
-                    var ak = $('<img src="flag.png" class="flag-animation"></div>').css(ae);
-                    $("body").append(ak);
-                    setTimeout(function () {
-                        ak.css(am)
-                    }, 0);
-                    setTimeout(function () {
-                        ak.remove()
-                    }, 500)
-                };
-                this.serializeToObj = function (ae) {
-                    if (ae) {
-                        if (!ac && !aa && !Y) {
-                            return ab
-                        } else {
-                            return [ab, ac ? 1 : 0, aa ? 1 : 0, Y ? 1 : 0]
-                        }
-                    } else {
-                        return {
-                            value: ab,
-                            isRevealed: ac,
-                            isFlagged: aa,
-                            isMarked: Y
-                        }
-                    }
-                };
-                this.deserializeFromObj = function (ae) {
-                    ab = ae.value;
-                    aa = ae.isFlagged;
-                    Y = ae.isMarked;
-                    ac = ae.isRevealed
-                }
-            }
+            squareData = squareData;
             /**
              * 
              * @description This is the main function used to lay the mines
              * @param {Object?} ab
              */
-            function mineLayer(ab) {
-                var X, Y, Z;
-                var aa;
-                I = [];
-                c = [];
-                M = [];
-                Z = 0;
-                for (X = 0; X <= rows + 1; X++) {
+            mineLayer(ab) {
+                let X, Y, Z;
+                let aa;
+                this.I = [];
+                this.c = [];
+                this.M = [];
+                this.Z = 0;
+                for (X = 0; X <= this.rows + 1; X++) {
                     I[X] = [];
-                    for (Y = 0; Y <= cols + 1; Y++) {
-                        aa = new squareData(X, Y);
-                        I[X][Y] = aa;
-                        c[X + "_" + Y] = aa;
-                        if (!aa.isHidden()) {
-                            M[Z++] = aa
-                        }
+                    for (Y = 0; Y <= this.cols + 1; Y++) {
+                        aa = new squareData(X, Y, this);
+                        this.I[X][Y] = aa;
+                        this.c[`${X}_${Y}`] = aa;
+                        if (!aa.isHidden()) this.M[Z++] = aa
                     }
                 }
                 if (ab) {
-                    var ac = ab.gridObj;
-                    for (X = 0; X <= rows + 1; X++) {
-                        for (Y = 0; Y <= cols + 1; Y++) {
-                            I[X][Y].deserializeFromObj(ac[X][Y])
+                    let ac = ab.gridObj;
+                    for (X = 0; X <= this.rows + 1; X++) {
+                        for (Y = 0; Y <= this.cols + 1; Y++) {
+                            this.I[X][Y].deserializeFromObj(ac[X][Y])
                         }
                     }
-                    M = [];
-                    for (X = 0; X <= rows + 1; X++) {
-                        for (Y = 0; Y <= cols + 1; Y++) {
-                            aa = I[X][Y];
-                            if (!aa.isHidden() && !aa.isMine()) {
-                                M.push(aa)
-                            }
+                    this.M = [];
+                    for (X = 0; X <= this.rows + 1; X++) {
+                        for (Y = 0; Y <= this.cols + 1; Y++) {
+                            aa = this.I[X][Y];
+                            if (!aa.isHidden() && !aa.isMine()) this.M.push(aa)
                         }
                     }
-                } else {
-                    for (Z = 0; Z < mines; Z++) {
-                        M.splice(Math.floor(Math.random() * M.length), 1)[0].plantMine()
-                    }
-                }
+                } else for (Z = 0; Z < this.mines; Z++) this.M.splice(Math.floor(Math.random() * this.M.length), 1)[0].plantMine()
             }
 
             /**
@@ -5269,54 +4182,51 @@
              * @decription
              * Pull the current grid state
              */
-            function getGrid(Z) {
-                var aa = [];
-                var X, Y;
-                for (X = 0; X <= rows + 1; X++) {
+            getGrid(Z) {
+                let aa = [];
+                let X, Y;
+                for (X = 0; X <= this.rows + 1; X++) {
                     aa[X] = [];
-                    for (Y = 0; Y <= cols + 1; Y++) {
-                        aa[X][Y] = I[X][Y].serializeToObj(Z)
+                    for (Y = 0; Y <= this.cols + 1; Y++) {
+                        aa[X][Y] = this.I[X][Y].serializeToObj(Z)
                     }
                 }
                 return aa
             }
 
             /**
-             * Pulls the grid state and saves it to the "o" var (called at start, reveal1, and flag)
+             * Pulls the grid state and saves it to the "o" let (called at start, reveal1, and flag)
              */
-            function setO() {
-                var Y = getGrid();
-                o = {
-                    gridObj: Y
+            setO() {
+                this.o = {
+                    gridObj: this.getGrid()
                 }
             }
 
             /**
              * @deprecated
              */
-            function checkMineLayer(ag) {
-                var Y = ag.getRow();
-                var X = ag.getCol();
-                var ad, Z;
-                var ac;
-                var af;
-                var aa;
-                if (!p && !y) {
+            checkMineLayer(ag) {
+                let Y = ag.getRow();
+                let X = ag.getCol();
+                let ad, Z;
+                let ac;
+                let af;
+                let aa;
+                if (!this.p && !this.y) {
                     if (ag.isMine()) {
-                        M.splice(Math.floor(Math.random() * M.length), 1)[0].plantMine();
+                        this.M.splice(Math.floor(Math.random() * this.M.length), 1)[0].plantMine();
                         ag.unplantMine();
-                        M.push(ag)
+                        this.M.push(ag)
                     }
-                    var af = [];
-                    for (var ab = 0; ab < M.length; ab++) {
-                        aa = M[ab];
-                        if (aa.getRow() < Y - 1 || aa.getRow() > Y + 1 || aa.getCol() < X - 1 || aa.getCol() > X + 1) {
-                            af.push(aa)
-                        }
+                    let af = [];
+                    for (let ab = 0; ab < this.M.length; ab++) {
+                        aa = this.M[ab];
+                        if (aa.getRow() < Y - 1 || aa.getRow() > Y + 1 || aa.getCol() < X - 1 || aa.getCol() > X + 1) af.push(aa)
                     }
                     for (ad = -1; ad <= 1; ad++) {
                         for (Z = -1; Z <= 1; Z++) {
-                            ac = I[Y + ad][X + Z];
+                            ac = this.I[Y + ad][X + Z];
                             if (ac.isMine() && af.length > 0) {
                                 af.splice(Math.floor(Math.random() * af.length), 1)[0].plantMine();
                                 ac.unplantMine()
@@ -5324,31 +4234,23 @@
                         }
                     }
                 }
-                U.start();
-                if ((Y == 1 && X == 1) || (Y == 1 && X == cols) || (Y == rows && X == 1) || (Y == rows && X == cols)) {
-                    return 1
-                } else {
-                    if (Y == 1 || Y == rows || X == 1 || X == cols) {
-                        return 2
-                    } else {
-                        return 3
-                    }
-                }
+                this.U.start();
+                return ((Y == 1 && X == 1) || (Y == 1 && X == this.cols) || (Y == this.rows && X == 1) || (Y == this.rows && X == this.cols)) ? 1 : ((Y == 1 || Y == this.rows || X == 1 || X == this.cols) ? 2 : 3)
             }
 
             /**
              * Game ID Generator
              */
-            function gameIDGen() {
-                var Y = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-                var Z;
-                r = "";
-                for (var Z = 0; Z < 3; Z++) {
-                    r += Y.charAt(Math.floor(Math.random() * Y.length))
+            gameIDGen() {
+                let Y = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+                let Z;
+                this.r = "";
+                for (let Z = 0; Z < 3; Z++) {
+                    this.r += Y.charAt(Math.floor(Math.random() * Y.length))
                 }
-                r += 4 * (Math.floor(Math.random() * 225) + 25) + gti;
-                for (var Z = 0; Z < 4; Z++) {
-                    r += Y.charAt(Math.floor(Math.random() * Y.length))
+                this.r += 4 * (Math.floor(Math.random() * 225) + 25) + this.gti;
+                for (let Z = 0; Z < 4; Z++) {
+                    this.r += Y.charAt(Math.floor(Math.random() * Y.length))
                 }
             }
 
@@ -5357,85 +4259,33 @@
              * @description
              * Time managment Sub-function holder used to keep track of the time
              */
-            function TimeManager() {
-                var aa;
-                var ab;
-                var ac;
-
-                function startClock() {
-                    var ag = new Date().getTime();
-                    var ad = ab * 1000;
-                    var af = ag - aa;
-                    var ae = 1000 - (af - ad);
-                    ac = setTimeout(startClock, ae);
-                    ab++;
-                    setTimeCounter()
-                }
-
-                function setTimeCounter() {
-                    var ad = numSeg(ab);
-                    document.getElementById("seconds_hundreds").className = "time" + ad[0];
-                    document.getElementById("seconds_tens").className = "time" + ad[1];
-                    document.getElementById("seconds_ones").className = "time" + ad[2]
-                }
-                this.start = function () {
-                    aa = new Date().getTime() - ab * 1000;
-                    startClock()
-                };
-                this.stop = function () {
-                    clearTimeout(ac)
-                };
-                this.getTime = function () {
-                    return ab
-                };
-                this.setTime = function (ad) {
-                    ab = ad;
-                    setTimeCounter()
-                }
-            }
+            TimeManager = TimeManager;
 
             /**
              * Sets the mines to the counter
              */
-            function updateMines() {
-                var Y = numSeg(K);
+            updateMines() {
+                let Y = numSeg(this.K);
                 document.getElementById("mines_hundreds").className = "time" + Y[0];
                 document.getElementById("mines_tens").className = "time" + Y[1];
                 document.getElementById("mines_ones").className = "time" + Y[2]
-            }
-            /**
-             * 
-             * @param {number} Y Number Value
-             * 
-             * @returns {[string|number,number,number]} 
-             * 3 segment number value where if Y is negitive, value 1 is equal to the string "-"
-             */
-            function numSeg(Y) {
-                Y = Math.min(Y, 999);
-                if (Y >= 0) {
-                    return [Math.floor(Y / 100), Math.floor((Y % 100) / 10), Y % 10]
-                } else {
-                    return ["-", Math.floor((-Y % 100) / 10), -Y % 10]
-                }
             }
 
             /**
              * @param {Object} Y
              * Game Death Function
              */
-            function gameDeath(Y) {
-                var ac, Z, aa;
-                var ab;
-                if (er) {
-                    return
-                }
-                er = 'lose'
+            gameDeath(Y) {
+                let ac, Z, aa;
+                let ab;
+                if (this.er) return
+                this.er = 'lose'
                 document.getElementById("face").className = "facedead";
-                U.stop();
-                L = true;
-                for (ac = 1; ac <= rows; ac++) {
-                    columnloop: for (Z = 1; Z <= cols; Z++) {
-                        ab = I[ac][Z];
+                this.U.stop();
+                this.L = true;
+                for (ac = 1; ac <= this.rows; ac++) {
+                    columnloop: for (Z = 1; Z <= this.cols; Z++) {
+                        ab = this.I[ac][Z];
                         if (!ab.isRevealed()) {
                             for (aa = 0; aa < Y.length; aa++) {
                                 if (ab == Y[aa]) {
@@ -5443,13 +4293,7 @@
                                     continue columnloop
                                 }
                             }
-                            if (ab.isMine() && !ab.isFlagged()) {
-                                ab.setClass("square bombrevealed")
-                            } else {
-                                if (!ab.isMine() && ab.isFlagged()) {
-                                    ab.setClass("square bombmisflagged")
-                                }
-                            }
+                            (ab.isMine() && !ab.isFlagged()) ? ab.setClass("square bombrevealed") : ((!ab.isMine() && ab.isFlagged()) ? ab.setClass("square bombmisflagged") : null);
                         }
                     }
                 }
@@ -5458,48 +4302,41 @@
             /**
              * Game Win Function
              */
-            function gameWin() {
-                var ad, Y;
-                var aa;
-                var Z;
-                var ab;
-                var ac = false;
-                if (er) {
-                    return
-                }
-                er = 'win'
+            gameWin() {
+                let ad, Y;
+                let aa;
+                let Z;
+                let ab;
+                let ac = false;
+                if (this.er) return
+                this.er = 'win'
                 document.getElementById("face").className = "facewin";
-                U.stop();
-                L = true;
-                K = 0;
-                updateMines();
-                for (ad = 1; ad <= rows; ad++) {
-                    for (Y = 1; Y <= cols; Y++) {
-                        aa = I[ad][Y];
-                        if (!aa.isRevealed() && !aa.isFlagged() && aa.isMine()) {
-                            aa.setClass("square bombflagged")
-                        } else if (!aa.isRevealed() && !aa.isMine()) {
-                            if (aa.isFlagged()) {
-                                aa.flag()
-                            }
+                this.U.stop();
+                this.L = true;
+                this.K = 0;
+                this.updateMines();
+                for (ad = 1; ad <= this.rows; ad++) {
+                    for (Y = 1; Y <= this.cols; Y++) {
+                        aa = this.I[ad][Y];
+                        if (!aa.isRevealed() && !aa.isFlagged() && aa.isMine()) aa.setClass("square bombflagged")
+                        else if (!aa.isRevealed() && !aa.isMine()) {
+                            if (aa.isFlagged()) aa.flag()
                             aa.setClass("square open" + aa.getValue());
                             aa.setRevealed(true);
                         }
                     }
                 }
-                if (gti > 0) {
+                if (this.gti > 0) {
                     ab = U.getTime();
-                    if (!p) {
+                    if (!this.p) {
                         for (Z = 3; Z >= 0; Z--) {
-                            if (ab <= A[Z][gti - 1]) {
+                            if (ab <= this.A[Z][this.gti - 1]) {
                                 ac = true;
                                 break
                             }
                         }
                     }
-                    if (E.onWin) {
-                        E.onWin(gti, ab)
-                    }
+                    if (this.onWin) this.onWin(gti, ab)
                 }
             }
 
@@ -5508,7 +4345,7 @@
              * @param {HTMLElement} Y Elemet Pressed
              * @returns {Boolean} Returns true if the element pressed has a class starting with "square"
              */
-            function squareTest(Y) {
+            squareTest(Y) {
                 return Y.className.substring(0, 6) == "square"
             }
 
@@ -5517,16 +4354,11 @@
              * @returns {{right:Boolean, left:Boolean}}
              * tests what mouse button was pressed
              */
-            function mousePressTest(Z) {
-                var Y = {};
-                if (k) {
-                    Y.left = Z.button == 1 || Z.button == 3 || Z.button == 4;
-                    Y.right = Z.button == 2 || Z.button == 3 || Z.button == 4
-                } else {
-                    Y.left = Z.button == 0 || Z.button == 1;
-                    Y.right = Z.button == 2 || Z.button == 1
+            mousePressTest(Z) {
+                return {
+                    left: this.K ? Z.button == 1 || Z.button == 3 || Z.button == 4 : Z.button == 0 || Z.button == 1,
+                    right: this.K ? Z.button == 2 || Z.button == 3 || Z.button == 4 : Z.button == 2 || Z.button == 1
                 }
-                return Y
             }
 
             /**
@@ -5536,16 +4368,8 @@
              * @description
              * Called for use in a square game
              */
-            function classSetter2(aa, Z, Y) {
-                if (!aa.isRevealed()) {
-                    if (aa.isMarked()) {
-                        aa.setClass(Y)
-                    } else {
-                        if (!aa.isFlagged()) {
-                            aa.setClass(Z)
-                        }
-                    }
-                }
+            classSetter2(aa, Z, Y) {
+                (!aa.isRevealed()) ? (aa.isMarked() ? aa.setClass(Y) : (!aa.isFlagged()) ? aa.setClass(Z) : null) : null
             }
 
             /**
@@ -5555,11 +4379,11 @@
              * @description
              * Called for use in a marking game
              */
-            function classSetter3(ac, ab, aa) {
-                var Y, Z;
+            classSetter3(ac, ab, aa) {
+                let Y, Z;
                 for (Y = -1; Y <= 1; Y++) {
                     for (Z = -1; Z <= 1; Z++) {
-                        classSetter2(I[ac.getRow() + Y][ac.getCol() + Z], ab, aa)
+                        this.classSetter2(this.I[ac.getRow() + Y][ac.getCol() + Z], ab, aa)
                     }
                 }
             }
@@ -5567,37 +4391,28 @@
             /**
              * Game Setup for eventListeners, and grabbing elements, and other required things
              */
-            function Setup() {
-                var aa = false;
-                var ac;
+            Setup() {
+                let aa = false;
+                let ac;
+                const p = this
 
                 /**
                  * @param {MouseEvent} ag
                  * Used for marking games
                  */
                 function markFunc1(ag) {
-                    if (ag.type === "touchmove") {
-                        return
-                    }
-                    var af = eleSelector(ag);
-                    if (af != ac && !D) {
+                    if (ag.type === "touchmove") return
+                    let af = eleSelector(ag);
+                    if (af != ac && !p.D) {
                         if (v) {
-                            if (ac) {
-                                classSetter3(c[ac.id], "square blank", "square question")
-                            }
-                            if (squareTest(af)) {
-                                classSetter3(c[af.id], "square open0", "square questionpressed")
-                            }
+                            if (ac) p.classSetter3(p.c[ac.id], "square blank", "square question")
+                            if (p.squareTest(af)) p.classSetter3(p.c[af.id], "square open0", "square questionpressed")
                         } else {
-                            if (ac) {
-                                classSetter2(c[ac.id], "square blank", "square question")
-                            }
-                            if (squareTest(af)) {
-                                classSetter2(c[af.id], "square open0", "square questionpressed")
-                            }
+                            if (ac) p.classSetter2(p.c[ac.id], "square blank", "square question")
+                            if (p.squareTest(af)) p.classSetter2(p.c[af.id], "square open0", "square questionpressed")
                         }
                     }
-                    ac = (squareTest(af)) ? af : undefined
+                    ac = (p.squareTest(af)) ? af : undefined
                 }
 
                 /**
@@ -5606,10 +4421,8 @@
                  * Changes the face upon touching it
                  */
                 function faceSetter(ag) {
-                    if (ag.type === "touchmove") {
-                        return
-                    }
-                    var af = eleSelector(ag);
+                    if (ag.type === "touchmove") return
+                    let af = eleSelector(ag);
                     document.getElementById("face").className = (af.id == "face") ? "facepressed" : "facesmile"
                 }
 
@@ -5621,51 +4434,45 @@
                  */
                 function eleSelector(af) {
                     if (af.type === "touchmove" || af.type === "touchend") {
-                        var ag = af.originalEvent.changedTouches[0];
+                        let ag = af.originalEvent.changedTouches[0];
                         return document.elementFromPoint(ag.clientX, ag.clientY)
-                    } else {
-                        return af.target
-                    }
+                    } else return af.target
                 }
 
-                k = false
+                p.k = false
 
                 $(document).bind("gesturestart", function (af) {
-                    C = true;
+                    p.C = true;
                     scrollManager()
                 });
 
                 $(document).bind("gestureend", function (af) {
-                    C = false
+                    p.C = false
                 });
 
                 $(document).bind("scroll", scrollManager);
 
                 function scrollManager() {
-                    if (!d) {
-                        return
-                    }
-                    d = null;
+                    if (!p.d) return
+                    p.d = null;
                     if (ac) {
-                        classSetter2(c[ac.id], "square blank", "square question");
+                        classSetter2(p.c[ac.id], "square blank", "square question");
                         ac = undefined
                     }
-                    if (!L) {
-                        document.getElementById("face").className = "facesmile"
-                    }
+                    if (!p.L) document.getElementById("face").className = "facesmile"
                 }
 
                 $(document).mousedown(function (ag) {
-                    var af = mousePressTest(ag);
-                    e = af.left || e;
-                    v = af.right || v;
-                    if (ag.ctrlKey && squareTest(ag.target) && !L) {
-                        if (er) return;
-                        c[ag.target.id].flag();
-                        isMouseDownForCtrlClick = true
+                    let af = mousePressTest(ag);
+                    p.e = af.left || p.e;
+                    p.v = af.right || p.v;
+                    if (ag.ctrlKey && p.squareTest(ag.target) && !L) {
+                        if (p.er) return;
+                        p.c[ag.target.id].flag();
+                        p.isMouseDownForCtrlClick = true
                     } else {
-                        if (e) {
-                            if (squareTest(ag.target) && !L) {
+                        if (p.e) {
+                            if (p.squareTest(ag.target) && !p.L) {
                                 ag.preventDefault();
                                 $(document).bind("mousemove", markFunc1);
                                 document.getElementById("face").className = "faceooh";
@@ -5680,10 +4487,10 @@
                                 }
                             }
                         } else {
-                            if (v) {
-                                if (squareTest(ag.target) && !L) {
-                                    if (er) return;
-                                    c[ag.target.id].flag()
+                            if (p.v) {
+                                if (p.squareTest(ag.target) && !p.L) {
+                                    if (p.er) return;
+                                    p.c[ag.target.id].flag()
                                 }
                                 return false
                             }
@@ -5692,62 +4499,50 @@
                 });
 
                 $(document).mouseup(function (ai) {
-                    var af = mousePressTest(ai);
-                    var ah;
-                    var ag;
-                    if (isMouseDownForCtrlClick) {
-                        e = false;
-                        v = false;
-                        isMouseDownForCtrlClick = false;
+                    let af = p.mousePressTest(ai);
+                    let ah;
+                    let ag;
+                    if (p.isMouseDownForCtrlClick) {
+                        p.e = false;
+                        p.v = false;
+                        p.isMouseDownForCtrlClick = false;
                         return
                     }
-                    if (er) {
-                        if (ai.target.id == "face" && aa) {
-                            E.newGame()
-                            aa = false
-                        }
-                        else {
-                            return
-                        }
+                    if (p.er) {
+                        if (!(ai.target.id == "face" && aa)) return
+                        p.newGame()
+                        aa = false
                     }
                     if (af.left) {
-                        e = false;
+                        p.e = false;
                         $(document).unbind("mousemove", markFunc1).unbind("mousemove", faceSetter);
-                        if (aa || !L) {
-                            document.getElementById("face").className = "facesmile"
-                        }
-                        if (squareTest(ai.target) && !L) {
-                            ah = c[ai.target.id];
-                            if (v) {
-                                D = true;
-                                classSetter3(c[ai.target.id], "square blank", "square question");
+                        if (aa || !p.L) document.getElementById("face").className = "facesmile"
+                        if (p.squareTest(ai.target) && !p.L) {
+                            ah = p.c[ai.target.id];
+                            if (p.v) {
+                                p.D = true;
+                                p.classSetter3(p.c[ai.target.id], "square blank", "square question");
                             } else {
-                                if (!D) {
+                                if (!p.D) {
                                     if (!g) {
-                                        ag = checkMineLayer(ah)
-                                        g = true
+                                        ag = p.checkMineLayer(ah)
+                                        p.g = true
                                     }
-                                    if (!ah.reveal1()) {
-                                        gameDeath([ah])
-                                    }
+                                    if (!ah.reveal1()) p.gameDeath([ah])
                                 }
                                 D = false
                             }
                         }
                     }
                     if (af.right) {
-                        v = false;
-                        if (squareTest(ai.target) && !L) {
-                            if (e) {
-                                ah = c[ai.target.id];
-                                D = true;
-                                classSetter3(ah, "square blank", "square question");
-                            } else {
-                                D = false
-                            }
-                            if (!L) {
-                                document.getElementById("face").className = "facesmile"
-                            }
+                        p.v = false;
+                        if (p.squareTest(ai.target) && !L) {
+                            if (p.e) {
+                                ah = p.c[ai.target.id];
+                                p.D = true;
+                                p.classSetter3(ah, "square blank", "square question");
+                            } else p.D = false
+                            if (!p.L) document.getElementById("face").className = "facesmile"
                         }
                     }
                 });
@@ -5759,51 +4554,43 @@
                     }
                     if (ag.which == 83) {
                         ag.preventDefault()
-                        E.newGame()
+                        p.newGame()
                     } else if (ag.which == 32) {
                         ag.preventDefault()
-                        square = c[hoveredSquareId];
+                        square = p.c[p.hoveredSquareId];
                         square.flag()
-                    } else if (ag.which == 68) {
-                        gameDeath([c[hoveredSquareId]])
-                    } else if (ag.which == 70) {
-                        document.body.requestFullscreen()
-                    } else if (ag.key == "~") {
-                        gameWin()
-                    } else {
-
-                    }
+                    } else if (ag.which == 68) p.gameDeath([p.c[p.hoveredSquareId]])
+                    else if (ag.which == 70) document.body.requestFullscreen()
+                    else if (ag.key == "~") p.gameWin()
+                    else return
                 });
 
                 $("#game").mouseover(function (af) {
-                    if (squareTest(af.target)) {
-                        hoveredSquareId = af.target.id
-                    }
+                    if (squareTest(af.target)) p.hoveredSquareId = af.target.id
                 });
 
                 $("#game").mouseout(function (af) {
                     if (squareTest(af.target)) {
-                        if (hoveredSquareId = af.target.id) {
-                            hoveredSquareId = ""
+                        if (p.hoveredSquareId = af.target.id) {
+                            p.hoveredSquareId = ""
                         }
                     }
                 })
-                
+
                 $(document).contextmenu(function (event) {
                     event.preventDefault()
                 })
             }
-        };
+        }
     </script>
-    <!-- Page Minesweeper Code -->
     <script>
         $(function () {
-            var gameType = 'expert';
-            var zoom = '200';
-            var position = 'center';
-            var isNightMode = false;
-            var hashParts, i;
-            var minesweeper;
+            let gameType = 'expert';
+            let zoom = '200';
+            let position = 'center';
+            let isNightMode = false;
+            let hashParts, i;
+            let minesweeper;
 
             if (!!location.hash && location.hash.length > 1) {
                 hashParts = location.hash.substring(1).split('-');
@@ -5828,9 +4615,7 @@
             document.getElementById('game-container').className = 'z' + zoom;
             setPosition(position);
 
-            if (isNightMode) {
-                toggleNightMode(isNightMode);
-            }
+            if (isNightMode) toggleNightMode(isNightMode);
 
             minesweeper = new Minesweeper([
                 [2, 20, 59],
@@ -5840,7 +4625,7 @@
             ], getOptions, setOptions);
 
             minesweeper.onWin = function (gameTypeId, time) {
-                var mode;
+                let mode;
                 switch (gameTypeId) {
                     case 1: mode = 'Beginner'; break;
                     case 2: mode = 'Intermediate'; break;
@@ -5876,7 +4661,7 @@
             });
 
             $('input[name="zoom"]').change(function () {
-                var zoom = parseFloat($(this).val());
+                let zoom = parseFloat($(this).val());
                 minesweeper.resize(zoom);
                 setHash();
             });
@@ -5887,7 +4672,7 @@
             });
 
             $('input[name="nightMode"]').change(function () {
-                var isNightMode = $(this).is(':checked');
+                let isNightMode = $(this).is(':checked');
                 toggleNightMode(isNightMode);
                 setHash();
             });
@@ -5915,7 +4700,7 @@
             });
 
             $('#import textarea').bind('input propertychange', function () {
-                var isImportable = minesweeper.isImportable($.trim($(this).val()));
+                let isImportable = minesweeper.isImportable($.trim($(this).val()));
                 $('#import input[type=submit]').prop('disabled', !isImportable);
             });
 
@@ -5934,7 +4719,7 @@
 
                 if ($('#export').is(':visible')) {
                     $('#export textarea').val(minesweeper.export_()).select();
-                    var didCopySucceed = document.execCommand('copy');
+                    let didCopySucceed = document.execCommand('copy');
                     $('#export-message').text(didCopySucceed ? 'Game state copied to your clipboard!' : 'Copy game state to your clipboard:');
                     $('#export-first-click-message').toggle(!minesweeper.hasStartedPlaying());
                 }
@@ -5942,11 +4727,9 @@
 
             $('#export textarea').mousedown(function () {
                 // If the textarea already has focus, don't override default behavior.
-                if (document.activeElement === $(this)[0]) {
-                    return;
-                }
+                if (document.activeElement === $(this)[0]) return;
                 // Defer or else the ensuing click event will un-highlight.
-                var that = this;
+                let that = this;
                 setTimeout(() => {
                     $(that).select();
                 }, 0);
@@ -5974,11 +4757,11 @@
             }
 
             function getOptions() {
-                var gameTypeId;
-                var numRows;
-                var numCols;
-                var numMines;
-                var zoom;
+                let gameTypeId;
+                let numRows;
+                let numCols;
+                let numMines;
+                let zoom;
 
                 if ($("#beginner").attr("checked")) {
                     gameTypeId = 1;
@@ -6000,27 +4783,18 @@
                 }
                 else if ($("#custom").attr("checked")) {
                     gameTypeId = 0;
-
                     numRows = parseInt($("#custom_height").val(), 10);
-                    if (isNaN(numRows)) {
-                        numRows = 20;
-                    }
+                    if (isNaN(numRows)) numRows = 20;
                     numRows = Math.max(1, numRows);
                     numRows = Math.min(99, numRows);
                     $("#custom_height").val(numRows);
-
                     numCols = parseInt($("#custom_width").val(), 10);
-                    if (isNaN(numCols)) {
-                        numCols = 30;
-                    }
+                    if (isNaN(numCols)) numCols = 30;
                     numCols = Math.max(8, numCols);
                     numCols = Math.min(99, numCols);
                     $("#custom_width").val(numCols);
-
                     numMines = parseInt($("#custom_mines").val(), 10);
-                    if (isNaN(numMines)) {
-                        numMines = Math.round(numRows * numCols / 5);
-                    }
+                    if (isNaN(numMines)) numMines = Math.round(numRows * numCols / 5);
                     numMines = Math.max(0, numMines);
                     numMines = Math.min(numRows * numCols, numMines);
                     $("#custom_mines").val(numMines);
@@ -6052,37 +4826,19 @@
             }
 
             function setHash() {
-                var gameType = 'expert';
-                var zoom = $('input[name="zoom"]:checked').val();
-                var position = $('input[name="position"]:checked').val();
-                var isNightMode = $('input[name="nightMode"]').is(':checked');
-                var hashParts = [];
+                let gameType = 'expert';
+                let zoom = $('input[name="zoom"]:checked').val();
+                let position = $('input[name="position"]:checked').val();
+                let isNightMode = $('input[name="nightMode"]').is(':checked');
+                let hashParts = [];
 
-                if ($("#beginner").attr("checked")) {
-                    hashParts.push("beginner");
-                }
-                else if ($("#intermediate").attr("checked")) {
-                    hashParts.push("intermediate");
-                }
-
-                if (zoom != 1) {
-                    hashParts.push(zoom * 100);
-                }
-
-                if (position != "center") {
-                    hashParts.push(position);
-                }
-
-                if (isNightMode) {
-                    hashParts.push('night');
-                }
-
-                if (hashParts.length > 0) {
-                    location.hash = '#' + hashParts.join('-');
-                }
-                else {
-                    location.hash = '';
-                }
+                if ($("#beginner").attr("checked")) hashParts.push("beginner");
+                else if ($("#intermediate").attr("checked")) hashParts.push("intermediate");
+                if (zoom != 1) hashParts.push(zoom * 100);
+                if (position != "center") hashParts.push(position);
+                if (isNightMode) hashParts.push('night');
+                if (hashParts.length > 0) location.hash = `#${hashParts.join('-')}`;
+                else location.hash = '';
             }
         });
     </script>
@@ -6090,943 +4846,7 @@
 </head>
 
 <body class="night-mode" style="margin-left: 0px;">
-    <table border="0" cellpadding="0" cellspacing="0" width="100%" height="100%">
-        <tbody>
-            <tr>
-                <td class="outer-container" style="text-align: center;">
-                    <div class="inner-container" style="margin-left: auto; margin-right: auto;">
-                        <div id="center-column">
-                            <div id="game-container" class="z200" style="width: 1000px;">
-                                <div style="white-space: nowrap;">
-                                    <span id="options-link" title="game options">Game</span>
-                                    | <span id="display-link" title="size/position">Display</span>
-                                    | <span id="controls-link" title="keyboard/mouse controls">Controls</span>
-                                    | <span id="import-link" title="load exported game">Import</span>
-                                    | <span id="export-link" title="same game to be impoorted">Export</span>
-                                    | <span title="Fullscreen the minesweeper window"><a
-                                            href="javascript:document.body.requestFullscreen()">Fullscreen</a></span>
-                                </div>
-                                <div id="game" oncontextmenu="(e) => {e.preventDefault()}"
-                                    ondrag="(e) => {e.preventDefault()}" ondragstart="(e) => {e.preventDefault()}"
-                                    style="width: 1000px; height: 636px;">
-                                    <div class="bordertl"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertr"></div>
-                                    <div class="borderlrlong"></div>
-                                    <div class="time0" id="mines_hundreds"></div>
-                                    <div class="time9" id="mines_tens"></div>
-                                    <div class="time9" id="mines_ones"></div>
-                                    <div class="facesmile" style="margin-left:364px; margin-right: 364px;" id="face">
-                                    </div>
-                                    <div class="time0" id="seconds_hundreds"></div>
-                                    <div class="time0" id="seconds_tens"></div>
-                                    <div class="time0" id="seconds_ones"></div>
-                                    <div class="borderlrlong"></div>
-                                    <div class="borderjointl"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="borderjointr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="1_1"></div>
-                                    <div class="square blank" id="1_2"></div>
-                                    <div class="square blank" id="1_3"></div>
-                                    <div class="square blank" id="1_4"></div>
-                                    <div class="square blank" id="1_5"></div>
-                                    <div class="square blank" id="1_6"></div>
-                                    <div class="square blank" id="1_7"></div>
-                                    <div class="square blank" id="1_8"></div>
-                                    <div class="square blank" id="1_9"></div>
-                                    <div class="square blank" id="1_10"></div>
-                                    <div class="square blank" id="1_11"></div>
-                                    <div class="square blank" id="1_12"></div>
-                                    <div class="square blank" id="1_13"></div>
-                                    <div class="square blank" id="1_14"></div>
-                                    <div class="square blank" id="1_15"></div>
-                                    <div class="square blank" id="1_16"></div>
-                                    <div class="square blank" id="1_17"></div>
-                                    <div class="square blank" id="1_18"></div>
-                                    <div class="square blank" id="1_19"></div>
-                                    <div class="square blank" id="1_20"></div>
-                                    <div class="square blank" id="1_21"></div>
-                                    <div class="square blank" id="1_22"></div>
-                                    <div class="square blank" id="1_23"></div>
-                                    <div class="square blank" id="1_24"></div>
-                                    <div class="square blank" id="1_25"></div>
-                                    <div class="square blank" id="1_26"></div>
-                                    <div class="square blank" id="1_27"></div>
-                                    <div class="square blank" id="1_28"></div>
-                                    <div class="square blank" id="1_29"></div>
-                                    <div class="square blank" id="1_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="2_1"></div>
-                                    <div class="square blank" id="2_2"></div>
-                                    <div class="square blank" id="2_3"></div>
-                                    <div class="square blank" id="2_4"></div>
-                                    <div class="square blank" id="2_5"></div>
-                                    <div class="square blank" id="2_6"></div>
-                                    <div class="square blank" id="2_7"></div>
-                                    <div class="square blank" id="2_8"></div>
-                                    <div class="square blank" id="2_9"></div>
-                                    <div class="square blank" id="2_10"></div>
-                                    <div class="square blank" id="2_11"></div>
-                                    <div class="square blank" id="2_12"></div>
-                                    <div class="square blank" id="2_13"></div>
-                                    <div class="square blank" id="2_14"></div>
-                                    <div class="square blank" id="2_15"></div>
-                                    <div class="square blank" id="2_16"></div>
-                                    <div class="square blank" id="2_17"></div>
-                                    <div class="square blank" id="2_18"></div>
-                                    <div class="square blank" id="2_19"></div>
-                                    <div class="square blank" id="2_20"></div>
-                                    <div class="square blank" id="2_21"></div>
-                                    <div class="square blank" id="2_22"></div>
-                                    <div class="square blank" id="2_23"></div>
-                                    <div class="square blank" id="2_24"></div>
-                                    <div class="square blank" id="2_25"></div>
-                                    <div class="square blank" id="2_26"></div>
-                                    <div class="square blank" id="2_27"></div>
-                                    <div class="square blank" id="2_28"></div>
-                                    <div class="square blank" id="2_29"></div>
-                                    <div class="square blank" id="2_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="3_1"></div>
-                                    <div class="square blank" id="3_2"></div>
-                                    <div class="square blank" id="3_3"></div>
-                                    <div class="square blank" id="3_4"></div>
-                                    <div class="square blank" id="3_5"></div>
-                                    <div class="square blank" id="3_6"></div>
-                                    <div class="square blank" id="3_7"></div>
-                                    <div class="square blank" id="3_8"></div>
-                                    <div class="square blank" id="3_9"></div>
-                                    <div class="square blank" id="3_10"></div>
-                                    <div class="square blank" id="3_11"></div>
-                                    <div class="square blank" id="3_12"></div>
-                                    <div class="square blank" id="3_13"></div>
-                                    <div class="square blank" id="3_14"></div>
-                                    <div class="square blank" id="3_15"></div>
-                                    <div class="square blank" id="3_16"></div>
-                                    <div class="square blank" id="3_17"></div>
-                                    <div class="square blank" id="3_18"></div>
-                                    <div class="square blank" id="3_19"></div>
-                                    <div class="square blank" id="3_20"></div>
-                                    <div class="square blank" id="3_21"></div>
-                                    <div class="square blank" id="3_22"></div>
-                                    <div class="square blank" id="3_23"></div>
-                                    <div class="square blank" id="3_24"></div>
-                                    <div class="square blank" id="3_25"></div>
-                                    <div class="square blank" id="3_26"></div>
-                                    <div class="square blank" id="3_27"></div>
-                                    <div class="square blank" id="3_28"></div>
-                                    <div class="square blank" id="3_29"></div>
-                                    <div class="square blank" id="3_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="4_1"></div>
-                                    <div class="square blank" id="4_2"></div>
-                                    <div class="square blank" id="4_3"></div>
-                                    <div class="square blank" id="4_4"></div>
-                                    <div class="square blank" id="4_5"></div>
-                                    <div class="square blank" id="4_6"></div>
-                                    <div class="square blank" id="4_7"></div>
-                                    <div class="square blank" id="4_8"></div>
-                                    <div class="square blank" id="4_9"></div>
-                                    <div class="square blank" id="4_10"></div>
-                                    <div class="square blank" id="4_11"></div>
-                                    <div class="square blank" id="4_12"></div>
-                                    <div class="square blank" id="4_13"></div>
-                                    <div class="square blank" id="4_14"></div>
-                                    <div class="square blank" id="4_15"></div>
-                                    <div class="square blank" id="4_16"></div>
-                                    <div class="square blank" id="4_17"></div>
-                                    <div class="square blank" id="4_18"></div>
-                                    <div class="square blank" id="4_19"></div>
-                                    <div class="square blank" id="4_20"></div>
-                                    <div class="square blank" id="4_21"></div>
-                                    <div class="square blank" id="4_22"></div>
-                                    <div class="square blank" id="4_23"></div>
-                                    <div class="square blank" id="4_24"></div>
-                                    <div class="square blank" id="4_25"></div>
-                                    <div class="square blank" id="4_26"></div>
-                                    <div class="square blank" id="4_27"></div>
-                                    <div class="square blank" id="4_28"></div>
-                                    <div class="square blank" id="4_29"></div>
-                                    <div class="square blank" id="4_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="5_1"></div>
-                                    <div class="square blank" id="5_2"></div>
-                                    <div class="square blank" id="5_3"></div>
-                                    <div class="square blank" id="5_4"></div>
-                                    <div class="square blank" id="5_5"></div>
-                                    <div class="square blank" id="5_6"></div>
-                                    <div class="square blank" id="5_7"></div>
-                                    <div class="square blank" id="5_8"></div>
-                                    <div class="square blank" id="5_9"></div>
-                                    <div class="square blank" id="5_10"></div>
-                                    <div class="square blank" id="5_11"></div>
-                                    <div class="square blank" id="5_12"></div>
-                                    <div class="square blank" id="5_13"></div>
-                                    <div class="square blank" id="5_14"></div>
-                                    <div class="square blank" id="5_15"></div>
-                                    <div class="square blank" id="5_16"></div>
-                                    <div class="square blank" id="5_17"></div>
-                                    <div class="square blank" id="5_18"></div>
-                                    <div class="square blank" id="5_19"></div>
-                                    <div class="square blank" id="5_20"></div>
-                                    <div class="square blank" id="5_21"></div>
-                                    <div class="square blank" id="5_22"></div>
-                                    <div class="square blank" id="5_23"></div>
-                                    <div class="square blank" id="5_24"></div>
-                                    <div class="square blank" id="5_25"></div>
-                                    <div class="square blank" id="5_26"></div>
-                                    <div class="square blank" id="5_27"></div>
-                                    <div class="square blank" id="5_28"></div>
-                                    <div class="square blank" id="5_29"></div>
-                                    <div class="square blank" id="5_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="6_1"></div>
-                                    <div class="square blank" id="6_2"></div>
-                                    <div class="square blank" id="6_3"></div>
-                                    <div class="square blank" id="6_4"></div>
-                                    <div class="square blank" id="6_5"></div>
-                                    <div class="square blank" id="6_6"></div>
-                                    <div class="square blank" id="6_7"></div>
-                                    <div class="square blank" id="6_8"></div>
-                                    <div class="square blank" id="6_9"></div>
-                                    <div class="square blank" id="6_10"></div>
-                                    <div class="square blank" id="6_11"></div>
-                                    <div class="square blank" id="6_12"></div>
-                                    <div class="square blank" id="6_13"></div>
-                                    <div class="square blank" id="6_14"></div>
-                                    <div class="square blank" id="6_15"></div>
-                                    <div class="square blank" id="6_16"></div>
-                                    <div class="square blank" id="6_17"></div>
-                                    <div class="square blank" id="6_18"></div>
-                                    <div class="square blank" id="6_19"></div>
-                                    <div class="square blank" id="6_20"></div>
-                                    <div class="square blank" id="6_21"></div>
-                                    <div class="square blank" id="6_22"></div>
-                                    <div class="square blank" id="6_23"></div>
-                                    <div class="square blank" id="6_24"></div>
-                                    <div class="square blank" id="6_25"></div>
-                                    <div class="square blank" id="6_26"></div>
-                                    <div class="square blank" id="6_27"></div>
-                                    <div class="square blank" id="6_28"></div>
-                                    <div class="square blank" id="6_29"></div>
-                                    <div class="square blank" id="6_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="7_1"></div>
-                                    <div class="square blank" id="7_2"></div>
-                                    <div class="square blank" id="7_3"></div>
-                                    <div class="square blank" id="7_4"></div>
-                                    <div class="square blank" id="7_5"></div>
-                                    <div class="square blank" id="7_6"></div>
-                                    <div class="square blank" id="7_7"></div>
-                                    <div class="square blank" id="7_8"></div>
-                                    <div class="square blank" id="7_9"></div>
-                                    <div class="square blank" id="7_10"></div>
-                                    <div class="square blank" id="7_11"></div>
-                                    <div class="square blank" id="7_12"></div>
-                                    <div class="square blank" id="7_13"></div>
-                                    <div class="square blank" id="7_14"></div>
-                                    <div class="square blank" id="7_15"></div>
-                                    <div class="square blank" id="7_16"></div>
-                                    <div class="square blank" id="7_17"></div>
-                                    <div class="square blank" id="7_18"></div>
-                                    <div class="square blank" id="7_19"></div>
-                                    <div class="square blank" id="7_20"></div>
-                                    <div class="square blank" id="7_21"></div>
-                                    <div class="square blank" id="7_22"></div>
-                                    <div class="square blank" id="7_23"></div>
-                                    <div class="square blank" id="7_24"></div>
-                                    <div class="square blank" id="7_25"></div>
-                                    <div class="square blank" id="7_26"></div>
-                                    <div class="square blank" id="7_27"></div>
-                                    <div class="square blank" id="7_28"></div>
-                                    <div class="square blank" id="7_29"></div>
-                                    <div class="square blank" id="7_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="8_1"></div>
-                                    <div class="square blank" id="8_2"></div>
-                                    <div class="square blank" id="8_3"></div>
-                                    <div class="square blank" id="8_4"></div>
-                                    <div class="square blank" id="8_5"></div>
-                                    <div class="square blank" id="8_6"></div>
-                                    <div class="square blank" id="8_7"></div>
-                                    <div class="square blank" id="8_8"></div>
-                                    <div class="square blank" id="8_9"></div>
-                                    <div class="square blank" id="8_10"></div>
-                                    <div class="square blank" id="8_11"></div>
-                                    <div class="square blank" id="8_12"></div>
-                                    <div class="square blank" id="8_13"></div>
-                                    <div class="square blank" id="8_14"></div>
-                                    <div class="square blank" id="8_15"></div>
-                                    <div class="square blank" id="8_16"></div>
-                                    <div class="square blank" id="8_17"></div>
-                                    <div class="square blank" id="8_18"></div>
-                                    <div class="square blank" id="8_19"></div>
-                                    <div class="square blank" id="8_20"></div>
-                                    <div class="square blank" id="8_21"></div>
-                                    <div class="square blank" id="8_22"></div>
-                                    <div class="square blank" id="8_23"></div>
-                                    <div class="square blank" id="8_24"></div>
-                                    <div class="square blank" id="8_25"></div>
-                                    <div class="square blank" id="8_26"></div>
-                                    <div class="square blank" id="8_27"></div>
-                                    <div class="square blank" id="8_28"></div>
-                                    <div class="square blank" id="8_29"></div>
-                                    <div class="square blank" id="8_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="9_1"></div>
-                                    <div class="square blank" id="9_2"></div>
-                                    <div class="square blank" id="9_3"></div>
-                                    <div class="square blank" id="9_4"></div>
-                                    <div class="square blank" id="9_5"></div>
-                                    <div class="square blank" id="9_6"></div>
-                                    <div class="square blank" id="9_7"></div>
-                                    <div class="square blank" id="9_8"></div>
-                                    <div class="square blank" id="9_9"></div>
-                                    <div class="square blank" id="9_10"></div>
-                                    <div class="square blank" id="9_11"></div>
-                                    <div class="square blank" id="9_12"></div>
-                                    <div class="square blank" id="9_13"></div>
-                                    <div class="square blank" id="9_14"></div>
-                                    <div class="square blank" id="9_15"></div>
-                                    <div class="square blank" id="9_16"></div>
-                                    <div class="square blank" id="9_17"></div>
-                                    <div class="square blank" id="9_18"></div>
-                                    <div class="square blank" id="9_19"></div>
-                                    <div class="square blank" id="9_20"></div>
-                                    <div class="square blank" id="9_21"></div>
-                                    <div class="square blank" id="9_22"></div>
-                                    <div class="square blank" id="9_23"></div>
-                                    <div class="square blank" id="9_24"></div>
-                                    <div class="square blank" id="9_25"></div>
-                                    <div class="square blank" id="9_26"></div>
-                                    <div class="square blank" id="9_27"></div>
-                                    <div class="square blank" id="9_28"></div>
-                                    <div class="square blank" id="9_29"></div>
-                                    <div class="square blank" id="9_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="10_1"></div>
-                                    <div class="square blank" id="10_2"></div>
-                                    <div class="square blank" id="10_3"></div>
-                                    <div class="square blank" id="10_4"></div>
-                                    <div class="square blank" id="10_5"></div>
-                                    <div class="square blank" id="10_6"></div>
-                                    <div class="square blank" id="10_7"></div>
-                                    <div class="square blank" id="10_8"></div>
-                                    <div class="square blank" id="10_9"></div>
-                                    <div class="square blank" id="10_10"></div>
-                                    <div class="square blank" id="10_11"></div>
-                                    <div class="square blank" id="10_12"></div>
-                                    <div class="square blank" id="10_13"></div>
-                                    <div class="square blank" id="10_14"></div>
-                                    <div class="square blank" id="10_15"></div>
-                                    <div class="square blank" id="10_16"></div>
-                                    <div class="square blank" id="10_17"></div>
-                                    <div class="square blank" id="10_18"></div>
-                                    <div class="square blank" id="10_19"></div>
-                                    <div class="square blank" id="10_20"></div>
-                                    <div class="square blank" id="10_21"></div>
-                                    <div class="square blank" id="10_22"></div>
-                                    <div class="square blank" id="10_23"></div>
-                                    <div class="square blank" id="10_24"></div>
-                                    <div class="square blank" id="10_25"></div>
-                                    <div class="square blank" id="10_26"></div>
-                                    <div class="square blank" id="10_27"></div>
-                                    <div class="square blank" id="10_28"></div>
-                                    <div class="square blank" id="10_29"></div>
-                                    <div class="square blank" id="10_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="11_1"></div>
-                                    <div class="square blank" id="11_2"></div>
-                                    <div class="square blank" id="11_3"></div>
-                                    <div class="square blank" id="11_4"></div>
-                                    <div class="square blank" id="11_5"></div>
-                                    <div class="square blank" id="11_6"></div>
-                                    <div class="square blank" id="11_7"></div>
-                                    <div class="square blank" id="11_8"></div>
-                                    <div class="square blank" id="11_9"></div>
-                                    <div class="square blank" id="11_10"></div>
-                                    <div class="square blank" id="11_11"></div>
-                                    <div class="square blank" id="11_12"></div>
-                                    <div class="square blank" id="11_13"></div>
-                                    <div class="square blank" id="11_14"></div>
-                                    <div class="square blank" id="11_15"></div>
-                                    <div class="square blank" id="11_16"></div>
-                                    <div class="square blank" id="11_17"></div>
-                                    <div class="square blank" id="11_18"></div>
-                                    <div class="square blank" id="11_19"></div>
-                                    <div class="square blank" id="11_20"></div>
-                                    <div class="square blank" id="11_21"></div>
-                                    <div class="square blank" id="11_22"></div>
-                                    <div class="square blank" id="11_23"></div>
-                                    <div class="square blank" id="11_24"></div>
-                                    <div class="square blank" id="11_25"></div>
-                                    <div class="square blank" id="11_26"></div>
-                                    <div class="square blank" id="11_27"></div>
-                                    <div class="square blank" id="11_28"></div>
-                                    <div class="square blank" id="11_29"></div>
-                                    <div class="square blank" id="11_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="12_1"></div>
-                                    <div class="square blank" id="12_2"></div>
-                                    <div class="square blank" id="12_3"></div>
-                                    <div class="square blank" id="12_4"></div>
-                                    <div class="square blank" id="12_5"></div>
-                                    <div class="square blank" id="12_6"></div>
-                                    <div class="square blank" id="12_7"></div>
-                                    <div class="square blank" id="12_8"></div>
-                                    <div class="square blank" id="12_9"></div>
-                                    <div class="square blank" id="12_10"></div>
-                                    <div class="square blank" id="12_11"></div>
-                                    <div class="square blank" id="12_12"></div>
-                                    <div class="square blank" id="12_13"></div>
-                                    <div class="square blank" id="12_14"></div>
-                                    <div class="square blank" id="12_15"></div>
-                                    <div class="square blank" id="12_16"></div>
-                                    <div class="square blank" id="12_17"></div>
-                                    <div class="square blank" id="12_18"></div>
-                                    <div class="square blank" id="12_19"></div>
-                                    <div class="square blank" id="12_20"></div>
-                                    <div class="square blank" id="12_21"></div>
-                                    <div class="square blank" id="12_22"></div>
-                                    <div class="square blank" id="12_23"></div>
-                                    <div class="square blank" id="12_24"></div>
-                                    <div class="square blank" id="12_25"></div>
-                                    <div class="square blank" id="12_26"></div>
-                                    <div class="square blank" id="12_27"></div>
-                                    <div class="square blank" id="12_28"></div>
-                                    <div class="square blank" id="12_29"></div>
-                                    <div class="square blank" id="12_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="13_1"></div>
-                                    <div class="square blank" id="13_2"></div>
-                                    <div class="square blank" id="13_3"></div>
-                                    <div class="square blank" id="13_4"></div>
-                                    <div class="square blank" id="13_5"></div>
-                                    <div class="square blank" id="13_6"></div>
-                                    <div class="square blank" id="13_7"></div>
-                                    <div class="square blank" id="13_8"></div>
-                                    <div class="square blank" id="13_9"></div>
-                                    <div class="square blank" id="13_10"></div>
-                                    <div class="square blank" id="13_11"></div>
-                                    <div class="square blank" id="13_12"></div>
-                                    <div class="square blank" id="13_13"></div>
-                                    <div class="square blank" id="13_14"></div>
-                                    <div class="square blank" id="13_15"></div>
-                                    <div class="square blank" id="13_16"></div>
-                                    <div class="square blank" id="13_17"></div>
-                                    <div class="square blank" id="13_18"></div>
-                                    <div class="square blank" id="13_19"></div>
-                                    <div class="square blank" id="13_20"></div>
-                                    <div class="square blank" id="13_21"></div>
-                                    <div class="square blank" id="13_22"></div>
-                                    <div class="square blank" id="13_23"></div>
-                                    <div class="square blank" id="13_24"></div>
-                                    <div class="square blank" id="13_25"></div>
-                                    <div class="square blank" id="13_26"></div>
-                                    <div class="square blank" id="13_27"></div>
-                                    <div class="square blank" id="13_28"></div>
-                                    <div class="square blank" id="13_29"></div>
-                                    <div class="square blank" id="13_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="14_1"></div>
-                                    <div class="square blank" id="14_2"></div>
-                                    <div class="square blank" id="14_3"></div>
-                                    <div class="square blank" id="14_4"></div>
-                                    <div class="square blank" id="14_5"></div>
-                                    <div class="square blank" id="14_6"></div>
-                                    <div class="square blank" id="14_7"></div>
-                                    <div class="square blank" id="14_8"></div>
-                                    <div class="square blank" id="14_9"></div>
-                                    <div class="square blank" id="14_10"></div>
-                                    <div class="square blank" id="14_11"></div>
-                                    <div class="square blank" id="14_12"></div>
-                                    <div class="square blank" id="14_13"></div>
-                                    <div class="square blank" id="14_14"></div>
-                                    <div class="square blank" id="14_15"></div>
-                                    <div class="square blank" id="14_16"></div>
-                                    <div class="square blank" id="14_17"></div>
-                                    <div class="square blank" id="14_18"></div>
-                                    <div class="square blank" id="14_19"></div>
-                                    <div class="square blank" id="14_20"></div>
-                                    <div class="square blank" id="14_21"></div>
-                                    <div class="square blank" id="14_22"></div>
-                                    <div class="square blank" id="14_23"></div>
-                                    <div class="square blank" id="14_24"></div>
-                                    <div class="square blank" id="14_25"></div>
-                                    <div class="square blank" id="14_26"></div>
-                                    <div class="square blank" id="14_27"></div>
-                                    <div class="square blank" id="14_28"></div>
-                                    <div class="square blank" id="14_29"></div>
-                                    <div class="square blank" id="14_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="15_1"></div>
-                                    <div class="square blank" id="15_2"></div>
-                                    <div class="square blank" id="15_3"></div>
-                                    <div class="square blank" id="15_4"></div>
-                                    <div class="square blank" id="15_5"></div>
-                                    <div class="square blank" id="15_6"></div>
-                                    <div class="square blank" id="15_7"></div>
-                                    <div class="square blank" id="15_8"></div>
-                                    <div class="square blank" id="15_9"></div>
-                                    <div class="square blank" id="15_10"></div>
-                                    <div class="square blank" id="15_11"></div>
-                                    <div class="square blank" id="15_12"></div>
-                                    <div class="square blank" id="15_13"></div>
-                                    <div class="square blank" id="15_14"></div>
-                                    <div class="square blank" id="15_15"></div>
-                                    <div class="square blank" id="15_16"></div>
-                                    <div class="square blank" id="15_17"></div>
-                                    <div class="square blank" id="15_18"></div>
-                                    <div class="square blank" id="15_19"></div>
-                                    <div class="square blank" id="15_20"></div>
-                                    <div class="square blank" id="15_21"></div>
-                                    <div class="square blank" id="15_22"></div>
-                                    <div class="square blank" id="15_23"></div>
-                                    <div class="square blank" id="15_24"></div>
-                                    <div class="square blank" id="15_25"></div>
-                                    <div class="square blank" id="15_26"></div>
-                                    <div class="square blank" id="15_27"></div>
-                                    <div class="square blank" id="15_28"></div>
-                                    <div class="square blank" id="15_29"></div>
-                                    <div class="square blank" id="15_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="square blank" id="16_1"></div>
-                                    <div class="square blank" id="16_2"></div>
-                                    <div class="square blank" id="16_3"></div>
-                                    <div class="square blank" id="16_4"></div>
-                                    <div class="square blank" id="16_5"></div>
-                                    <div class="square blank" id="16_6"></div>
-                                    <div class="square blank" id="16_7"></div>
-                                    <div class="square blank" id="16_8"></div>
-                                    <div class="square blank" id="16_9"></div>
-                                    <div class="square blank" id="16_10"></div>
-                                    <div class="square blank" id="16_11"></div>
-                                    <div class="square blank" id="16_12"></div>
-                                    <div class="square blank" id="16_13"></div>
-                                    <div class="square blank" id="16_14"></div>
-                                    <div class="square blank" id="16_15"></div>
-                                    <div class="square blank" id="16_16"></div>
-                                    <div class="square blank" id="16_17"></div>
-                                    <div class="square blank" id="16_18"></div>
-                                    <div class="square blank" id="16_19"></div>
-                                    <div class="square blank" id="16_20"></div>
-                                    <div class="square blank" id="16_21"></div>
-                                    <div class="square blank" id="16_22"></div>
-                                    <div class="square blank" id="16_23"></div>
-                                    <div class="square blank" id="16_24"></div>
-                                    <div class="square blank" id="16_25"></div>
-                                    <div class="square blank" id="16_26"></div>
-                                    <div class="square blank" id="16_27"></div>
-                                    <div class="square blank" id="16_28"></div>
-                                    <div class="square blank" id="16_29"></div>
-                                    <div class="square blank" id="16_30"></div>
-                                    <div class="borderlr"></div>
-                                    <div class="borderbl"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="bordertb"></div>
-                                    <div class="borderbr"></div>
-                                    <div class="square blank" style="display: none;" id="0_0"></div>
-                                    <div class="square blank" style="display: none;" id="0_1"></div>
-                                    <div class="square blank" style="display: none;" id="0_2"></div>
-                                    <div class="square blank" style="display: none;" id="0_3"></div>
-                                    <div class="square blank" style="display: none;" id="0_4"></div>
-                                    <div class="square blank" style="display: none;" id="0_5"></div>
-                                    <div class="square blank" style="display: none;" id="0_6"></div>
-                                    <div class="square blank" style="display: none;" id="0_7"></div>
-                                    <div class="square blank" style="display: none;" id="0_8"></div>
-                                    <div class="square blank" style="display: none;" id="0_9"></div>
-                                    <div class="square blank" style="display: none;" id="0_10"></div>
-                                    <div class="square blank" style="display: none;" id="0_11"></div>
-                                    <div class="square blank" style="display: none;" id="0_12"></div>
-                                    <div class="square blank" style="display: none;" id="0_13"></div>
-                                    <div class="square blank" style="display: none;" id="0_14"></div>
-                                    <div class="square blank" style="display: none;" id="0_15"></div>
-                                    <div class="square blank" style="display: none;" id="0_16"></div>
-                                    <div class="square blank" style="display: none;" id="0_17"></div>
-                                    <div class="square blank" style="display: none;" id="0_18"></div>
-                                    <div class="square blank" style="display: none;" id="0_19"></div>
-                                    <div class="square blank" style="display: none;" id="0_20"></div>
-                                    <div class="square blank" style="display: none;" id="0_21"></div>
-                                    <div class="square blank" style="display: none;" id="0_22"></div>
-                                    <div class="square blank" style="display: none;" id="0_23"></div>
-                                    <div class="square blank" style="display: none;" id="0_24"></div>
-                                    <div class="square blank" style="display: none;" id="0_25"></div>
-                                    <div class="square blank" style="display: none;" id="0_26"></div>
-                                    <div class="square blank" style="display: none;" id="0_27"></div>
-                                    <div class="square blank" style="display: none;" id="0_28"></div>
-                                    <div class="square blank" style="display: none;" id="0_29"></div>
-                                    <div class="square blank" style="display: none;" id="0_30"></div>
-                                    <div class="square blank" style="display: none;" id="0_31"></div>
-                                    <div class="square blank" style="display: none;" id="17_0"></div>
-                                    <div class="square blank" style="display: none;" id="17_1"></div>
-                                    <div class="square blank" style="display: none;" id="17_2"></div>
-                                    <div class="square blank" style="display: none;" id="17_3"></div>
-                                    <div class="square blank" style="display: none;" id="17_4"></div>
-                                    <div class="square blank" style="display: none;" id="17_5"></div>
-                                    <div class="square blank" style="display: none;" id="17_6"></div>
-                                    <div class="square blank" style="display: none;" id="17_7"></div>
-                                    <div class="square blank" style="display: none;" id="17_8"></div>
-                                    <div class="square blank" style="display: none;" id="17_9"></div>
-                                    <div class="square blank" style="display: none;" id="17_10"></div>
-                                    <div class="square blank" style="display: none;" id="17_11"></div>
-                                    <div class="square blank" style="display: none;" id="17_12"></div>
-                                    <div class="square blank" style="display: none;" id="17_13"></div>
-                                    <div class="square blank" style="display: none;" id="17_14"></div>
-                                    <div class="square blank" style="display: none;" id="17_15"></div>
-                                    <div class="square blank" style="display: none;" id="17_16"></div>
-                                    <div class="square blank" style="display: none;" id="17_17"></div>
-                                    <div class="square blank" style="display: none;" id="17_18"></div>
-                                    <div class="square blank" style="display: none;" id="17_19"></div>
-                                    <div class="square blank" style="display: none;" id="17_20"></div>
-                                    <div class="square blank" style="display: none;" id="17_21"></div>
-                                    <div class="square blank" style="display: none;" id="17_22"></div>
-                                    <div class="square blank" style="display: none;" id="17_23"></div>
-                                    <div class="square blank" style="display: none;" id="17_24"></div>
-                                    <div class="square blank" style="display: none;" id="17_25"></div>
-                                    <div class="square blank" style="display: none;" id="17_26"></div>
-                                    <div class="square blank" style="display: none;" id="17_27"></div>
-                                    <div class="square blank" style="display: none;" id="17_28"></div>
-                                    <div class="square blank" style="display: none;" id="17_29"></div>
-                                    <div class="square blank" style="display: none;" id="17_30"></div>
-                                    <div class="square blank" style="display: none;" id="17_31"></div>
-                                    <div class="square blank" style="display: none;" id="1_0"></div>
-                                    <div class="square blank" style="display: none;" id="1_31"></div>
-                                    <div class="square blank" style="display: none;" id="2_0"></div>
-                                    <div class="square blank" style="display: none;" id="2_31"></div>
-                                    <div class="square blank" style="display: none;" id="3_0"></div>
-                                    <div class="square blank" style="display: none;" id="3_31"></div>
-                                    <div class="square blank" style="display: none;" id="4_0"></div>
-                                    <div class="square blank" style="display: none;" id="4_31"></div>
-                                    <div class="square blank" style="display: none;" id="5_0"></div>
-                                    <div class="square blank" style="display: none;" id="5_31"></div>
-                                    <div class="square blank" style="display: none;" id="6_0"></div>
-                                    <div class="square blank" style="display: none;" id="6_31"></div>
-                                    <div class="square blank" style="display: none;" id="7_0"></div>
-                                    <div class="square blank" style="display: none;" id="7_31"></div>
-                                    <div class="square blank" style="display: none;" id="8_0"></div>
-                                    <div class="square blank" style="display: none;" id="8_31"></div>
-                                    <div class="square blank" style="display: none;" id="9_0"></div>
-                                    <div class="square blank" style="display: none;" id="9_31"></div>
-                                    <div class="square blank" style="display: none;" id="10_0"></div>
-                                    <div class="square blank" style="display: none;" id="10_31"></div>
-                                    <div class="square blank" style="display: none;" id="11_0"></div>
-                                    <div class="square blank" style="display: none;" id="11_31"></div>
-                                    <div class="square blank" style="display: none;" id="12_0"></div>
-                                    <div class="square blank" style="display: none;" id="12_31"></div>
-                                    <div class="square blank" style="display: none;" id="13_0"></div>
-                                    <div class="square blank" style="display: none;" id="13_31"></div>
-                                    <div class="square blank" style="display: none;" id="14_0"></div>
-                                    <div class="square blank" style="display: none;" id="14_31"></div>
-                                    <div class="square blank" style="display: none;" id="15_0"></div>
-                                    <div class="square blank" style="display: none;" id="15_31"></div>
-                                    <div class="square blank" style="display: none;" id="16_0"></div>
-                                    <div class="square blank" style="display: none;" id="16_31"></div>
-                                </div>
-
-                                <form id="options-form">
-                                    <table cellspacing="0" cellpadding="2" id="options" class="dialog">
-                                        <tbody>
-                                            <tr class="dialog-title">
-                                                <td style="padding: 3px;">Game</td>
-                                                <td colspan="3" style="padding: 3px; text-align: right;">
-                                                    <span id="options-close" class="dialog-close"
-                                                        title="close this box">×</span>
-                                                </td>
-                                            </tr>
-                                            <tr class="dialog-bar">
-                                                <td></td>
-                                                <td>Height</td>
-                                                <td>Width</td>
-                                                <td>Mines</td>
-                                            </tr>
-                                            <tr>
-                                                <td><label><input type="radio" name="field" id="beginner">
-                                                        <strong>Beginner</strong></label></td>
-                                                <td>9</td>
-                                                <td>9</td>
-                                                <td>10</td>
-                                            </tr>
-                                            <tr>
-                                                <td><label><input type="radio" name="field" id="intermediate">
-                                                        <strong>Intermediate</strong></label></td>
-                                                <td>16</td>
-                                                <td>16</td>
-                                                <td>40</td>
-                                            </tr>
-                                            <tr>
-                                                <td><label><input type="radio" name="field" checked="checked"
-                                                            id="expert"> <strong>Expert</strong></label></td>
-                                                <td>16</td>
-                                                <td>30</td>
-                                                <td>99</td>
-                                            </tr>
-                                            <tr>
-                                                <td><label><input type="radio" name="field" id="custom"> Custom</label>
-                                                </td>
-                                                <td><input type="text" value="20" id="custom_height"
-                                                        class="dialog-text-input"
-                                                        onfocus="$('#custom').attr('checked', true);"></td>
-                                                <td><input type="text" value="30" id="custom_width"
-                                                        class="dialog-text-input"
-                                                        onfocus="$('#custom').attr('checked', true);"></td>
-                                                <td><input type="text" value="145" id="custom_mines"
-                                                        class="dialog-text-input"
-                                                        onfocus="$('#custom').attr('checked', true);"></td>
-                                            </tr>
-                                            <tr class="dialog-bar">
-                                                <td><input type="submit" value="New Game" class="dialogText"
-                                                        style="vertical-align: middle;"></td>
-                                                <td colspan="3">
-                                                    <label style="margin-bottom: 0;"><input type="checkbox" id="marks">
-                                                        Marks (?)</label>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </form>
-
-                                <table cellspacing="0" cellpadding="2" id="display" class="dialog">
-                                    <tbody>
-                                        <tr class="dialog-title">
-                                            <td>Display</td>
-                                            <td style="text-align: right;">
-                                                <span id="display-close" class="dialog-close"
-                                                    title="close this box">×</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 6px;"><strong>Zoom</strong></td>
-                                            <td style="padding: 6px;">
-                                                <label><input type="radio" name="zoom" id="zoom100" value="1"
-                                                        checked="checked"> 100%</label><br>
-                                                <label><input type="radio" name="zoom" id="zoom150" value="1.5">
-                                                    150%</label><br>
-                                                <label><input type="radio" name="zoom" id="zoom200" value="2"
-                                                        checked="checked"> 200%</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 6px; border-top: 1px solid #AAA;">
-                                                <strong>Position</strong>
-                                            </td>
-                                            <td style="padding: 6px; border-top: 1px solid #AAA;">
-                                                <label><input type="radio" name="position" id="position-center"
-                                                        value="center" checked="checked"> Center</label><br>
-                                                <label><input type="radio" name="position" id="position-left"
-                                                        value="left" checked="checked"> Left</label>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 6px; border-top: 1px solid #AAA;"><label
-                                                    for="nightMode"><strong>Night Mode</strong></label></td>
-                                            <td style="padding: 6px; border-top: 1px solid #AAA;">
-                                                <input type="checkbox" name="nightMode" id="nightMode"
-                                                    checked="checked">
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <table cellspacing="0" cellpadding="2" id="controls" class="dialog">
-                                    <tbody>
-                                        <tr class="dialog-title">
-                                            <td>Controls</td>
-                                            <td style="text-align: right;">
-                                                <span id="controls-close" class="dialog-close"
-                                                    title="close this box">×</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 6px;"><strong>Desktop</strong></td>
-                                            <td style="padding: 6px;">
-                                                <ul>
-                                                    <li><b>Left-click</b> an empty square to reveal it.</li>
-                                                    <li><b>Right-click</b> (or <b>Ctrl+click</b>) an empty square to
-                                                        flag it.</li>
-                                                    <li><b>Midde-click</b> (or <b>left+right click</b>) a number to
-                                                        reveal<br> its adjacent squares.</li>
-                                                    <li>Press <b>space</b> bar while hovering over a square to
-                                                        flag<br>it or reveal its adjacent squares.</li>
-                                                    <li>Press <b>S</b> or click the smiley face to start a new game.
-                                                    </li>
-                                                    <li>Press <b>D</b> to self-destruct</li>
-                                                    <li>Press <b>F</b> to Fullscreen</li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td style="padding: 6px; border-top: 1px solid var(--hexa)">
-                                                <strong>Mobile</strong>
-                                            </td>
-                                            <td style="padding: 6px; border-top: 1px solid var(--hexa);">
-                                                <ul>
-                                                    <li><b>Tap</b> an empty square to reveal it.</li>
-                                                    <li><b>Long-press</b> an empty square to flag it.</li>
-                                                    <li><b>Tap</b> a number to reveal its adjacent squares.</li>
-                                                </ul>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-
-                                <form id="import-form">
-                                    <table cellspacing="0" cellpadding="2" id="import" class="dialog">
-                                        <tbody>
-                                            <tr class="dialog-title">
-                                                <td>Import</td>
-                                                <td style="text-align: right;">
-                                                    <span id="import-close" class="dialog-close"
-                                                        title="close this box">×</span>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="2">
-                                                    Paste exported game state:
-                                                    <br>
-                                                    <textarea
-                                                        style="width: 240px; height: 40px; margin-top: 4px;"></textarea>
-                                                </td>
-                                            </tr>
-                                            <tr class="dialog-bar">
-                                                <td colspan="2">
-                                                    <input type="submit" value="Load Game">
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </form>
-
-                                <table cellspacing="0" cellpadding="2" id="export" class="dialog">
-                                    <tbody>
-                                        <tr class="dialog-title">
-                                            <td>Export</td>
-                                            <td style="text-align: right;">
-                                                <span id="export-close" class="dialog-close"
-                                                    title="close this box">×</span>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="2">
-                                                <em id="export-message"></em>
-                                                <br>
-                                                <textarea
-                                                    style="width: 240px; height: 40px; margin-top: 4px;"></textarea>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <notice>
-        <h1>Please close DevTools and/or use a PC</h1>
-    </notice>
+    
 </body>
 
 </html>
